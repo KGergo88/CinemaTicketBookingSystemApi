@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace CinemaTicketBooking.Application.Controllers;
+namespace CinemaTicketBooking.Web.Controllers;
 
 public class HomeController : Controller
 {
