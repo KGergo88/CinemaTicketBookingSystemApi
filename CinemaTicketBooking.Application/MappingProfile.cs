@@ -20,10 +20,10 @@ public class MappingProfile : Profile
     private List<string> ConvertMovieGenreToListOfStrings(Genre genreFlags)
     {
         var genres = Enum.GetValues(typeof(Genre))
-            .Cast<Genre>()
-            .Where(flag => genreFlags.HasFlag(flag) && flag != Genre.Unknown)
-            .Select(flag => flag.ToString())
-            .ToList();
+                         .Cast<Genre>()
+                         .Where(flag => genreFlags.HasFlag(flag) && flag != Genre.Unknown)
+                         .Select(flag => flag.ToString())
+                         .ToList();
 
         return genres;
     }
