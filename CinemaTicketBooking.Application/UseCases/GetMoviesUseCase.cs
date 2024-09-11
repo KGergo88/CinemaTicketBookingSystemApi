@@ -1,23 +1,21 @@
 using AutoMapper;
-using CinemaTicketBooking.Application.Dtos;
 using CinemaTicketBooking.Application.Interfaces.Repositories;
+using CinemaTicketBooking.Domain.Entities;
 
 namespace CinemaTicketBooking.Application.UseCases;
 
 internal class GetMoviesUseCase : IGetMoviesUseCase
 {
-    private readonly IMapper mapper;
     private readonly IMovieRepository movieRepository;
 
-    public GetMoviesUseCase(IMapper mapper, IMovieRepository movieRepository)
+    public GetMoviesUseCase(IMovieRepository movieRepository)
     {
-        this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         this.movieRepository = movieRepository ?? throw new ArgumentNullException(nameof(movieRepository));
     }
 
-    public async Task<List<MovieDto>> ExecuteAsync()
+    public async Task<List<Movie>> ExecuteAsync()
     {
         var movies = await movieRepository.GetMoviesAsync();
-        return mapper.Map<List<MovieDto>>(movies);
+        return movies;
     }
 }

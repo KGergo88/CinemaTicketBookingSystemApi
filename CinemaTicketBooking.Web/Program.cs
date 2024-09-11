@@ -6,8 +6,8 @@ using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAutoMapper(
-    typeof(CinemaTicketBooking.Application.MappingProfile),
-    typeof(CinemaTicketBooking.Infrastructure.MappingProfile));
+    typeof(CinemaTicketBooking.Infrastructure.MappingProfile),
+    typeof(CinemaTicketBooking.Web.MappingProfile));
 
 builder.Services.AddDbContext<CinemaTicketBookingDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("CinemaTicketDbContext")));

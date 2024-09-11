@@ -1,9 +1,9 @@
 using AutoMapper;
 using CinemaTicketBooking.Domain;
 using CinemaTicketBooking.Domain.Entities;
-using CinemaTicketBooking.Application.Dtos;
+using CinemaTicketBooking.Web.Dtos;
 
-namespace CinemaTicketBooking.Application;
+namespace CinemaTicketBooking.Web;
 
 public class MappingProfile : Profile
 {

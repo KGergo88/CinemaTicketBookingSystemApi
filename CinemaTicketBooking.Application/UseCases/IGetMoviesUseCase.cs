@@ -1,8 +1,8 @@
-using CinemaTicketBooking.Application.Dtos;
+using CinemaTicketBooking.Domain.Entities;
 
 namespace CinemaTicketBooking.Application.UseCases;
 
 public interface IGetMoviesUseCase
 {
-    public Task<List<MovieDto>> ExecuteAsync();
+    public Task<List<Movie>> ExecuteAsync();
 }
