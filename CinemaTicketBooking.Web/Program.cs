@@ -1,9 +1,17 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using CinemaTicketBooking.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddAutoMapper(typeof(CinemaTicketBooking.Application.MappingProfile));
+builder.Services.AddAutoMapper(
+    typeof(CinemaTicketBooking.Application.MappingProfile),
+    typeof(CinemaTicketBooking.Infrastructure.MappingProfile));
+
+builder.Services.AddDbContext<CinemaTicketBookingDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("CinemaTicketDbContext")));
+
 builder.Services.AddControllers();
 
 builder.Services.AddSwaggerGen(options =>
