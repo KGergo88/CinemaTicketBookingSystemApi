@@ -1,4 +1,4 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
@@ -14,6 +14,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CinemaTicketBooking.Web", "CinemaTicketBooking.Web\CinemaTicketBooking.Web.csproj", "{DDAE1B74-5E45-4FD3-AA1E-73A86EDCEDD7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CinemaTicketBooking.Infrastructure", "CinemaTicketBooking.Infrastructure\CinemaTicketBooking.Infrastructure.csproj", "{F90D24F9-0CBE-42B8-BCF1-4BB9E92947F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CinemaTicketBooking.IntegrationTests", "CinemaTicketBooking.IntegrationTests\CinemaTicketBooking.IntegrationTests.csproj", "{67195D8D-884F-4EB3-8BB9-524F3011E6D1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +39,10 @@ Global
 		{F90D24F9-0CBE-42B8-BCF1-4BB9E92947F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F90D24F9-0CBE-42B8-BCF1-4BB9E92947F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F90D24F9-0CBE-42B8-BCF1-4BB9E92947F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67195D8D-884F-4EB3-8BB9-524F3011E6D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67195D8D-884F-4EB3-8BB9-524F3011E6D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67195D8D-884F-4EB3-8BB9-524F3011E6D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67195D8D-884F-4EB3-8BB9-524F3011E6D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,6 +52,7 @@ Global
 		{60C7FF29-FB70-4473-BBAF-458A509158B1} = {BA0E17D2-C58D-48A1-B35A-F04A5B32019C}
 		{DDAE1B74-5E45-4FD3-AA1E-73A86EDCEDD7} = {BA0E17D2-C58D-48A1-B35A-F04A5B32019C}
 		{F90D24F9-0CBE-42B8-BCF1-4BB9E92947F7} = {BA0E17D2-C58D-48A1-B35A-F04A5B32019C}
+		{67195D8D-884F-4EB3-8BB9-524F3011E6D1} = {C21042D4-5153-4128-A55D-ECF05F1CF44A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {63092DAA-BF10-455F-A730-8980FA300A4E}
