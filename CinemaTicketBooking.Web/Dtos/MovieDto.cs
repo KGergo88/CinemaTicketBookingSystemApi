@@ -1,4 +1,4 @@
-﻿namespace CinemaTicketBooking.Application.Dtos
+﻿namespace CinemaTicketBooking.Web.Dtos
 {
     public class MovieDto
     {
