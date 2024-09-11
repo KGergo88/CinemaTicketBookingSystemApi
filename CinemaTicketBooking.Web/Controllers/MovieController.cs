@@ -12,7 +12,7 @@ public class MovieController : ControllerBase
     private readonly IMapper mapper;
     private readonly IGetMoviesUseCase getMoviesUseCase;
 
-    public MovieController(IGetMoviesUseCase getMoviesUseCase, IMapper mapper)
+    public MovieController(IMapper mapper, IGetMoviesUseCase getMoviesUseCase)
     {
         this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         this.getMoviesUseCase = getMoviesUseCase ?? throw new ArgumentNullException(nameof(getMoviesUseCase));
