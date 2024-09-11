@@ -18,7 +18,6 @@ public class MovieController : ControllerBase
         this.getMoviesUseCase = getMoviesUseCase ?? throw new ArgumentNullException(nameof(getMoviesUseCase));
     }
 
-
     [HttpGet("[action]")]
     public async Task<ActionResult<List<MovieDto>>> List()
     {
