@@ -6,9 +6,14 @@ namespace CinemaTicketBooking.Web.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class MovieController(IGetMoviesUseCase getMoviesUseCase) : ControllerBase
+public class MovieController : ControllerBase
 {
-    private readonly IGetMoviesUseCase getMoviesUseCase = getMoviesUseCase;
+    private readonly IGetMoviesUseCase getMoviesUseCase;
+
+    public MovieController(IGetMoviesUseCase getMoviesUseCase)
+    {
+        this.getMoviesUseCase = getMoviesUseCase ?? throw new ArgumentNullException(nameof(getMoviesUseCase));
+    }
 
     [HttpGet("[action]")]
     public async Task<ActionResult<List<MovieDto>>> List()
