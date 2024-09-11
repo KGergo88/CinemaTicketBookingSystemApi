@@ -7,6 +7,8 @@ public class Movie
 
     public required string Title { get; set; }
 
+    public required int? ReleaseYear { get; set; }
+
     public string Description { get; set; } = "";
 
     public required TimeSpan Duration { get; set; }
