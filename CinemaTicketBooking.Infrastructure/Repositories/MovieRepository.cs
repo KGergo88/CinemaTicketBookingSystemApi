@@ -16,9 +16,11 @@ internal class MovieRepository : IMovieRepository
         this.context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
-    public async Task<List<Movie>> GetMoviesAsync()
+    public async Task<List<Domain.Entities.Movie>> GetMoviesAsync()
     {
-        var movies = await context.Movies.ToListAsync();
-        return mapper.Map<List<Movie>>(movies);
+        var infraMovies = await context.Movies
+                                       .Include(m => m.Genres)
+                                       .ToListAsync();
+        return mapper.Map<List<Domain.Entities.Movie>>(infraMovies);
     }
 }

@@ -9,13 +9,13 @@ namespace CinemaTicketBooking.Infrastructure.Entities;
 [Index(nameof(Name), IsUnique = true)]
 internal class Genre
 {
-    [Required]
-    public Guid Id { get; set; }
-
     // Constraints
     //   - Every Genre must have a name
     //   - One of the longest genre name is 21 characters (Phychological Thriller)
+    [Key]
     [Required]
     [MaxLength(50)]
     public required string Name { get; set; }
+
+    public ICollection<Movie> Movies { get; set; } = [];
 }
