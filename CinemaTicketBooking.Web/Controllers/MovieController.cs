@@ -32,7 +32,7 @@ public class MovieController : ControllerBase
         return Ok(movieDtos);
     }
 
-    [HttpPost("")]
+    [HttpPost("[action]")]
     public async Task<ActionResult> Add(List<MovieDto> moviesDtos)
     {
         var movies = mapper.Map<List<Movie>>(moviesDtos);
