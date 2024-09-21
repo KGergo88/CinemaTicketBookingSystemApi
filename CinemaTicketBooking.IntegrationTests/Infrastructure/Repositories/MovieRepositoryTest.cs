@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using CinemaTicketBooking.Infrastructure;
 using CinemaTicketBooking.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -73,11 +73,11 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                 Name = "Thriller"
             };
             var sleepyHollowMovie = new CinemaTicketBooking.Infrastructure.Entities.Movie
-                {
-                    Id = Guid.NewGuid(),
-                    Title = "Sleepy Hollow",
-                    ReleaseYear = 1999,
-                    Description = "A movie about a headless horseman chopping other people´s heads off",
+            {
+                Id = Guid.NewGuid(),
+                Title = "Sleepy Hollow",
+                ReleaseYear = 1999,
+                Description = "A movie about a headless horseman chopping other people´s heads off",
                 DurationInSeconds = 105,
                 Genres = new List<CinemaTicketBooking.Infrastructure.Entities.Genre>
                 {
@@ -164,7 +164,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                 thrillerGenre
             };
             expectedDomainMovies = new List<CinemaTicketBooking.Domain.Entities.Movie>()
-                {
+            {
                 new()
                 {
                     Id = sleepyHollowMovie.Id,
@@ -174,8 +174,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                     Duration = TimeSpan.FromSeconds(sleepyHollowMovie.DurationInSeconds),
                     Genres = new List<string> { "Dark Fantasy", "Slasher Horror", "Supernatural Horror", "Fantasy", "Horror", "Mistery" }
                 },
-                    new()
-                    {
+                new()
+                {
                     Id = iAmLegendMovie.Id,
                     Title = iAmLegendMovie.Title,
                     ReleaseYear = iAmLegendMovie.ReleaseYear,
@@ -214,8 +214,82 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             Assert.Equivalent(expectedDomainMovies, domainMovies, strict: true);
         }
 
+        public static IEnumerable<object[]> AddMoviesAsyncCreatesMoviesAndGenresCorrectlyAsyncData()
+        {
+            var sleepyHollowMovie = new CinemaTicketBooking.Domain.Entities.Movie
+            {
+                Title = "Sleepy Hollow",
+                ReleaseYear = 1999,
+                Description = "A movie about a headless horseman chopping other people´s heads off",
+                Duration = TimeSpan.FromSeconds(105),
+                Genres = new List<string> { "Dark Fantasy", "Slasher Horror", "Supernatural Horror", "Fantasy", "Horror", "Mistery" }
+            };
+            var iAmLegendMovie = new CinemaTicketBooking.Domain.Entities.Movie
+            {
+                Title = "I Am Legend",
+                ReleaseYear = 2007,
+                Description = "A movie about people turning into zombies after getting vaccinated",
+                Duration = TimeSpan.FromSeconds(101),
+                Genres = new List<string> { "Dystopian Sci-Fi", "Survival", "Zombie Horror", "Action", "Drama", "Horror", "Sci-Fi", "Thriller" }
+            };
+
+            var domainMovies = new List<CinemaTicketBooking.Domain.Entities.Movie>()
+            {
+                sleepyHollowMovie
+            };
+
+            yield return new object[]
+            {
+                domainMovies
+            };
+
+            domainMovies = new List<CinemaTicketBooking.Domain.Entities.Movie>()
+            {
+                sleepyHollowMovie,
+                iAmLegendMovie
+            };
+
+            yield return new object[]
+            {
+                domainMovies
+            };
+        }
+
+        [Theory]
+        [MemberData(nameof(AddMoviesAsyncCreatesMoviesAndGenresCorrectlyAsyncData))]
+        async Task AddMoviesAsyncCreatesMoviesAndGenresCorrectlyAsync(List<CinemaTicketBooking.Domain.Entities.Movie> domainMovies)
+        {
+            // Arrange
+            await using var db = new TestDatabase();
+            var dbContext = await db.GetContextAsync();
+            var moviesRepository = new MovieRepository(mapper, dbContext);
+
+            // Act
+            await moviesRepository.AddMoviesAsync(domainMovies);
+
             // Assert
-            Assert.Equivalent(expectedDomainEntities, movies, strict: true);
+            var infraMovies = await dbContext.Movies.ToListAsync();
+            var infraGenres = await dbContext.Genres.ToListAsync();
+
+            Assert.Equal(domainMovies.Count, infraMovies.Count);
+            var expectedKnownGenreNames = domainMovies.SelectMany(dm => dm.Genres)
+                                                      .Distinct()
+                                                      .ToList();
+            Assert.Equal(expectedKnownGenreNames.Count, infraGenres.Count);
+            foreach (var domainMovie in domainMovies)
+            {
+                var infraMovie = infraMovies.Single(im => im.Title == domainMovie.Title
+                                                          && im.ReleaseYear == domainMovie.ReleaseYear);
+                Assert.Equal(domainMovie.Description, infraMovie.Description);
+                Assert.Equal(domainMovie.Title, infraMovie.Title);
+                
+                Assert.Equal(domainMovie.Genres.Count, infraMovie.Genres.Count);
+                foreach (var domainGenre in domainMovie.Genres)
+                {
+                    var infraGenre = infraGenres.Single(ig => ig.Name == domainGenre);
+                    Assert.Contains(infraMovie, infraGenre.Movies);                    
+                }
+            }
         }
     }
 }

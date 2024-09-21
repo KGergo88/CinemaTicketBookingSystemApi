@@ -1,5 +1,4 @@
 using AutoMapper;
-using Microsoft.IdentityModel.Tokens;
 
 namespace CinemaTicketBooking.Infrastructure;
 
@@ -11,5 +10,9 @@ public class MappingProfile : Profile
         CreateMap<Infrastructure.Entities.Movie, Domain.Entities.Movie>()
             .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => TimeSpan.FromSeconds(src.DurationInSeconds)))
             .ForMember(dest => dest.Genres, opt => opt.MapFrom(src => src.Genres.Select(g => g.Name)));
+
+        CreateMap<Domain.Entities.Movie, Infrastructure.Entities.Movie>()
+            .ForMember(dest => dest.DurationInSeconds, opt => opt.MapFrom(src => src.Duration.Seconds))
+            .ForMember(dest => dest.Genres, opt => opt.Ignore());
     }
 }

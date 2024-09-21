@@ -1,5 +1,6 @@
 using AutoMapper;
 using CinemaTicketBooking.Application.UseCases;
+using CinemaTicketBooking.Domain.Entities;
 using CinemaTicketBooking.Web.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,11 +12,16 @@ public class MovieController : ControllerBase
 {
     private readonly IMapper mapper;
     private readonly IGetMoviesUseCase getMoviesUseCase;
+    private readonly IAddMoviesUseCase addMoviesUseCase;
 
-    public MovieController(IMapper mapper, IGetMoviesUseCase getMoviesUseCase)
+    public MovieController(
+        IMapper mapper,
+        IGetMoviesUseCase getMoviesUseCase,
+        IAddMoviesUseCase addMoviesUseCase)
     {
         this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         this.getMoviesUseCase = getMoviesUseCase ?? throw new ArgumentNullException(nameof(getMoviesUseCase));
+        this.addMoviesUseCase = addMoviesUseCase ?? throw new ArgumentNullException(nameof(addMoviesUseCase));
     }
 
     [HttpGet("[action]")]
@@ -25,5 +31,12 @@ public class MovieController : ControllerBase
         var movieDtos = mapper.Map<List<MovieDto>>(movies);
         return Ok(movieDtos);
     }
+
+    [HttpPost("")]
+    public async Task<ActionResult> Add(List<MovieDto> moviesDtos)
+    {
+        var movies = mapper.Map<List<Movie>>(moviesDtos);
+        await addMoviesUseCase.ExecuteAsync(movies);
+        return Ok();
     }
 }
