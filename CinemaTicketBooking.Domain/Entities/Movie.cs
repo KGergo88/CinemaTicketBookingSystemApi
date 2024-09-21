@@ -13,5 +13,5 @@ public class Movie
 
     public required TimeSpan Duration { get; set; }
 
-    public required Genre Genre { get; set; }
+    public required List<string> Genres { get; set; }
 }
