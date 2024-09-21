@@ -18,6 +18,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             mapper = mappingConfig.CreateMapper();
         }
 
+        #region GetMoviesAsync Tests
+
         public static IEnumerable<object[]> GetMoviesAsyncReturnsAllMoviesCorrectlyAsyncData()
         {
             var darkFantasyGenre = new CinemaTicketBooking.Infrastructure.Entities.Genre
@@ -214,6 +216,10 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             Assert.Equivalent(expectedDomainMovies, domainMovies, strict: true);
         }
 
+        #endregion
+
+        #region AddMoviesAsync Tests
+
         public static IEnumerable<object[]> AddMoviesAsyncCreatesMoviesAndGenresCorrectlyAsyncData()
         {
             var sleepyHollowMovie = new CinemaTicketBooking.Domain.Entities.Movie
@@ -291,5 +297,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                 }
             }
         }
+
+        #endregion        
     }
 }
