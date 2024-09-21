@@ -21,7 +21,9 @@ public class MovieController : ControllerBase
     [HttpGet("[action]")]
     public async Task<ActionResult<List<MovieDto>>> List()
     {
-        var result = await getMoviesUseCase.ExecuteAsync();
-        return Ok(result);
+        var movies = await getMoviesUseCase.ExecuteAsync();
+        var movieDtos = mapper.Map<List<MovieDto>>(movies);
+        return Ok(movieDtos);
+    }
     }
 }
