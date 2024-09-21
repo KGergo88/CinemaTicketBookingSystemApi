@@ -12,7 +12,10 @@ public class CinemaTicketBookingDbContext : DbContext
 
     internal DbSet<Movie> Movies { get; set; }
 
+    internal DbSet<Genre> Genres { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
     }
 }

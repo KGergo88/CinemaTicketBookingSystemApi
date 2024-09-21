@@ -1,5 +1,4 @@
 using AutoMapper;
-using Microsoft.IdentityModel.Tokens;
 
 namespace CinemaTicketBooking.Infrastructure;
 
@@ -10,31 +9,10 @@ public class MappingProfile : Profile
         // Create mappings between infrastructure and domain entities
         CreateMap<Infrastructure.Entities.Movie, Domain.Entities.Movie>()
             .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => TimeSpan.FromSeconds(src.DurationInSeconds)))
-            .ForMember(dest => dest.Genre, opt => opt.MapFrom(src => ConvertGenreCollectionToGenreFlags(src.Genres)));
+            .ForMember(dest => dest.Genres, opt => opt.MapFrom(src => src.Genres.Select(g => g.Name)));
 
-        // Additional mappings can be added here
-    }
-
-    private Domain.Genre ConvertGenreCollectionToGenreFlags(ICollection<Entities.Genre> genreCollection)
-    {
-        if (genreCollection.IsNullOrEmpty())
-            return Domain.Genre.Unknown;
-
-        var parsedGenre = new Domain.Genre();
-        foreach (var genreEntry in genreCollection)
-        {
-            if (Enum.TryParse<Domain.Genre>(genreEntry.Name, ignoreCase: true, out var parsedGenreEntry))
-            {
-                parsedGenre |= parsedGenreEntry;
-            }
-            else
-            {
-                // TODO Log here a warning or throw an exception if this shall fail,
-                // otherwise we could just note that some of the genres are not known to us
-                parsedGenre |= Domain.Genre.Unknown;
-            }
-        }
-
-        return parsedGenre;
+        CreateMap<Domain.Entities.Movie, Infrastructure.Entities.Movie>()
+            .ForMember(dest => dest.DurationInSeconds, opt => opt.MapFrom(src => src.Duration.Seconds))
+            .ForMember(dest => dest.Genres, opt => opt.Ignore());
     }
 }
