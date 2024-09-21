@@ -1,4 +1,4 @@
-﻿using CinemaTicketBooking.Infrastructure.Entities;
+using CinemaTicketBooking.Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace CinemaTicketBooking.Infrastructure;
@@ -14,5 +14,6 @@ public class CinemaTicketBookingDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
     }
 }
