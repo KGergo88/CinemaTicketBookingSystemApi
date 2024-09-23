@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using CinemaTicketBooking.Infrastructure;
 using CinemaTicketBooking.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -288,17 +288,17 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                                                           && im.ReleaseYear == domainMovie.ReleaseYear);
                 Assert.Equal(domainMovie.Description, infraMovie.Description);
                 Assert.Equal(domainMovie.Title, infraMovie.Title);
-                
+
                 Assert.Equal(domainMovie.Genres.Count, infraMovie.Genres.Count);
                 foreach (var domainGenre in domainMovie.Genres)
                 {
                     var infraGenre = infraGenres.Single(ig => ig.Name == domainGenre);
-                    Assert.Contains(infraMovie, infraGenre.Movies);                    
+                    Assert.Contains(infraMovie, infraGenre.Movies);
                 }
             }
         }
 
-        #endregion        
+        #endregion
 
         #region UpdateMovieAsync Tests
 
