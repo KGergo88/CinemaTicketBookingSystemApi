@@ -98,4 +98,17 @@ internal class MovieRepository : IMovieRepository
 
         await context.SaveChangesAsync();
     }
+
+    public async Task DeleteMoviesAsync(List<Guid> movieIdsToDelete)
+    {
+        // Deleting this way and not via the ExecuteDeleteAsync()
+        // as that solution would leave references to the deleted Movie
+        // entitites in the Genre navigation properties.
+        // This solution is not as fast as we need to make a DB round trip.
+        var movies = await context.Movies.Where(m => movieIdsToDelete.Contains(m.Id))
+                                         .ToListAsync();
+
+        context.RemoveRange(movies);
+        await context.SaveChangesAsync();
+    }
 }

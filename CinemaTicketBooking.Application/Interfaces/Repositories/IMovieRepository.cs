@@ -9,4 +9,6 @@ public interface IMovieRepository
     public Task AddMoviesAsync(List<Movie> domainMovies);
 
     public Task UpdateMovieAsync(Movie domainMovie);
+
+    public Task DeleteMoviesAsync(List<Guid> movieIdsToDelete);
 }
