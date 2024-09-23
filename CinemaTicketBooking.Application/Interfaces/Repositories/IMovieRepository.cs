@@ -7,4 +7,6 @@ public interface IMovieRepository
     public Task<List<Movie>> GetMoviesAsync();
 
     public Task AddMoviesAsync(List<Movie> domainMovies);
+
+    public Task UpdateMovieAsync(Movie domainMovie);
 }

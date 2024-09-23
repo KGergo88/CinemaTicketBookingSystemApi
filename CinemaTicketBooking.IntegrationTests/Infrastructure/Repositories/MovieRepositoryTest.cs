@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using CinemaTicketBooking.Infrastructure;
 using CinemaTicketBooking.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -299,5 +299,165 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
         }
 
         #endregion        
+
+        #region UpdateMovieAsync Tests
+
+        public static IEnumerable<object[]> UpdateMovieAsyncUpdatesMoviesAndGenresCorrectlyAsyncData()
+        {
+            var darkFantasyGenre = new CinemaTicketBooking.Infrastructure.Entities.Genre
+            {
+                Name = "Dark Fantasy"
+            };
+            var slasherHorrorGenre = new CinemaTicketBooking.Infrastructure.Entities.Genre
+            {
+                Name = "Slasher Horror"
+            };
+            var supernaturalHorrorGenre = new CinemaTicketBooking.Infrastructure.Entities.Genre
+            {
+                Name = "Supernatural Horror"
+            };
+            var fantasyGenre = new CinemaTicketBooking.Infrastructure.Entities.Genre
+            {
+                Name = "Fantasy"
+            };
+            var horrorGenre = new CinemaTicketBooking.Infrastructure.Entities.Genre
+            {
+                Name = "Horror"
+            };
+            var misteryGenre = new CinemaTicketBooking.Infrastructure.Entities.Genre
+            {
+                Name = "Mistery"
+            };
+            var dystopianSciFiGenre = new CinemaTicketBooking.Infrastructure.Entities.Genre
+            {
+                Name = "Dystopian Sci-Fi"
+            };
+            var survivalGenre = new CinemaTicketBooking.Infrastructure.Entities.Genre
+            {
+                Name = "Survival"
+            };
+            var zombieHorrorGenre = new CinemaTicketBooking.Infrastructure.Entities.Genre
+            {
+                Name = "Zombie Horror"
+            };
+            var actionGenre = new CinemaTicketBooking.Infrastructure.Entities.Genre
+            {
+                Name = "Action"
+            };
+            var dramaGenre = new CinemaTicketBooking.Infrastructure.Entities.Genre
+            {
+                Name = "Drama"
+            };
+            var sciFiGenre = new CinemaTicketBooking.Infrastructure.Entities.Genre
+            {
+                Name = "Sci-Fi"
+            };
+            var thrillerGenre = new CinemaTicketBooking.Infrastructure.Entities.Genre
+            {
+                Name = "Thriller"
+            };
+            var infraGenres = new List<CinemaTicketBooking.Infrastructure.Entities.Genre>()
+            {
+                darkFantasyGenre,
+                slasherHorrorGenre,
+                supernaturalHorrorGenre,
+                fantasyGenre,
+                horrorGenre,
+                misteryGenre
+            };
+            var sleepyHollowMovie = new CinemaTicketBooking.Infrastructure.Entities.Movie
+            {
+                Id = Guid.NewGuid(),
+                Title = "Sleepy Hollow",
+                ReleaseYear = 1999,
+                Description = "A movie about a headless horseman chopping other people´s heads off",
+                DurationInSeconds = 105,
+                Genres = new List<CinemaTicketBooking.Infrastructure.Entities.Genre>
+                {
+                    darkFantasyGenre,
+                    slasherHorrorGenre,
+                    supernaturalHorrorGenre,
+                    fantasyGenre,
+                    horrorGenre,
+                    misteryGenre
+                }
+            };
+            var iAmLegendMovie = new CinemaTicketBooking.Infrastructure.Entities.Movie
+            {
+                Id = Guid.NewGuid(),
+                Title = "I Am Legend",
+                ReleaseYear = 2007,
+                Description = "A movie about people turning into zombies after getting vaccinated",
+                DurationInSeconds = 101,
+                Genres = new List<CinemaTicketBooking.Infrastructure.Entities.Genre>
+                {
+                    dystopianSciFiGenre,
+                    survivalGenre,
+                    zombieHorrorGenre,
+                    actionGenre,
+                    dramaGenre,
+                    horrorGenre,
+                    sciFiGenre,
+                    thrillerGenre
+                }
+            };
+            var infraMovies = new List<CinemaTicketBooking.Infrastructure.Entities.Movie>
+            {
+                sleepyHollowMovie,
+                iAmLegendMovie
+            };
+
+            yield return new object[]
+            {
+                infraMovies,
+                infraGenres,
+                new CinemaTicketBooking.Domain.Entities.Movie
+                {
+                    Id = sleepyHollowMovie.Id,
+                    Title = "Updated title",
+                    ReleaseYear = 1234,
+                    Description = "Updated description",
+                    Duration = TimeSpan.FromSeconds(123),
+                    Genres = new List<string>
+                    {
+                        "Updated genre"
+                    }
+                }
+            };
+        }
+
+        [Theory]
+        [MemberData(nameof(UpdateMovieAsyncUpdatesMoviesAndGenresCorrectlyAsyncData))]
+        async Task UpdateMovieAsyncUpdatesMoviesAndGenresCorrectlyAsync(List<CinemaTicketBooking.Infrastructure.Entities.Movie> infraMovies,
+                                                                        List<CinemaTicketBooking.Infrastructure.Entities.Genre> infraGenres,
+                                                                        CinemaTicketBooking.Domain.Entities.Movie expectedDomainMovie)
+        {
+            // Arrange
+            await using var db = new TestDatabase();
+            var dbContext = await db.GetContextAsync();
+            var moviesRepository = new MovieRepository(mapper, dbContext);
+            dbContext.Movies.AddRange(infraMovies);
+            dbContext.Genres.AddRange(infraGenres);
+            await dbContext.SaveChangesAsync();
+
+            // Act
+            await moviesRepository.UpdateMovieAsync(expectedDomainMovie);
+
+            // Assert
+            var updatedMovie = await dbContext.Movies.Include(m => m.Genres)
+                                                     .SingleAsync(m => m.Id == expectedDomainMovie.Id);
+
+            Assert.Equal(expectedDomainMovie.Title, updatedMovie.Title);
+            Assert.Equal(expectedDomainMovie.ReleaseYear, updatedMovie.ReleaseYear);
+            Assert.Equal(expectedDomainMovie.Description, updatedMovie.Description);
+            Assert.Equal(expectedDomainMovie.Duration.TotalSeconds, updatedMovie.DurationInSeconds);
+            Assert.Equal(expectedDomainMovie.Genres.Count, updatedMovie.Genres.Count);
+            foreach (var expectedGenre in expectedDomainMovie.Genres)
+            {
+                var storedGenre = updatedMovie.Genres.Where(g => g.Name == expectedGenre).Single();
+            }
+        }
+
+        #endregion
     }
 }

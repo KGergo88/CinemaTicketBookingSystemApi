@@ -13,15 +13,18 @@ public class MovieController : ControllerBase
     private readonly IMapper mapper;
     private readonly IGetMoviesUseCase getMoviesUseCase;
     private readonly IAddMoviesUseCase addMoviesUseCase;
+    private readonly IUpdateMovieUseCase updateMovieUseCase;
 
     public MovieController(
         IMapper mapper,
         IGetMoviesUseCase getMoviesUseCase,
-        IAddMoviesUseCase addMoviesUseCase)
+        IAddMoviesUseCase addMoviesUseCase,
+        IUpdateMovieUseCase updateMovieUseCase)
     {
         this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         this.getMoviesUseCase = getMoviesUseCase ?? throw new ArgumentNullException(nameof(getMoviesUseCase));
         this.addMoviesUseCase = addMoviesUseCase ?? throw new ArgumentNullException(nameof(addMoviesUseCase));
+        this.updateMovieUseCase = updateMovieUseCase ?? throw new ArgumentNullException(nameof(updateMovieUseCase));
     }
 
     [HttpGet("[action]")]
@@ -37,6 +40,14 @@ public class MovieController : ControllerBase
     {
         var movies = mapper.Map<List<Movie>>(moviesDtos);
         await addMoviesUseCase.ExecuteAsync(movies);
+        return Ok();
+    }
+
+    [HttpPost("[action]")]
+    public async Task<ActionResult> Update(MovieDto movieDto)
+    {
+        var movie = mapper.Map<Movie>(movieDto);
+        await updateMovieUseCase.ExecuteAsync(movie);
         return Ok();
     }
 }

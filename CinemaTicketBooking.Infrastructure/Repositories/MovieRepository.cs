@@ -60,4 +60,42 @@ internal class MovieRepository : IMovieRepository
 
         await context.SaveChangesAsync();
     }
+
+    public async Task UpdateMovieAsync(Domain.Entities.Movie domainMovie)
+    {
+        var infraMovie = await context.Movies.Include(m => m.Genres)
+                                             .Where(m => m.Id == domainMovie.Id)
+                                             .SingleAsync();
+
+        infraMovie.Title = domainMovie.Title;
+        infraMovie.ReleaseYear = domainMovie.ReleaseYear;
+        infraMovie.Description = domainMovie.Description;
+        infraMovie.DurationInSeconds = (int)domainMovie.Duration.TotalSeconds;
+
+        infraMovie.Genres.Clear();
+        var alreadyStoredGenres = await context.Genres.ToListAsync();
+
+        var genresToCreate = new List<Genre>();
+        foreach (var domainGenre in domainMovie.Genres)
+        {
+            var alreadyStoredGenre = alreadyStoredGenres.SingleOrDefault(asg => asg.Name == domainGenre);
+            if (alreadyStoredGenre is not null)
+            {
+                infraMovie.Genres.Add(alreadyStoredGenre);
+            }
+            else
+            {
+                genresToCreate.Add(
+                    new Genre
+                    {
+                        Name = domainGenre,
+                        Movies = [ infraMovie ]
+                    }
+                );
+            }
+        }
+        context.Genres.AddRange(genresToCreate);
+
+        await context.SaveChangesAsync();
+    }
 }
