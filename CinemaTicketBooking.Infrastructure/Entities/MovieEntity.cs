@@ -9,7 +9,7 @@ namespace CinemaTicketBooking.Infrastructure.Entities;
 // same title released in the same year
 [Index(nameof(Title))]
 [Index(nameof(Title), nameof(ReleaseYear), IsUnique = true)]
-internal class Movie
+internal class MovieEntity
 {
     [Required]
     public Guid Id { get; set; }
