@@ -21,13 +21,13 @@ internal class MovieEntity
     // of the Evil, Mutant, Hellbound, Flesh-Eating Subhumanoid Zombified Living Dead, Part 3, 2005)
     [Required]
     [MaxLength(250)]
-    public required string Title { get; set; }
+    public string Title { get; set; }
 
     // Null means that the release is not known
     // Constraints
     //   - The year must be a 4 digit number
     [Precision(4)]
-    public required int? ReleaseYear { get; set; } = null;
+    public int? ReleaseYear { get; set; } = null;
 
     public string Description { get; set; } = "";
 
@@ -35,5 +35,5 @@ internal class MovieEntity
     [Precision(5)]
     public int DurationInSeconds { get; set; }
 
-    public ICollection<Genre> Genres { get; set; } = [];
+    public ICollection<GenreEntity> Genres { get; set; }
 }
