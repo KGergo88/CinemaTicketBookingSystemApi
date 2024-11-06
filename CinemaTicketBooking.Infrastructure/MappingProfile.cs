@@ -14,5 +14,10 @@ public class MappingProfile : Profile
         CreateMap<Domain.Entities.Movie, Infrastructure.Entities.MovieEntity>()
             .ForMember(dest => dest.DurationInSeconds, opt => opt.MapFrom(src => src.Duration.Seconds))
             .ForMember(dest => dest.Genres, opt => opt.Ignore());
+
+        CreateMap<Domain.Entities.Theater, Infrastructure.Entities.TheaterEntity>();
+        CreateMap<Domain.Entities.Auditorium, Infrastructure.Entities.AuditoriumEntity>();
+        CreateMap<Domain.Entities.Tier, Infrastructure.Entities.TierEntity>();
+        CreateMap<Domain.Entities.Seat, Infrastructure.Entities.SeatEntity>();
     }
 }
