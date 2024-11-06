@@ -26,19 +26,19 @@ internal class MovieRepository : IMovieRepository
 
     public async Task AddMoviesAsync(List<Domain.Entities.Movie> domainMovies)
     {
-        var infraMovies = new List<Infrastructure.Entities.Movie>();
+        var infraMovies = new List<Infrastructure.Entities.MovieEntity>();
         var genresOfMovieIds = new Dictionary<Guid, List<string>>();
 
         foreach (var domainMovie in domainMovies)
         {
             var alreadyStoredMovie = await context.Movies.FirstOrDefaultAsync(m => m.Title == domainMovie.Title
-                                                                                   && m.ReleaseYear == domainMovie.ReleaseYear);
+                                                                                     && m.ReleaseYear == domainMovie.ReleaseYear);
             if (alreadyStoredMovie is not null)
             {
                 throw new ArgumentException($"A movie with the Title \"{domainMovie.Title}\" from the year {domainMovie.ReleaseYear} is already stored!");
             }
 
-            var infraMovie = mapper.Map<Infrastructure.Entities.Movie>(domainMovie);
+            var infraMovie = mapper.Map<Infrastructure.Entities.MovieEntity>(domainMovie);
             infraMovie.Id = Guid.NewGuid();
 
             genresOfMovieIds.Add(infraMovie.Id, domainMovie.Genres);
@@ -49,7 +49,7 @@ internal class MovieRepository : IMovieRepository
         var genresToCreate = genresOfMovieIds.Values.SelectMany(genres => genres)
                                                     .Distinct()
                                                     .Where(genre => !alreadyStoredGenres.Any(asg => asg.Name != genre))
-                                                    .Select(genre => new Genre { Name = genre })
+                                                    .Select(genre => new GenreEntity { Name = genre })
                                                     .ToList();
         context.Genres.AddRange(genresToCreate);
         alreadyStoredGenres.AddRange(genresToCreate);
@@ -75,7 +75,7 @@ internal class MovieRepository : IMovieRepository
         infraMovie.Genres.Clear();
         var alreadyStoredGenres = await context.Genres.ToListAsync();
 
-        var genresToCreate = new List<Genre>();
+        var genresToCreate = new List<GenreEntity>();
         foreach (var domainGenre in domainMovie.Genres)
         {
             var alreadyStoredGenre = alreadyStoredGenres.SingleOrDefault(asg => asg.Name == domainGenre);
@@ -86,7 +86,7 @@ internal class MovieRepository : IMovieRepository
             else
             {
                 genresToCreate.Add(
-                    new Genre
+                    new GenreEntity
                     {
                         Name = domainGenre,
                         Movies = [ infraMovie ]

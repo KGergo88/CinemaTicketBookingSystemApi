@@ -9,7 +9,7 @@ namespace CinemaTicketBooking.Infrastructure.Entities;
 // same title released in the same year
 [Index(nameof(Title))]
 [Index(nameof(Title), nameof(ReleaseYear), IsUnique = true)]
-internal class Movie
+internal class MovieEntity
 {
     [Required]
     public Guid Id { get; set; }
@@ -21,13 +21,13 @@ internal class Movie
     // of the Evil, Mutant, Hellbound, Flesh-Eating Subhumanoid Zombified Living Dead, Part 3, 2005)
     [Required]
     [MaxLength(250)]
-    public required string Title { get; set; }
+    public string Title { get; set; }
 
     // Null means that the release is not known
     // Constraints
     //   - The year must be a 4 digit number
     [Precision(4)]
-    public required int? ReleaseYear { get; set; } = null;
+    public int? ReleaseYear { get; set; } = null;
 
     public string Description { get; set; } = "";
 
@@ -35,5 +35,5 @@ internal class Movie
     [Precision(5)]
     public int DurationInSeconds { get; set; }
 
-    public ICollection<Genre> Genres { get; set; } = [];
+    public ICollection<GenreEntity> Genres { get; set; }
 }

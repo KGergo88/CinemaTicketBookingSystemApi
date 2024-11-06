@@ -7,7 +7,7 @@ namespace CinemaTicketBooking.Infrastructure.Entities;
 // One might often search either by the Name which must be unique to avoid duplicated genres.
 // A movie with multiple genres like Horror-Comedy should reference multiple Genre entities.
 [Index(nameof(Name), IsUnique = true)]
-internal class Genre
+internal class GenreEntity
 {
     // Constraints
     //   - Every Genre must have a name
@@ -15,7 +15,7 @@ internal class Genre
     [Key]
     [Required]
     [MaxLength(50)]
-    public required string Name { get; set; }
+    public string Name { get; set; }
 
-    public ICollection<Movie> Movies { get; set; } = [];
+    public ICollection<MovieEntity> Movies { get; set; }
 }
