@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 {
-    public class TheaterRepositoryTest
+    public class TheaterRepositoryTest : TestDatabase
     {
         private IMapper mapper;
 
@@ -125,8 +125,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
         public async Task AddTheatersAsyncCreatesTheatersAndRelatedEntitiesCorrectlyAsync(List<CinemaTicketBooking.Domain.Entities.Theater> domainTheaters)
         {
             // Arrange
-            await using var db = new TestDatabase();
-            var dbContext = await db.GetContextAsync();
+            await using var db = await CreateDatabaseAsync();
+            var dbContext = db.Context;
             var theaterRepository = new TheaterRepository(mapper, dbContext);
 
             // Act

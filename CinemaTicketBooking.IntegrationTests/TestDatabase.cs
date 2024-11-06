@@ -3,40 +3,20 @@ using System.Runtime.CompilerServices;
 
 namespace CinemaTicketBooking.IntegrationTests
 {
-    public sealed class TestDatabase : IAsyncDisposable
+    public abstract class TestDatabase
     {
-        private static readonly SqlInstance<CinemaTicketBookingDbContext> sqlInstance;
-        private SqlDatabase<CinemaTicketBookingDbContext>? database;
+        static SqlInstance<CinemaTicketBookingDbContext> sqlInstance;
 
-        static TestDatabase()
-        {
-            sqlInstance ??= new(constructInstance: builder => new(builder.Options));
-        }
+        static TestDatabase() =>
+            sqlInstance = new(
+                constructInstance: builder => new(builder.Options));
 
-        public async ValueTask DisposeAsync()
-        {
-            if (database is not null)
-            {
-                await database.Context.Database.EnsureDeletedAsync();
-                await database.DisposeAsync();
-            }
-        }
-
-        public async Task<CinemaTicketBookingDbContext> GetContextAsync(
+        public static Task<SqlDatabase<CinemaTicketBookingDbContext>> CreateDatabaseAsync(
             [CallerFilePath] string testFile = "",
             string? databaseSuffix = null,
             [CallerMemberName] string memberName = "")
-        {
-            // Generating a unique suffix for the database name if none was provided
-            databaseSuffix ??= Guid.NewGuid().ToString();
-
-            if (database is null)
             {
-                database = await sqlInstance.Build(testFile, databaseSuffix, memberName);
-                await database.Context.Database.EnsureCreatedAsync();
+                return sqlInstance.Build(dbName: Guid.NewGuid().ToString());
             }
-
-            return database.Context;
-        }
     }
 }

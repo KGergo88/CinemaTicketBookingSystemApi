@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 {
-    public class MovieRepositoryTest
+    public class MovieRepositoryTest : TestDatabase
     {
         private IMapper mapper;
 
@@ -202,8 +202,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                                                                 List<CinemaTicketBooking.Domain.Entities.Movie> expectedDomainMovies)
         {
             // Arrange
-            await using var db = new TestDatabase();
-            var dbContext = await db.GetContextAsync();
+            await using var db = await CreateDatabaseAsync();
+            var dbContext = db.Context;
             var moviesRepository = new MovieRepository(mapper, dbContext);
             dbContext.Genres.AddRange(infraGenres);
             dbContext.Movies.AddRange(infraMovies);
@@ -266,8 +266,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
         async Task AddMoviesAsyncCreatesMoviesAndGenresCorrectlyAsync(List<CinemaTicketBooking.Domain.Entities.Movie> domainMovies)
         {
             // Arrange
-            await using var db = new TestDatabase();
-            var dbContext = await db.GetContextAsync();
+            await using var db = await CreateDatabaseAsync();
+            var dbContext = db.Context;
             var moviesRepository = new MovieRepository(mapper, dbContext);
 
             // Act
@@ -433,8 +433,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                                                                         CinemaTicketBooking.Domain.Entities.Movie expectedDomainMovie)
         {
             // Arrange
-            await using var db = new TestDatabase();
-            var dbContext = await db.GetContextAsync();
+            await using var db = await CreateDatabaseAsync();
+            var dbContext = db.Context;
             var moviesRepository = new MovieRepository(mapper, dbContext);
             dbContext.Movies.AddRange(infraMovies);
             dbContext.Genres.AddRange(infraGenres);
@@ -582,8 +582,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                                                                 List<Guid> movieIdsToDelete)
         {
             // Arrange
-            await using var db = new TestDatabase();
-            var dbContext = await db.GetContextAsync();
+            await using var db = await CreateDatabaseAsync();
+            var dbContext = db.Context;
             var moviesRepository = new MovieRepository(mapper, dbContext);
             dbContext.Movies.AddRange(infraMovies);
             dbContext.Genres.AddRange(infraGenres);
