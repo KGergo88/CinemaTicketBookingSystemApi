@@ -39,10 +39,9 @@ internal class MovieRepository : IMovieRepository
             }
 
             var infraMovie = mapper.Map<Infrastructure.Entities.MovieEntity>(domainMovie);
-            infraMovie.Id = Guid.NewGuid();
+            infraMovies.Add(infraMovie);
 
             genresOfMovieIds.Add(infraMovie.Id, domainMovie.Genres);
-            infraMovies.Add(infraMovie);
         }
 
         var alreadyStoredGenres = await context.Genres.ToListAsync();
