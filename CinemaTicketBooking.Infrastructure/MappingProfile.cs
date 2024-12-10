@@ -17,6 +17,13 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.DurationInSeconds, opt => opt.MapFrom(src => src.Duration.Seconds))
             .ForMember(dest => dest.Genres, opt => opt.Ignore());
 
+        // When storing domain entities we only need to fill out the XXXId properties for Auditorium and Movie, the navigation properties are irrelevant
+        CreateMap<Domain.Entities.Screening, Infrastructure.Entities.ScreeningEntity>()
+            // For previously not stored entities (Guid is empty), a valid Guid needs to be created
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => CreateNewGuidIfNullOrEmpty(src.Id)))
+            .ForMember(dest => dest.Auditorium, opt => opt.Ignore())
+            .ForMember(dest => dest.Movie, opt => opt.Ignore());
+
         CreateMap<Domain.Entities.Theater, Infrastructure.Entities.TheaterEntity>()
             // For previously not stored entities (Guid is empty), a valid Guid needs to be created
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => CreateNewGuidIfNullOrEmpty(src.Id)));
