@@ -17,4 +17,12 @@ public class SqlServerDatabaseBinding : IDatabaseBinding
 
         options.UseSqlServer(connectionString);
     }
+
+    public bool IsUniqueIndexException(DbUpdateException dbUpdateException)
+    {
+        if (dbUpdateException.InnerException is SqlException sqlException)
+            return IsUniqueIndexExceptionRegex.IsMatch(sqlException.Message);
+
+        return false;
+    }
 }

@@ -6,27 +6,27 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CinemaTicketBooking.Infrastructure.Repositories;
 
-internal class ScreeningRepository : IScreeningRepository
+internal class CustomerRepository : ICustomerRepository
 {
     private readonly IMapper mapper;
     private readonly CinemaTicketBookingDbContext context;
 
-    public ScreeningRepository(IMapper mapper, CinemaTicketBookingDbContext context)
+    public CustomerRepository(IMapper mapper, CinemaTicketBookingDbContext context)
     {
         this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         this.context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
-    public async Task<Screening> GetScreeningOrNullAsync(Guid id)
+    public async Task<Customer?> GetCustomerOrNullAsync(Guid customerId)
     {
-        var infraScreening = await context.Screenings.SingleOrDefaultAsync(s => s.Id == id);
-        return mapper.Map<Screening>(infraScreening);
+        var infraCustomer = await context.Customers.SingleOrDefaultAsync(c => c.Id == customerId);
+        return mapper.Map<Customer>(infraCustomer);
     }
 
-    public async Task AddScreeningsAsync(List<Domain.Entities.Screening> domainScreenings)
+    public async Task AddCustomerAsync(Customer customer)
     {
-        var infraScreenings = mapper.Map<IList<ScreeningEntity>>(domainScreenings);
-        context.Screenings.AddRange(infraScreenings);
+        var infraCustomer = mapper.Map<CustomerEntity>(customer);
+        context.Customers.Add(infraCustomer);
         await context.SaveChangesAsync();
     }
 }
