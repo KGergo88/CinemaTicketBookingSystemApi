@@ -29,7 +29,6 @@ internal class ScreeningEntity
     [MaxLength(50)]
     public string Language { get; set; }
 
-    [Required]
     [MaxLength(50)]
     public string? Subtitles { get; set; }
 

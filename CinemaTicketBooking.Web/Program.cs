@@ -1,4 +1,6 @@
 ﻿using CinemaTicketBooking.Infrastructure;
+using CinemaTicketBooking.Infrastructure.DatabaseBindings;
+using CinemaTicketBooking.Web;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
@@ -9,10 +11,13 @@ builder.Services.AddAutoMapper(
     typeof(CinemaTicketBooking.Infrastructure.MappingProfile),
     typeof(CinemaTicketBooking.Web.MappingProfile));
 
-builder.Services.AddDbContext<CinemaTicketBookingDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("CinemaTicketDbContext")));
+var dbConnectionString = builder.Configuration.GetConnectionString("CinemaTicketDbContext");
+var databaseBinding = DatabaseBindingFactory.Create(dbConnectionString);
+builder.Services.AddDbContext<CinemaTicketBookingDbContext>(
+    options => databaseBinding.SetDatabaseType(options, dbConnectionString));
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+    options.Filters.Add<UnhandledExceptionFilter>());
 
 builder.Services.AddSwaggerGen(options =>
 {

@@ -11,6 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="$(AssemblyName).UnitTests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\CinemaTicketBooking.Domain\CinemaTicketBooking.Domain.csproj" />
   </ItemGroup>
 
