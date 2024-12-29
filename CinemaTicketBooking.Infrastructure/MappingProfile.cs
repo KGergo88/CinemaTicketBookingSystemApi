@@ -36,6 +36,8 @@ public class MappingProfile : Profile
             // For previously not stored entities (Guid is empty), a valid Guid needs to be created
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => CreateNewGuidIfNullOrEmpty(src.Id)));
 
+        CreateMap<Infrastructure.Entities.SeatEntity, Domain.Entities.Seat>();
+
         CreateMap<Domain.Entities.Seat, Infrastructure.Entities.SeatEntity>()
             // For previously not stored entities (Guid is empty), a valid Guid needs to be created
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => CreateNewGuidIfNullOrEmpty(src.Id)));
