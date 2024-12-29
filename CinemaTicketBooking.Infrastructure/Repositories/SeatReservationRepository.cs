@@ -1,5 +1,6 @@
 using AutoMapper;
 using CinemaTicketBooking.Application.Interfaces.Repositories;
+using CinemaTicketBooking.Domain.Entities;
 using CinemaTicketBooking.Infrastructure.Entities;
 using CinemaTicketBooking.Infrastructure.DatabaseBindings;
 using Microsoft.EntityFrameworkCore;
@@ -42,5 +43,35 @@ internal class SeatReservationRepository : ISeatReservationRepository
 
             throw;
         }
+    }
+
+    public async Task<List<Seat>> GetAvailableSeats(Guid screningId)
+    {
+        var screeningEntity = await context.Screenings.AsSplitQuery()
+                                                      .Include(s => s.Auditorium)
+                                                      .ThenInclude(a => a.Tiers)
+                                                      .ThenInclude(t => t.Seats)
+                                                      .Where(s => s.Id == screningId)
+                                                      .SingleAsync();
+
+        var allSeatEntities = screeningEntity.Auditorium.Tiers.SelectMany(t => t.Seats)
+                                                              .ToDictionary(s => s.Id);
+
+        var reservedSeatEntities = await context.SeatReservations.Include(sr => sr.Seat)
+                                                                 .Include(sr => sr.Booking)
+                                                                 .Where(sr => sr.ScreeningId == screningId
+                                                                              && (sr.Booking.BookingState == (int)BookingState.NonConfirmed
+                                                                                  || sr.Booking.BookingState == (int)BookingState.Confirmed))
+                                                                 .Select(sr => sr.Seat)
+                                                                 .ToDictionaryAsync(s => s.Id);
+
+        foreach (var key in reservedSeatEntities.Keys)
+        {
+            allSeatEntities.Remove(key);
+        }
+
+        var availableSeatEntities = allSeatEntities.Values.ToList();
+
+        return mapper.Map<List<Seat>>(availableSeatEntities);
     }
 }
