@@ -1,4 +1,5 @@
 using CinemaTicketBooking.Application.Interfaces.Repositories;
+using CinemaTicketBooking.Application.Interfaces.UseCases;
 
 namespace CinemaTicketBooking.Application.UseCases;
 

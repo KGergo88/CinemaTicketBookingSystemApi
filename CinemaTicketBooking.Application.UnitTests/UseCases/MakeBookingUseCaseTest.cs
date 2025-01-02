@@ -1,4 +1,5 @@
 ﻿using CinemaTicketBooking.Application.Interfaces.Repositories;
+using CinemaTicketBooking.Application.Interfaces.UseCases;
 using CinemaTicketBooking.Application.UseCases;
 using CinemaTicketBooking.Domain.Entities;
 using Moq;

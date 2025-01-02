@@ -1,5 +1,5 @@
 using AutoMapper;
-using CinemaTicketBooking.Application.UseCases;
+using CinemaTicketBooking.Application.Interfaces.UseCases;
 using CinemaTicketBooking.Web.Dtos.GetAvailableSeats;
 using Microsoft.AspNetCore.Mvc;
 

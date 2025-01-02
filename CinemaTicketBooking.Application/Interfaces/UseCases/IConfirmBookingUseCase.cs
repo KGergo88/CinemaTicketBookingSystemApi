@@ -1,4 +1,4 @@
-namespace CinemaTicketBooking.Application.UseCases;
+namespace CinemaTicketBooking.Application.Interfaces.UseCases;
 
 public class ConfirmBookingException(string message) : Exception(message) {}
 

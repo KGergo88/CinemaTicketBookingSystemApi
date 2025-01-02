@@ -1,5 +1,5 @@
 using AutoMapper;
-using CinemaTicketBooking.Application.UseCases;
+using CinemaTicketBooking.Application.Interfaces.UseCases;
 using CinemaTicketBooking.Domain.Entities;
 using CinemaTicketBooking.Web.Dtos.MakeBooking;
 using Microsoft.AspNetCore.Mvc;
