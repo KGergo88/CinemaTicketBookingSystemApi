@@ -4,7 +4,7 @@ using CinemaTicketBooking.Domain.Entities;
 
 namespace CinemaTicketBooking.Application.UseCases;
 
-internal class AddScreeningsUseCase
+internal class AddScreeningsUseCase : IAddScreeningsUseCase
 {
     private readonly IScreeningRepository screeningRepository;
 

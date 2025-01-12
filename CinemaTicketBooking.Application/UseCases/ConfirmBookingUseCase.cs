@@ -4,7 +4,7 @@ using CinemaTicketBooking.Domain.Entities;
 
 namespace CinemaTicketBooking.Application.UseCases;
 
-internal class ConfirmBookingUseCase
+internal class ConfirmBookingUseCase : IConfirmBookingUseCase
 {
     private readonly IBookingRepository bookingRepository;
 
