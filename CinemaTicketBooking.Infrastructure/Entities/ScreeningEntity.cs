@@ -33,4 +33,6 @@ internal class ScreeningEntity
     public string? Subtitles { get; set; }
 
     public ICollection<SeatReservationEntity> SeatReservations { get; set; }
+
+    public ICollection<PricingEntity> Pricings { get; set; }
 }

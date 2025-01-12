@@ -30,6 +30,8 @@ public class CinemaTicketBookingDbContext : DbContext
 
     internal DbSet<SeatReservationEntity> SeatReservations { get; set; }
 
+    internal DbSet<PricingEntity> Pricings { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -49,6 +51,23 @@ public class CinemaTicketBookingDbContext : DbContext
             .Entity<SeatReservationEntity>()
             .HasOne(e => e.Seat)
             .WithMany(e => e.SeatReservations)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        // Definiging deletion behaviours for Pricing in order to solve database creation issue.
+        // The Auditoriums table can be reached from the Pricings table in two routes.
+        // This leads to the problem that deleting the parent in these relationships cannot delete the children.
+        // Since deleting is not a case we want to solve now,
+        // we can define the NoAction behaviour which will cause exceptions to be thrown upon deleting.
+        // Link:https://learn.microsoft.com/en-us/ef/core/saving/cascade-delete#configuring-cascading-behaviors
+        modelBuilder
+            .Entity<PricingEntity>()
+            .HasOne(e => e.Screening)
+            .WithMany(e => e.Pricings)
+            .OnDelete(DeleteBehavior.NoAction);
+        modelBuilder
+            .Entity<PricingEntity>()
+            .HasOne(e => e.Tier)
+            .WithOne(e => e.Pricing)
             .OnDelete(DeleteBehavior.NoAction);
     }
 }
