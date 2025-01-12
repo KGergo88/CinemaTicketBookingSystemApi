@@ -1,6 +1,6 @@
 using CinemaTicketBooking.Domain.Entities;
 
-namespace CinemaTicketBooking.Application.UseCases;
+namespace CinemaTicketBooking.Application.Interfaces.UseCases;
 
 public interface IAddTheatersUseCase
 {

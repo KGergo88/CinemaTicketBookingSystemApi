@@ -24,4 +24,6 @@ internal class TierEntity
     public AuditoriumEntity Auditorium { get; set; }
 
     public ICollection<SeatEntity> Seats { get; set; }
+
+    public PricingEntity Pricing { get; set; }
 }

@@ -11,7 +11,11 @@ builder.Services.AddAutoMapper(
     typeof(CinemaTicketBooking.Infrastructure.MappingProfile),
     typeof(CinemaTicketBooking.Web.MappingProfile));
 
-var dbConnectionString = builder.Configuration.GetConnectionString("CinemaTicketDbContext");
+var connectionStringName = "CinemaTicketBooking";
+var dbConnectionString = builder.Configuration.GetConnectionString(connectionStringName);
+if (dbConnectionString is null)
+    throw new StartupException($"Could not load the connection string: \"{connectionStringName}\"");
+
 var databaseBinding = DatabaseBindingFactory.Create(dbConnectionString);
 builder.Services.AddDbContext<CinemaTicketBookingDbContext>(
     options => databaseBinding.SetDatabaseType(options, dbConnectionString));

@@ -1,14 +1,12 @@
 namespace CinemaTicketBooking.Domain.Entities;
 
-public class SeatReservation
+public class Pricing
 {
     public Guid? Id { get; set; }
 
-    public required Booking Booking { get; set; }
-
     public required Screening Screening { get; set; }
 
-    public required Seat Seat { get; set; }
+    public required Tier Tier { get; set; }
 
     public required Price Price { get; set; }
 }

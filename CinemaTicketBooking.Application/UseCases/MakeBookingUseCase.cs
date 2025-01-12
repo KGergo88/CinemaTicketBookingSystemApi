@@ -1,9 +1,10 @@
 using CinemaTicketBooking.Application.Interfaces.Repositories;
+using CinemaTicketBooking.Application.Interfaces.UseCases;
 using CinemaTicketBooking.Domain.Entities;
 
 namespace CinemaTicketBooking.Application.UseCases;
 
-internal class MakeBookingUseCase
+internal class MakeBookingUseCase : IMakeBookingUseCase
 {
     private readonly IBookingRepository bookingRepository;
     private readonly ICustomerRepository customerRepository;
