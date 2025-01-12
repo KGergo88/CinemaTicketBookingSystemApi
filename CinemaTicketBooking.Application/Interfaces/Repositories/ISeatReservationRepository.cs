@@ -7,7 +7,9 @@ public class SeatReservationRepositoryException(string message, Exception? inner
 
 public interface ISeatReservationRepository
 {
-    public Task AddSeatReservationsAsync(List<Guid> seatsToReserve, Guid bookingId, Guid screeningId);
+    public Task AddSeatReservationsAsync(List<Guid> seatIdsToReserve, Guid bookingId, Guid screeningId);
 
     public Task<List<Seat>> GetAvailableSeats(Guid screningId);
+
+    public Task<List<SeatReservation>> GetSeatReservationsOfABookingAsync(Guid bookingId);
 }

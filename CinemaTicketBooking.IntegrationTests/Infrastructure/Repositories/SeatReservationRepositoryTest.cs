@@ -29,42 +29,45 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 
         public static IEnumerable<object[]> AddScreeningsAsyncCreatesScreeningsCorrectlyAsyncData()
         {
+            var sopronElitMoziHuszarikTeremDefaultTier = new Tier
+            {
+                Id = Guid.NewGuid(),
+                Name = "default",
+                Seats =
+                [
+                    new Seat
+                    {
+                        Id = Guid.NewGuid(),
+                        Row = 1,
+                        Column = 1
+                    },
+                    new Seat
+                    {
+                        Id = Guid.NewGuid(),
+                        Row = 2,
+                        Column = 1
+                    },
+                    new Seat
+                    {
+                        Id = Guid.NewGuid(),
+                        Row = 3,
+                        Column = 1
+                    },
+                    new Seat
+                    {
+                        Id = Guid.NewGuid(),
+                        Row = 4,
+                        Column = 1
+                    }
+                ]
+            };
+
             var sopronElitMoziHuszarikTerem = new Auditorium
             {
                 Id = Guid.NewGuid(),
                 Name = "Huszárik Terem",
                 Tiers = [
-                    new Tier
-                    {
-                        Id = Guid.NewGuid(),
-                        Name = "default",
-                        Seats = [
-                            new Seat
-                            {
-                                Id = Guid.NewGuid(),
-                                Row = 1,
-                                Column = 1
-                            },
-                            new Seat
-                            {
-                                Id = Guid.NewGuid(),
-                                Row = 2,
-                                Column = 1
-                            },
-                            new Seat
-                            {
-                                Id = Guid.NewGuid(),
-                                Row = 3,
-                                Column = 1
-                            },
-                            new Seat
-                            {
-                                Id = Guid.NewGuid(),
-                                Row = 4,
-                                Column = 1
-                            }
-                        ]
-                    }
+                    sopronElitMoziHuszarikTeremDefaultTier
                 ]
             };
 
@@ -99,6 +102,18 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                 Subtitles = "English"
             };
 
+            var pricing = new Pricing
+            {
+                Id = Guid.NewGuid(),
+                Screening = sleepyHollowScreening,
+                Tier = sopronElitMoziHuszarikTeremDefaultTier,
+                Price = new Price
+                {
+                    Amount = 4500,
+                    Currency = "HUF",
+                }
+            };
+
             var hansJuergenCustomer = new Customer
             {
                 Id = Guid.NewGuid(),
@@ -120,6 +135,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                 elitMozi,
                 sleepyHollowMovie,
                 sleepyHollowScreening,
+                pricing,
                 hansJuergenCustomer,
                 booking
             ];
@@ -130,6 +146,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
         async Task AddSeatReservationsAsyncRejectsMultipleReservationsForTheSameSeatAsync(Theater theaterToSetup,
                                                                                           Movie movieToSetup,
                                                                                           Screening screeningToSetup,
+                                                                                          Pricing pricingToSetup,
                                                                                           Customer customerToSetup,
                                                                                           Booking bookingToSetup)
         {
@@ -146,6 +163,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 
                 var screeningRepository = new ScreeningRepository(mapper, dbContext);
                 await screeningRepository.AddScreeningsAsync([screeningToSetup]);
+                await screeningRepository.SetPricingAsync(screeningToSetup.Id.Value, theaterToSetup.Auditoriums[0].Tiers[0].Id.Value, pricingToSetup);
 
                 var customerRepository = new CustomerRepository(mapper, dbContext);
                 await customerRepository.AddCustomerAsync(customerToSetup);
@@ -248,6 +266,18 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                 Subtitles = "English"
             };
 
+            var pricing = new Pricing
+            {
+                Id = Guid.NewGuid(),
+                Screening = sleepyHollowScreening,
+                Tier = sopronElitMoziHuszarikTeremDefaultTier,
+                Price = new Price
+                {
+                    Amount = 4500,
+                    Currency = "HUF",
+                }
+            };
+
             var hansJuergenCustomer = new Customer
             {
                 Id = Guid.NewGuid(),
@@ -279,6 +309,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                 elitMozi,
                 sleepyHollowMovie,
                 sleepyHollowScreening,
+                pricing,
                 hansJuergenCustomer,
                 booking,
                 seatIdsToReserve,
@@ -291,6 +322,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
         async Task GetAvailableSeatsReturnsTheAvailableSeatsAsync(Theater theaterToSetup,
                                                                   Movie movieToSetup,
                                                                   Screening screeningToSetup,
+                                                                  Pricing pricingToSetup,
                                                                   Customer customerToSetup,
                                                                   Booking bookingToSetup,
                                                                   List<Guid> seatIdsToReserve,
@@ -309,6 +341,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 
                 var screeningRepository = new ScreeningRepository(mapper, dbContext);
                 await screeningRepository.AddScreeningsAsync([screeningToSetup]);
+                await screeningRepository.SetPricingAsync(screeningToSetup.Id.Value, theaterToSetup.Auditoriums[0].Tiers[0].Id.Value, pricingToSetup);
 
                 var customerRepository = new CustomerRepository(mapper, dbContext);
                 await customerRepository.AddCustomerAsync(customerToSetup);

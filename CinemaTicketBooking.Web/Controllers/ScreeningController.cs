@@ -1,6 +1,7 @@
 using AutoMapper;
 using CinemaTicketBooking.Application.Interfaces.UseCases;
 using CinemaTicketBooking.Domain.Entities;
+using CinemaTicketBooking.Web.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CinemaTicketBooking.Web.Controllers;
@@ -21,7 +22,7 @@ public class ScreeningController : ControllerBase
     }
 
     [HttpPost("[action]")]
-    public async Task<ActionResult> AddScreenings(List<Dtos.AddScreening.ScreeningDto> screeningDtos)
+    public async Task<ActionResult> AddScreenings(List<ScreeningDto> screeningDtos)
     {
         var screenings = mapper.Map<List<Screening>>(screeningDtos);
         await addScreeningsUseCase.ExecuteAsync(screenings);

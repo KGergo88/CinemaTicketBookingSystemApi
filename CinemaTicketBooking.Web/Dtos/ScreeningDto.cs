@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CinemaTicketBooking.Web.Dtos.AddScreening
+namespace CinemaTicketBooking.Web.Dtos
 {
     public class ScreeningDto
     {
