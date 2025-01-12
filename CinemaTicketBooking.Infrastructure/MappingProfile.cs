@@ -54,6 +54,14 @@ public class MappingProfile : Profile
         CreateMap<Domain.Entities.Customer, Infrastructure.Entities.CustomerEntity>()
             // For previously not stored entities (Guid is empty), a valid Guid needs to be created
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => CreateNewGuidIfNullOrEmpty(src.Id)));
+
+        CreateMap<Domain.Entities.Pricing, Infrastructure.Entities.PricingEntity>()
+            // For previously not stored entities (Guid is empty), a valid Guid needs to be created
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => CreateNewGuidIfNullOrEmpty(src.Id)))
+            .ForMember(dest => dest.Screening, opt => opt.Ignore())
+            .ForMember(dest => dest.Tier, opt => opt.Ignore())
+            .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price.Amount))
+            .ForMember(dest => dest.Currency, opt => opt.MapFrom(src => src.Price.Currency));
     }
 
     private static Guid CreateNewGuidIfNullOrEmpty(Guid? id)
