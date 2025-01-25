@@ -27,7 +27,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 
         #region AddSeatReservationsAsync Tests
 
-        public static IEnumerable<object[]> AddScreeningsAsyncCreatesScreeningsCorrectlyAsyncData()
+        public static IEnumerable<object[]> AddSeatReservationsAsyncRejectsMultipleReservationsForTheSameSeatAsyncData()
         {
             var sopronElitMoziHuszarikTeremDefaultTier = new Tier
             {
@@ -142,7 +142,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
         }
 
         [Theory]
-        [MemberData(nameof(AddScreeningsAsyncCreatesScreeningsCorrectlyAsyncData))]
+        [MemberData(nameof(AddSeatReservationsAsyncRejectsMultipleReservationsForTheSameSeatAsyncData))]
         async Task AddSeatReservationsAsyncRejectsMultipleReservationsForTheSameSeatAsync(Theater theaterToSetup,
                                                                                           Movie movieToSetup,
                                                                                           Screening screeningToSetup,
