@@ -192,6 +192,10 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             Assert.Equal("Could not reserve seats as at least one of them seems to be already reserved.", secondCallException.Message);
         }
 
+        #endregion
+
+        #region GetAvailableSeatsAsync Tests
+
         public static IEnumerable<object[]> GetAvailableSeatsReturnsTheAvailableSeatsAsyncData()
         {
             var sopronElitMoziHuszarikTeremDefaultTier = new Tier
