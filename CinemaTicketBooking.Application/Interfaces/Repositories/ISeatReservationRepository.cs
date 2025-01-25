@@ -12,4 +12,6 @@ public interface ISeatReservationRepository
     public Task<List<Seat>> GetAvailableSeatsAsync(Guid screningId);
 
     public Task<List<SeatReservation>> GetSeatReservationsOfABookingAsync(Guid bookingId);
+
+    public Task ReleaseSeatsOfTimeoutedBookingsAsync();
 }

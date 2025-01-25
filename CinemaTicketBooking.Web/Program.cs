@@ -1,6 +1,7 @@
 ﻿using CinemaTicketBooking.Infrastructure;
 using CinemaTicketBooking.Infrastructure.DatabaseBindings;
 using CinemaTicketBooking.Web;
+using CinemaTicketBooking.Web.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
@@ -22,6 +23,8 @@ builder.Services.AddDbContext<CinemaTicketBookingDbContext>(
 
 builder.Services.AddControllers(options =>
     options.Filters.Add<UnhandledExceptionFilter>());
+
+builder.Services.AddHostedService<BookingTimeoutBackgroundService>();
 
 builder.Services.AddSwaggerGen(options =>
 {

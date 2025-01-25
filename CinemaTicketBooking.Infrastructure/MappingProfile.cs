@@ -16,6 +16,8 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.DurationInSeconds, opt => opt.MapFrom(src => src.Duration.Seconds))
             .ForMember(dest => dest.Genres, opt => opt.Ignore());
 
+        CreateMap<Infrastructure.Entities.ScreeningEntity, Domain.Entities.Screening>();
+
         // When storing domain entities we only need to fill out the XXXId properties for Auditorium and Movie, the navigation properties are irrelevant
         CreateMap<Domain.Entities.Screening, Infrastructure.Entities.ScreeningEntity>()
             // For previously not stored entities (Guid is empty), a valid Guid needs to be created
@@ -27,9 +29,13 @@ public class MappingProfile : Profile
             // For previously not stored entities (Guid is empty), a valid Guid needs to be created
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => CreateNewGuidIfNullOrEmpty(src.Id)));
 
+        CreateMap<Infrastructure.Entities.AuditoriumEntity, Domain.Entities.Auditorium>();
+
         CreateMap<Domain.Entities.Auditorium, Infrastructure.Entities.AuditoriumEntity>()
             // For previously not stored entities (Guid is empty), a valid Guid needs to be created
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => CreateNewGuidIfNullOrEmpty(src.Id)));
+
+        CreateMap<Infrastructure.Entities.TierEntity, Domain.Entities.Tier>();
 
         CreateMap<Domain.Entities.Tier, Infrastructure.Entities.TierEntity>()
             // For previously not stored entities (Guid is empty), a valid Guid needs to be created
@@ -50,6 +56,9 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.BookingState, opt => opt.MapFrom(src => (int)src.BookingState))
             .ForMember(dest => dest.Customer, opt => opt.Ignore());
 
+        CreateMap<Infrastructure.Entities.BookingEntity, Domain.Entities.Booking>()
+            .ForMember(dest => dest.BookingState, opt => opt.MapFrom(src => (Domain.Entities.BookingState)src.BookingState));
+
         CreateMap<Domain.Entities.Customer, Infrastructure.Entities.CustomerEntity>()
             // For previously not stored entities (Guid is empty), a valid Guid needs to be created
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => CreateNewGuidIfNullOrEmpty(src.Id)));
@@ -61,6 +70,9 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Tier, opt => opt.Ignore())
             .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price.Amount))
             .ForMember(dest => dest.Currency, opt => opt.MapFrom(src => src.Price.Currency));
+
+        CreateMap<Infrastructure.Entities.SeatReservationEntity, Domain.Entities.SeatReservation>()
+            .ForMember(dest => dest.Price, opt => opt.MapFrom(src => new Domain.Entities.Price{ Amount = src.Price, Currency = src.Currency }));
     }
 
     private static Guid CreateNewGuidIfNullOrEmpty(Guid? id)

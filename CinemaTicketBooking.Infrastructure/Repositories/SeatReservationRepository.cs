@@ -91,6 +91,12 @@ internal class SeatReservationRepository : ISeatReservationRepository
         return mapper.Map<List<SeatReservation>>(seatReservationEntities);
     }
 
+    public async Task ReleaseSeatsOfTimeoutedBookingsAsync()
+    {
+        await context.SeatReservations.Where(sr => sr.Booking.BookingState == (int)BookingState.ConfirmationTimeout)
+                                      .ExecuteDeleteAsync();
+    }
+
     private async Task<Dictionary<Guid, PricingEntity>> GetPricingEntitiesForSeatIds(Guid screeningId, List<Guid> seatIds)
     {
         var pricingsOfTheScreening = await context.Pricings.Include(p => p.Tier)
