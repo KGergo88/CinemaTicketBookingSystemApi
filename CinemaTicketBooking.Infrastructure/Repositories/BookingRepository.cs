@@ -40,4 +40,35 @@ internal class BookingRepository : IBookingRepository
         context.Bookings.Update(infraBooking);
         await context.SaveChangesAsync();
     }
+
+    public async Task TimeoutUnconfirmedBookingsAsync(int timeoutInMinutes)
+    {
+        if (timeoutInMinutes <= 0)
+            throw new BookingRepositoryException($"{nameof(timeoutInMinutes)} shall be greater than zero! Actual value: {timeoutInMinutes}");
+
+        // TODO
+        // Instead of doing two round trips to the DB, we should use ExecuteUpdateAsync() here,
+        // but for some reason that does not seem to work with our test environment
+        // The code for that would look like this:
+        //   await context.Bookings.Where(b => b.BookingState == (int)BookingState.NonConfirmed
+        //                                     && (b.CreatedOn.AddMinutes(timeoutInMinutes) < DateTimeOffset.UtcNow))
+        //                         .ExecuteUpdateAsync(updates => updates.SetProperty(b => b.BookingState, (int)BookingState.ConfirmationTimeout));
+
+        await using var transaction = await context.Database.BeginTransactionAsync();
+        try
+        {
+            var bookingsToTimeout = await context.Bookings.Where(b => b.BookingState == (int)BookingState.NonConfirmed
+                                                                      && (b.CreatedOn.AddMinutes(timeoutInMinutes) <
+                                                                          DateTimeOffset.UtcNow))
+                                                          .ToListAsync();
+            bookingsToTimeout.ForEach(b => b.BookingState = (int)BookingState.ConfirmationTimeout);
+            await context.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+        catch (Exception e)
+        {
+            await transaction.RollbackAsync();
+            throw new BookingRepositoryException(e.Message);
+        }
+    }
 }

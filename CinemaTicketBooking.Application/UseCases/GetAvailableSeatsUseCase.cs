@@ -1,4 +1,3 @@
-using AutoMapper;
 using CinemaTicketBooking.Application.Interfaces.Repositories;
 using CinemaTicketBooking.Application.Interfaces.UseCases;
 using CinemaTicketBooking.Domain.Entities;
@@ -16,6 +15,6 @@ internal class GetAvailableSeatsUseCase : IGetAvailableSeatsUseCase
 
     public async Task<List<Seat>> ExecuteAsync(Guid screeningId)
     {
-        return await seatReservationRepository.GetAvailableSeats(screeningId);
+        return await seatReservationRepository.GetAvailableSeatsAsync(screeningId);
     }
 }

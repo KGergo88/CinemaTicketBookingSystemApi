@@ -51,7 +51,7 @@ internal class SeatReservationRepository : ISeatReservationRepository
         }
     }
 
-    public async Task<List<Seat>> GetAvailableSeats(Guid screningId)
+    public async Task<List<Seat>> GetAvailableSeatsAsync(Guid screningId)
     {
         var screeningEntity = await context.Screenings.AsSplitQuery()
                                                       .Include(s => s.Auditorium)
@@ -89,6 +89,12 @@ internal class SeatReservationRepository : ISeatReservationRepository
                                                                     .ToListAsync();
 
         return mapper.Map<List<SeatReservation>>(seatReservationEntities);
+    }
+
+    public async Task ReleaseSeatsOfTimeoutedBookingsAsync()
+    {
+        await context.SeatReservations.Where(sr => sr.Booking.BookingState == (int)BookingState.ConfirmationTimeout)
+                                      .ExecuteDeleteAsync();
     }
 
     private async Task<Dictionary<Guid, PricingEntity>> GetPricingEntitiesForSeatIds(Guid screeningId, List<Guid> seatIds)
