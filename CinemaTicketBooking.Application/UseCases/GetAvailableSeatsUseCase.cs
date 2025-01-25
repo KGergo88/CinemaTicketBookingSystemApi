@@ -16,6 +16,6 @@ internal class GetAvailableSeatsUseCase : IGetAvailableSeatsUseCase
 
     public async Task<List<Seat>> ExecuteAsync(Guid screeningId)
     {
-        return await seatReservationRepository.GetAvailableSeats(screeningId);
+        return await seatReservationRepository.GetAvailableSeatsAsync(screeningId);
     }
 }

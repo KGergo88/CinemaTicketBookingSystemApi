@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using CinemaTicketBooking.Application.Interfaces.Repositories;
 using CinemaTicketBooking.Domain.Entities;
 using CinemaTicketBooking.Infrastructure;
@@ -356,7 +356,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             await seatReservationRepository.AddSeatReservationsAsync(seatIdsToReserve, bookingId, screeningId);
 
             // Act
-            var availableSeats = await seatReservationRepository.GetAvailableSeats(screeningId);
+            var availableSeats = await seatReservationRepository.GetAvailableSeatsAsync(screeningId);
 
             // Assert
             Assert.Equivalent(expectedAvailableSeats, availableSeats);

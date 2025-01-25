@@ -51,7 +51,7 @@ internal class SeatReservationRepository : ISeatReservationRepository
         }
     }
 
-    public async Task<List<Seat>> GetAvailableSeats(Guid screningId)
+    public async Task<List<Seat>> GetAvailableSeatsAsync(Guid screningId)
     {
         var screeningEntity = await context.Screenings.AsSplitQuery()
                                                       .Include(s => s.Auditorium)
