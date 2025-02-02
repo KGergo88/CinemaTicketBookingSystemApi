@@ -18,9 +18,8 @@ internal class MovieRepository : IMovieRepository
 
     public async Task<List<Domain.Entities.Movie>> GetMoviesAsync()
     {
-        var infraMovies = await context.Movies
-                                       .Include(m => m.Genres)
-                                       .ToListAsync();
+        var infraMovies = await context.Movies.Include(m => m.Genres)
+                                              .ToListAsync();
         return mapper.Map<List<Domain.Entities.Movie>>(infraMovies);
     }
 
@@ -32,7 +31,7 @@ internal class MovieRepository : IMovieRepository
         foreach (var domainMovie in domainMovies)
         {
             var alreadyStoredMovie = await context.Movies.FirstOrDefaultAsync(m => m.Title == domainMovie.Title
-                                                                                     && m.ReleaseYear == domainMovie.ReleaseYear);
+                                                                                   && m.ReleaseYear == domainMovie.ReleaseYear);
             if (alreadyStoredMovie is not null)
             {
                 throw new ArgumentException($"A movie with the Title \"{domainMovie.Title}\" from the year {domainMovie.ReleaseYear} is already stored!");
