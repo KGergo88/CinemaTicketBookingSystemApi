@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CinemaTicketBooking.Web;
 
-public class UnhandledExceptionFilter : IExceptionFilter
+internal class UnhandledExceptionFilter : IExceptionFilter
 {
     public void OnException(ExceptionContext context)
     {
