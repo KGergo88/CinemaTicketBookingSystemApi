@@ -1,0 +1,25 @@
+using CinemaTicketBooking.Application.Interfaces.UseCases;
+using CinemaTicketBooking.Application.UseCases;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace CinemaTicketBooking.Application;
+
+public static class ServiceCollectionExtensions
+{
+    public static IServiceCollection AddCinemaTicketBookingApplicationServices(this IServiceCollection services)
+    {
+        services.AddScoped<IAddMoviesUseCase, AddMoviesUseCase>();
+        services.AddScoped<IAddScreeningsUseCase, AddScreeningsUseCase>();
+        services.AddScoped<IAddTheatersUseCase, AddTheatersUseCase>();
+        services.AddScoped<IConfirmBookingUseCase, ConfirmBookingUseCase>();
+        services.AddScoped<IDeleteMovieUseCase, DeleteMovieUseCase>();
+        services.AddScoped<IGetAvailableSeatsUseCase, GetAvailableSeatsUseCase>();
+        services.AddScoped<IGetBookingDetailsUseCase, GetBookingDetailsUseCase>();
+        services.AddScoped<IGetMoviesUseCase, GetMoviesUseCase>();
+        services.AddScoped<IMakeBookingUseCase, MakeBookingUseCase>();
+        services.AddScoped<IManageBookingTimeoutUseCase, ManageBookingTimeoutUseCase>();
+        services.AddScoped<IUpdateMovieUseCase, UpdateMovieUseCase>();
+
+        return services;
+    }
+}

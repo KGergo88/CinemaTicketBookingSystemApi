@@ -5,14 +5,14 @@ namespace CinemaTicketBooking.Web.Services;
 internal class BookingTimeoutBackgroundService : IHostedService, IDisposable
 {
     public const double TimeoutLimitInMinutes = 15.0;
-    private readonly IManageBookingTimeoutUseCase manageBookingTimeoutUseCase;
+    private readonly IServiceScopeFactory serviceScopeFactory;
     private readonly ILogger<BookingTimeoutBackgroundService> logger;
     private System.Timers.Timer timer;
 
-    public BookingTimeoutBackgroundService(IManageBookingTimeoutUseCase manageBookingTimeoutUseCase,
+    public BookingTimeoutBackgroundService(IServiceScopeFactory serviceScopeFactory,
                                            ILogger<BookingTimeoutBackgroundService> logger)
     {
-        this.manageBookingTimeoutUseCase = manageBookingTimeoutUseCase ?? throw new ArgumentNullException(nameof(manageBookingTimeoutUseCase));
+        this.serviceScopeFactory = serviceScopeFactory;
 
         this.logger = logger;
 
@@ -31,6 +31,8 @@ internal class BookingTimeoutBackgroundService : IHostedService, IDisposable
     private async Task DoWorkAsync()
     {
         logger.LogInformation("Booking Timeout Background Service is working.");
+        using var scope = serviceScopeFactory.CreateScope();
+        var manageBookingTimeoutUseCase = scope.ServiceProvider.GetRequiredService<IManageBookingTimeoutUseCase>();
         await manageBookingTimeoutUseCase.ExecuteAsync();
     }
 
