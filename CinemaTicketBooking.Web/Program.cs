@@ -1,4 +1,4 @@
-﻿using CinemaTicketBooking.Infrastructure;
+using CinemaTicketBooking.Infrastructure;
 using CinemaTicketBooking.Infrastructure.DatabaseBindings;
 using CinemaTicketBooking.Web;
 using CinemaTicketBooking.Web.Services;
@@ -30,7 +30,7 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "Cinema Ticket Bookin System API",
+        Title = "Cinema Ticket Booking System API",
         Description = "",
         Version = "v1",
         TermsOfService = null,
