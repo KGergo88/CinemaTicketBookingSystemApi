@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include="$(AssemblyName).UnitTests" />
     <InternalsVisibleTo Include="CinemaTicketBooking.IntegrationTests" />
   </ItemGroup>
 
