@@ -1,4 +1,5 @@
 using CinemaTicketBooking.Infrastructure;
+using CinemaTicketBooking.Infrastructure.DatabaseSeeding;
 using System.Runtime.CompilerServices;
 
 namespace CinemaTicketBooking.IntegrationTests
@@ -14,9 +15,16 @@ namespace CinemaTicketBooking.IntegrationTests
         public static Task<SqlDatabase<CinemaTicketBookingDbContext>> CreateDatabaseAsync(
             [CallerFilePath] string testFile = "",
             string? databaseSuffix = null,
-            [CallerMemberName] string memberName = "")
-            {
-                return sqlInstance.Build(dbName: Guid.NewGuid().ToString());
-            }
+            [CallerMemberName] string memberName = "",
+            string? seedDataJsonPath = null)
+        {
+            var dbName = Guid.NewGuid().ToString();
+
+            IEnumerable<object>? entities = null;
+            if (!string.IsNullOrEmpty(seedDataJsonPath))
+                entities = SeedDataLoader.LoadFromJson(seedDataJsonPath);
+
+            return sqlInstance.Build(dbName, entities);
+        }
     }
 }
