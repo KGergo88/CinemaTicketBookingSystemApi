@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CinemaTicketBooking.Domain.Entities;
 using CinemaTicketBooking.Infrastructure;
+using CinemaTicketBooking.Infrastructure.Entities;
 using CinemaTicketBooking.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,7 +20,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             mapper = mappingConfig.CreateMapper();
         }
 
-        async Task CheckStoredTheaterAsync(CinemaTicketBookingDbContext dbContext, CinemaTicketBooking.Domain.Entities.Theater domainTheater)
+        async Task CheckStoredTheaterAsync(CinemaTicketBookingDbContext dbContext, Theater domainTheater)
         {
             var infraTheater = await dbContext.Theaters.Include(t => t.Auditoriums)
                                                        .ThenInclude(a => a.Tiers)
@@ -34,8 +35,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             }
         }
 
-        void CheckStoredAuditoriums(ICollection<CinemaTicketBooking.Infrastructure.Entities.AuditoriumEntity> storedAuditoriums,
-                                    CinemaTicketBooking.Domain.Entities.Auditorium domainAuditorium)
+        void CheckStoredAuditoriums(ICollection<AuditoriumEntity> storedAuditoriums,
+                                    Auditorium domainAuditorium)
         {
             var infraAuditorium = storedAuditoriums.Single(sa => sa.Name == domainAuditorium.Name);
             foreach(var domainTier in domainAuditorium.Tiers)
@@ -44,8 +45,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             }
         }
 
-        void CheckStoredTiers(ICollection<CinemaTicketBooking.Infrastructure.Entities.TierEntity> storedTiers,
-                              CinemaTicketBooking.Domain.Entities.Tier domainTier)
+        void CheckStoredTiers(ICollection<TierEntity> storedTiers,
+                              Tier domainTier)
         {
             var infraTier = storedTiers.Single(st => st.Name == domainTier.Name);
             foreach (var domainSeat in domainTier.Seats)
@@ -54,8 +55,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             }
         }
 
-        void CheckStoredSeat(ICollection<CinemaTicketBooking.Infrastructure.Entities.SeatEntity> storedSeats,
-                             CinemaTicketBooking.Domain.Entities.Seat domainSeat)
+        void CheckStoredSeat(ICollection<SeatEntity> storedSeats,
+                             Seat domainSeat)
         {
             var infraSeat = storedSeats.Single(ss => ss.Row == domainSeat.Row
                                                      && ss.Column == domainSeat.Column);
@@ -66,7 +67,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
         public static IEnumerable<object[]> AddTheatersAsyncCreatesTheatersAndRelatedEntitiesCorrectlyAsyncData()
         {
             yield return new object[] {
-                new List<CinemaTicketBooking.Domain.Entities.Theater>{
+                new List<Theater>{
                     new Theater
                     {
                         Name = "Elit Mozi",
@@ -122,7 +123,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 
         [Theory]
         [MemberData(nameof(AddTheatersAsyncCreatesTheatersAndRelatedEntitiesCorrectlyAsyncData))]
-        public async Task AddTheatersAsyncCreatesTheatersAndRelatedEntitiesCorrectlyAsync(List<CinemaTicketBooking.Domain.Entities.Theater> domainTheaters)
+        public async Task AddTheatersAsyncCreatesTheatersAndRelatedEntitiesCorrectlyAsync(List<Theater> domainTheaters)
         {
             // Arrange
             await using var db = await CreateDatabaseAsync();
