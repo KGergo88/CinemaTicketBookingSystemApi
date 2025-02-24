@@ -166,7 +166,7 @@ public class MakeBookingUseCaseTest
         var seatReservationRepositoryExceptionMessage = "Some known exception from the repository.";
         mockSeatReservationRepository.Setup(
             msrr => msrr.AddSeatReservationsAsync(
-                It.IsAny<List<Guid>>(), It.IsAny<Guid>(), It.IsAny<Guid>())).ThrowsAsync(
+                It.IsAny<IEnumerable<Guid>>(), It.IsAny<Guid>(), It.IsAny<Guid>())).ThrowsAsync(
                     new SeatReservationRepositoryException(seatReservationRepositoryExceptionMessage)
             );
         var makeBookingUseCase = new MakeBookingUseCase(mockBookingRepository.Object,

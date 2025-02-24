@@ -20,7 +20,7 @@ internal class SeatReservationRepository : ISeatReservationRepository
         this.context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
-    public async Task AddSeatReservationsAsync(List<Guid> seatIdsToReserve, Guid bookingId, Guid screeningId)
+    public async Task AddSeatReservationsAsync(IEnumerable<Guid> seatIdsToReserve, Guid bookingId, Guid screeningId)
     {
         var pricingsBySeats = await GetPricingEntitiesForSeatIds(screeningId, seatIdsToReserve);
         if (seatIdsToReserve.Any(sitr => !pricingsBySeats.ContainsKey(sitr)))
@@ -97,7 +97,7 @@ internal class SeatReservationRepository : ISeatReservationRepository
                                       .ExecuteDeleteAsync();
     }
 
-    private async Task<Dictionary<Guid, PricingEntity>> GetPricingEntitiesForSeatIds(Guid screeningId, List<Guid> seatIds)
+    private async Task<Dictionary<Guid, PricingEntity>> GetPricingEntitiesForSeatIds(Guid screeningId, IEnumerable<Guid> seatIds)
     {
         var pricingsOfTheScreening = await context.Pricings.Include(p => p.Tier)
                                                     .ThenInclude(t => t.Seats)

@@ -23,7 +23,7 @@ internal class MovieRepository : IMovieRepository
         return mapper.Map<List<Domain.Entities.Movie>>(infraMovies);
     }
 
-    public async Task AddMoviesAsync(List<Domain.Entities.Movie> domainMovies)
+    public async Task AddMoviesAsync(IEnumerable<Domain.Entities.Movie> domainMovies)
     {
         var infraMovies = new List<Infrastructure.Entities.MovieEntity>();
         var genresOfMovieIds = new Dictionary<Guid, List<string>>();
@@ -97,7 +97,7 @@ internal class MovieRepository : IMovieRepository
         await context.SaveChangesAsync();
     }
 
-    public async Task DeleteMoviesAsync(List<Guid> movieIdsToDelete)
+    public async Task DeleteMoviesAsync(IEnumerable<Guid> movieIdsToDelete)
     {
         // Deleting this way and not via the ExecuteDeleteAsync()
         // as that solution would leave references to the deleted Movie

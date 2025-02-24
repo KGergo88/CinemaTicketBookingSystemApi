@@ -6,7 +6,7 @@ public interface IScreeningRepository
 {
     public Task<Screening?> GetScreeningOrNullAsync(Guid id);
 
-    public Task AddScreeningsAsync(List<Screening> domainScreenings);
+    public Task AddScreeningsAsync(IEnumerable<Screening> domainScreenings);
 
     public Task SetPricingAsync(Guid screeningId, Guid tierId, Pricing pricing);
 }

@@ -4,5 +4,5 @@ namespace CinemaTicketBooking.Application.Interfaces.UseCases;
 
 public interface IAddMoviesUseCase
 {
-    public Task ExecuteAsync(List<Movie> movies);
+    public Task ExecuteAsync(IEnumerable<Movie> movies);
 }

@@ -22,7 +22,7 @@ public class ScreeningController : ControllerBase
     }
 
     [HttpPost("[action]")]
-    public async Task<ActionResult> AddScreenings(List<ScreeningDto> screeningDtos)
+    public async Task<ActionResult> AddScreenings(IEnumerable<ScreeningDto> screeningDtos)
     {
         var screenings = mapper.Map<List<Screening>>(screeningDtos);
         await addScreeningsUseCase.ExecuteAsync(screenings);

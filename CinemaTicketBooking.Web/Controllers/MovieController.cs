@@ -39,7 +39,7 @@ public class MovieController : ControllerBase
     }
 
     [HttpPost("[action]")]
-    public async Task<ActionResult> Add(List<MovieDto> moviesDtos)
+    public async Task<ActionResult> Add(IEnumerable<MovieDto> moviesDtos)
     {
         var movies = mapper.Map<List<Movie>>(moviesDtos);
         await addMoviesUseCase.ExecuteAsync(movies);
@@ -55,7 +55,7 @@ public class MovieController : ControllerBase
     }
 
     [HttpPost("[action]")]
-    public async Task<ActionResult> Delete(List<Guid> movieIdsToDelete)
+    public async Task<ActionResult> Delete(IEnumerable<Guid> movieIdsToDelete)
     {
         await deleteMoviesUseCase.ExecuteAsync(movieIdsToDelete);
         return Ok();

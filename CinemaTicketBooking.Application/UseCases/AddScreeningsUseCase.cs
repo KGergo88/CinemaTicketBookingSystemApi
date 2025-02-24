@@ -13,7 +13,7 @@ internal class AddScreeningsUseCase : IAddScreeningsUseCase
         this.screeningRepository = screeningRepository ?? throw new ArgumentNullException(nameof(screeningRepository));
     }
 
-    public async Task ExecuteAsync(List<Screening> screenings)
+    public async Task ExecuteAsync(IEnumerable<Screening> screenings)
     {
         await screeningRepository.AddScreeningsAsync(screenings);
     }

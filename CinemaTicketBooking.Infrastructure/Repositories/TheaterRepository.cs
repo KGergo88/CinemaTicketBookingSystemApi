@@ -17,7 +17,7 @@ internal class TheaterRepository : ITheaterRepository
         this.context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
-    public async Task AddTheatersAsync(List<Domain.Entities.Theater> domainTheaters)
+    public async Task AddTheatersAsync(IEnumerable<Domain.Entities.Theater> domainTheaters)
     {
         var infraTheaters = mapper.Map<IList<TheaterEntity>>(domainTheaters);
         context.Theaters.AddRange(infraTheaters);

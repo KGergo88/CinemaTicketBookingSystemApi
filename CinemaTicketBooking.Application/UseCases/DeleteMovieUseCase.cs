@@ -12,7 +12,7 @@ internal class DeleteMovieUseCase : IDeleteMovieUseCase
         this.movieRepository = movieRepository ?? throw new ArgumentNullException(nameof(movieRepository));
     }
 
-    public async Task ExecuteAsync(List<Guid> movieIdsToDelete)
+    public async Task ExecuteAsync(IEnumerable<Guid> movieIdsToDelete)
     {
         await movieRepository.DeleteMoviesAsync(movieIdsToDelete);
     }

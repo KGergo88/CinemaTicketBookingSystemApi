@@ -13,7 +13,7 @@ internal class AddMoviesUseCase : IAddMoviesUseCase
         this.movieRepository = movieRepository ?? throw new ArgumentNullException(nameof(movieRepository));
     }
 
-    public async Task ExecuteAsync(List<Movie> movies)
+    public async Task ExecuteAsync(IEnumerable<Movie> movies)
     {
         await movieRepository.AddMoviesAsync(movies);
     }
