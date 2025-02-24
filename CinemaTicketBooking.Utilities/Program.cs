@@ -15,10 +15,10 @@ string? projectName = Assembly.GetExecutingAssembly().GetName().Name;
 logger.LogInformation("Starting {ProjectName}", projectName);
 
 var seedDatabaseCommand = new SeedDatabaseCommand();
-var SeedDatabaseCommandHandler = new SeedDatabaseCommandHandler(loggerFactory);
+var seedDatabaseCommandHandler = new SeedDatabaseCommandHandler(loggerFactory);
 
 seedDatabaseCommand.SetHandler(
-    SeedDatabaseCommandHandler.HandleAsync,
+    seedDatabaseCommandHandler.HandleAsync,
     seedDatabaseCommand.ConnectionStringArgument,
     seedDatabaseCommand.JsonPathArgument);
 
