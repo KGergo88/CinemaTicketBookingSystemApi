@@ -41,11 +41,11 @@ internal class SeatReservationRepository : ISeatReservationRepository
         {
             await context.SaveChangesAsync();
         }
-        catch (DbUpdateException dbUpdateException)
+        catch (DbUpdateException ex)
         {
-            if (databaseBinding.IsUniqueIndexException(dbUpdateException))
+            if (databaseBinding.IsUniqueIndexException(ex))
                 throw new SeatReservationRepositoryException(
-                    "Could not reserve seats as at least one of them seems to be already reserved.", dbUpdateException);
+                    "Could not reserve seats as at least one of them seems to be already reserved.", ex);
 
             throw;
         }
