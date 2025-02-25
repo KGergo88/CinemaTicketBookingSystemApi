@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CinemaTicketBooking.Domain.Entities;
 using CinemaTicketBooking.Infrastructure;
+using CinemaTicketBooking.Infrastructure.DatabaseBindings;
 using CinemaTicketBooking.Infrastructure.Entities;
 using CinemaTicketBooking.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
     public class MovieRepositoryTest : TestDatabase
     {
         private IMapper mapper;
+        private readonly IDatabaseBinding databaseBinding;
 
         public MovieRepositoryTest()
         {
@@ -18,6 +20,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                 mc.AddProfile(new MappingProfile());
             });
             mapper = mappingConfig.CreateMapper();
+
+            databaseBinding = DatabaseBindingFactory.Create("CinemaTicketBookingDbContext");
         }
 
         #region GetMoviesAsync Tests
@@ -206,7 +210,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             // Arrange
             await using var db = await CreateDatabaseAsync();
             var dbContext = db.Context;
-            var moviesRepository = new MovieRepository(mapper, dbContext);
+            var moviesRepository = new MovieRepository(mapper, databaseBinding, dbContext);
             dbContext.Genres.AddRange(infraGenres);
             dbContext.Movies.AddRange(infraMovies);
             await dbContext.SaveChangesAsync();
@@ -270,7 +274,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             // Arrange
             await using var db = await CreateDatabaseAsync();
             var dbContext = db.Context;
-            var moviesRepository = new MovieRepository(mapper, dbContext);
+            var moviesRepository = new MovieRepository(mapper, databaseBinding, dbContext);
 
             // Act
             await moviesRepository.AddMoviesAsync(domainMovies);
@@ -437,7 +441,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             // Arrange
             await using var db = await CreateDatabaseAsync();
             var dbContext = db.Context;
-            var moviesRepository = new MovieRepository(mapper, dbContext);
+            var moviesRepository = new MovieRepository(mapper, databaseBinding, dbContext);
             dbContext.Movies.AddRange(infraMovies);
             dbContext.Genres.AddRange(infraGenres);
             await dbContext.SaveChangesAsync();
@@ -586,7 +590,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             // Arrange
             await using var db = await CreateDatabaseAsync();
             var dbContext = db.Context;
-            var moviesRepository = new MovieRepository(mapper, dbContext);
+            var moviesRepository = new MovieRepository(mapper, databaseBinding, dbContext);
             dbContext.Movies.AddRange(infraMovies);
             dbContext.Genres.AddRange(infraGenres);
             await dbContext.SaveChangesAsync();

@@ -15,6 +15,13 @@ internal class AddMoviesUseCase : IAddMoviesUseCase
 
     public async Task ExecuteAsync(IEnumerable<Movie> movies)
     {
-        await movieRepository.AddMoviesAsync(movies);
+        try
+        {
+            await movieRepository.AddMoviesAsync(movies);
+        }
+        catch (MovieRepositoryException ex)
+        {
+            throw new AddMoviesUseCaseException($"Could not add movies. Details: {ex.Message}", ex);
+        }
     }
 }

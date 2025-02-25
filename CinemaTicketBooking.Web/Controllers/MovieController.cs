@@ -41,23 +41,44 @@ public class MovieController : ControllerBase
     [HttpPost("[action]")]
     public async Task<ActionResult> Add(IEnumerable<MovieWithoutIdDto> moviesDtos)
     {
-        var movies = mapper.Map<List<Movie>>(moviesDtos);
-        await addMoviesUseCase.ExecuteAsync(movies);
-        return Ok();
+        try
+        {
+            var movies = mapper.Map<List<Movie>>(moviesDtos);
+            await addMoviesUseCase.ExecuteAsync(movies);
+            return Ok();
+        }
+        catch (AddMoviesUseCaseException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpPost("[action]")]
     public async Task<ActionResult> Update(MovieWithIdDto movieDto)
     {
-        var movie = mapper.Map<Movie>(movieDto);
-        await updateMovieUseCase.ExecuteAsync(movie);
-        return Ok();
+        try
+        {
+            var movie = mapper.Map<Movie>(movieDto);
+            await updateMovieUseCase.ExecuteAsync(movie);
+            return Ok();
+        }
+        catch (UpdateMovieUseCaseException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpPost("[action]")]
     public async Task<ActionResult> Delete(IEnumerable<Guid> movieIdsToDelete)
     {
-        await deleteMoviesUseCase.ExecuteAsync(movieIdsToDelete);
-        return Ok();
+        try
+        {
+            await deleteMoviesUseCase.ExecuteAsync(movieIdsToDelete);
+            return Ok();
+        }
+        catch (DeleteMoviesUseCaseException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 }

@@ -15,6 +15,13 @@ internal class UpdateMovieUseCase : IUpdateMovieUseCase
 
     public async Task ExecuteAsync(Movie movie)
     {
-        await movieRepository.UpdateMovieAsync(movie);
+        try
+        {
+            await movieRepository.UpdateMovieAsync(movie);
+        }
+        catch (MovieRepositoryException ex)
+        {
+            throw new UpdateMovieUseCaseException($"Could not update movie. Details: {ex.Message}", ex);
+        }
     }
 }

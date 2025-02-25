@@ -1,6 +1,7 @@
 using AutoMapper;
 using CinemaTicketBooking.Application.Interfaces.Repositories;
 using CinemaTicketBooking.Domain.Entities;
+using CinemaTicketBooking.Infrastructure.DatabaseBindings;
 using CinemaTicketBooking.Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,11 +10,13 @@ namespace CinemaTicketBooking.Infrastructure.Repositories;
 internal class MovieRepository : IMovieRepository
 {
     private readonly IMapper mapper;
+    private readonly IDatabaseBinding databaseBinding;
     private readonly CinemaTicketBookingDbContext context;
 
-    public MovieRepository(IMapper mapper, CinemaTicketBookingDbContext context)
+    public MovieRepository(IMapper mapper, IDatabaseBinding databaseBinding, CinemaTicketBookingDbContext context)
     {
         this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        this.databaseBinding = databaseBinding ?? throw new ArgumentNullException(nameof(databaseBinding));
         this.context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
@@ -34,9 +37,8 @@ internal class MovieRepository : IMovieRepository
             var alreadyStoredMovie = await context.Movies.FirstOrDefaultAsync(m => m.Title == domainMovie.Title
                                                                                    && m.ReleaseYear == domainMovie.ReleaseYear);
             if (alreadyStoredMovie is not null)
-            {
-                throw new ArgumentException($"A movie with the Title \"{domainMovie.Title}\" from the year {domainMovie.ReleaseYear} is already stored!");
-            }
+                throw new MovieRepositoryException(
+                    $"A movie with the Title \"{domainMovie.Title}\" from the year {domainMovie.ReleaseYear} is already stored!");
 
             var infraMovie = mapper.Map<MovieEntity>(domainMovie);
             infraMovies.Add(infraMovie);
@@ -57,14 +59,32 @@ internal class MovieRepository : IMovieRepository
                                                                  .ToList());
         context.AddRange(infraMovies);
 
-        await context.SaveChangesAsync();
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex)
+        {
+            if (databaseBinding.IsUniqueIndexException(ex))
+                throw new MovieRepositoryException($"Cannot add the same movie twice!", ex);
+
+            throw;
+        }
     }
 
     public async Task UpdateMovieAsync(Movie domainMovie)
     {
-        var infraMovie = await context.Movies.Include(m => m.Genres)
+        MovieEntity? infraMovie;
+        try
+        {
+            infraMovie = await context.Movies.Include(m => m.Genres)
                                              .Where(m => m.Id == domainMovie.Id)
                                              .SingleAsync();
+        }
+        catch (InvalidOperationException ex)
+        {
+            throw new MovieRepositoryException($"No movie with the ID {domainMovie.Id} was found!", ex);
+        }
 
         infraMovie.Title = domainMovie.Title;
         infraMovie.ReleaseYear = domainMovie.ReleaseYear;
@@ -106,6 +126,14 @@ internal class MovieRepository : IMovieRepository
         // This solution is not as fast as we need to make a DB round trip.
         var movies = await context.Movies.Where(m => movieIdsToDelete.Contains(m.Id))
                                          .ToListAsync();
+
+        if (movies.Count != movieIdsToDelete.Count())
+        {
+            var foundIds = movies.Select(m => m.Id);
+            var missingIds = movieIdsToDelete.Except(foundIds).ToList();
+            var missingIdsAsString = string.Join(", ", missingIds);
+            throw new MovieRepositoryException($"Not every requested ID exists! Missing IDs: {missingIdsAsString}");
+        }
 
         context.RemoveRange(movies);
         await context.SaveChangesAsync();
