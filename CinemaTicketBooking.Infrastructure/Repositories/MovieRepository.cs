@@ -1,5 +1,6 @@
 using AutoMapper;
 using CinemaTicketBooking.Application.Interfaces.Repositories;
+using CinemaTicketBooking.Domain.Entities;
 using CinemaTicketBooking.Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,14 +17,14 @@ internal class MovieRepository : IMovieRepository
         this.context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
-    public async Task<List<Domain.Entities.Movie>> GetMoviesAsync()
+    public async Task<List<Movie>> GetMoviesAsync()
     {
         var infraMovies = await context.Movies.Include(m => m.Genres)
                                               .ToListAsync();
-        return mapper.Map<List<Domain.Entities.Movie>>(infraMovies);
+        return mapper.Map<List<Movie>>(infraMovies);
     }
 
-    public async Task AddMoviesAsync(List<Domain.Entities.Movie> domainMovies)
+    public async Task AddMoviesAsync(IEnumerable<Movie> domainMovies)
     {
         var infraMovies = new List<Infrastructure.Entities.MovieEntity>();
         var genresOfMovieIds = new Dictionary<Guid, List<string>>();
@@ -59,7 +60,7 @@ internal class MovieRepository : IMovieRepository
         await context.SaveChangesAsync();
     }
 
-    public async Task UpdateMovieAsync(Domain.Entities.Movie domainMovie)
+    public async Task UpdateMovieAsync(Movie domainMovie)
     {
         var infraMovie = await context.Movies.Include(m => m.Genres)
                                              .Where(m => m.Id == domainMovie.Id)
@@ -97,7 +98,7 @@ internal class MovieRepository : IMovieRepository
         await context.SaveChangesAsync();
     }
 
-    public async Task DeleteMoviesAsync(List<Guid> movieIdsToDelete)
+    public async Task DeleteMoviesAsync(IEnumerable<Guid> movieIdsToDelete)
     {
         // Deleting this way and not via the ExecuteDeleteAsync()
         // as that solution would leave references to the deleted Movie

@@ -13,7 +13,7 @@ internal class AddTheatersUseCase : IAddTheatersUseCase
         this.theaterRepository = theaterRepository ?? throw new ArgumentNullException(nameof(theaterRepository));
     }
 
-    public async Task ExecuteAsync(List<Theater> theaters)
+    public async Task ExecuteAsync(IEnumerable<Theater> theaters)
     {
         await theaterRepository.AddTheatersAsync(theaters);
     }

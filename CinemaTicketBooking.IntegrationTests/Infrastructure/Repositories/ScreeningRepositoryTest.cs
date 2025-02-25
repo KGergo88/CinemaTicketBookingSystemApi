@@ -26,37 +26,37 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             // The theaters and movies and all their child entities have their ids set as the AddScreening feature will be used
             // in a way that a screening can only be created for an existing theater and movie
 
-            var sopronElitMoziHuszarikTerem = new CinemaTicketBooking.Domain.Entities.Auditorium
+            var sopronElitMoziHuszarikTerem = new Auditorium
             {
                 Id = Guid.NewGuid(),
                 Name = "Huszárik Terem",
-                Tiers = new List<CinemaTicketBooking.Domain.Entities.Tier>
+                Tiers = new List<Tier>
                 {
-                    new CinemaTicketBooking.Domain.Entities.Tier
+                    new Tier
                     {
                         Id = Guid.NewGuid(),
                         Name = "default",
-                        Seats = new List<CinemaTicketBooking.Domain.Entities.Seat>
+                        Seats = new List<Seat>
                         {
-                            new CinemaTicketBooking.Domain.Entities.Seat
+                            new Seat
                             {
                                 Id = Guid.NewGuid(),
                                 Row = 1,
                                 Column = 1
                             },
-                            new CinemaTicketBooking.Domain.Entities.Seat
+                            new Seat
                             {
                                 Id = Guid.NewGuid(),
                                 Row = 2,
                                 Column = 1
                             },
-                            new CinemaTicketBooking.Domain.Entities.Seat
+                            new Seat
                             {
                                 Id = Guid.NewGuid(),
                                 Row = 3,
                                 Column = 1
                             },
-                            new CinemaTicketBooking.Domain.Entities.Seat
+                            new Seat
                             {
                                 Id = Guid.NewGuid(),
                                 Row = 4,
@@ -67,7 +67,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                 }
             };
 
-            var theatersToSetup = new List<CinemaTicketBooking.Domain.Entities.Theater>
+            var theatersToSetup = new List<Theater>
             {
                 new Theater
                 {
@@ -81,7 +81,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                 }
             };
 
-            var sleepyHollowMovie = new CinemaTicketBooking.Domain.Entities.Movie
+            var sleepyHollowMovie = new Movie
             {
                 Id = Guid.NewGuid(),
                 Title = "Sleepy Hollow",
@@ -91,7 +91,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                 Genres = new List<string> { "Dark Fantasy", "Slasher Horror", "Supernatural Horror", "Fantasy", "Horror", "Mistery" }
             };
 
-            var iAmLegendMovie = new CinemaTicketBooking.Domain.Entities.Movie
+            var iAmLegendMovie = new Movie
             {
                 Id = Guid.NewGuid(),
                 Title = "I Am Legend",
@@ -101,13 +101,13 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                 Genres = new List<string> { "Dystopian Sci-Fi", "Survival", "Zombie Horror", "Action", "Drama", "Horror", "Sci-Fi", "Thriller" }
             };
 
-            var moviesToSetup = new List<CinemaTicketBooking.Domain.Entities.Movie>
+            var moviesToSetup = new List<Movie>
             {
                 sleepyHollowMovie,
                 iAmLegendMovie
             };
 
-            var sleepyHollowScreening = new CinemaTicketBooking.Domain.Entities.Screening
+            var sleepyHollowScreening = new Screening
             {
                 Auditorium = sopronElitMoziHuszarikTerem,
                 Movie = sleepyHollowMovie,
@@ -116,7 +116,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                 Subtitles = "English"
             };
 
-            var iAmLegendScreening = new CinemaTicketBooking.Domain.Entities.Screening
+            var iAmLegendScreening = new Screening
             {
                 Auditorium = sopronElitMoziHuszarikTerem,
                 Movie = iAmLegendMovie,
@@ -125,7 +125,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                 Subtitles = "Hungarian"
             };
 
-            var domainScreenings = new List<CinemaTicketBooking.Domain.Entities.Screening>()
+            var domainScreenings = new List<Screening>()
             {
                 sleepyHollowScreening,
                 iAmLegendScreening
@@ -141,9 +141,9 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 
         [Theory]
         [MemberData(nameof(AddScreeningsAsyncCreatesScreeningsCorrectlyAsyncData))]
-        async Task AddScreeningsAsyncCreatesScreeningsCorrectlyAsync(List<CinemaTicketBooking.Domain.Entities.Theater> theatersToSetup,
-                                                                     List<CinemaTicketBooking.Domain.Entities.Movie> moviesToSetup,
-                                                                     List<CinemaTicketBooking.Domain.Entities.Screening> domainScreenings)
+        async Task AddScreeningsAsyncCreatesScreeningsCorrectlyAsync(List<Theater> theatersToSetup,
+                                                                     List<Movie> moviesToSetup,
+                                                                     List<Screening> domainScreenings)
         {
             // Arrange
             await using var db = await CreateDatabaseAsync();
