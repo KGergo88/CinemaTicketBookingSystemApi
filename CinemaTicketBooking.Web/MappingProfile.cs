@@ -1,5 +1,4 @@
 using AutoMapper;
-using CinemaTicketBooking.Domain;
 using CinemaTicketBooking.Domain.Entities;
 using CinemaTicketBooking.Web.Dtos;
 
