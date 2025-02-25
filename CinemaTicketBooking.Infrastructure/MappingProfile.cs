@@ -15,7 +15,7 @@ public class MappingProfile : Profile
         CreateMap<Movie, MovieEntity>()
             // For previously not stored entities (Guid is empty), a valid Guid needs to be created
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => CreateNewGuidIfNullOrEmpty(src.Id)))
-            .ForMember(dest => dest.DurationInSeconds, opt => opt.MapFrom(src => src.Duration.Seconds))
+            .ForMember(dest => dest.DurationInSeconds, opt => opt.MapFrom(src => src.Duration.TotalSeconds))
             .ForMember(dest => dest.Genres, opt => opt.Ignore());
 
         CreateMap<ScreeningEntity, Screening>();
