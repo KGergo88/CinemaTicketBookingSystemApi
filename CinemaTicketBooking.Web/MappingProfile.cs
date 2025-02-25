@@ -8,10 +8,10 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        // Create mappings between domain models and DTOs
+        CreateMap<MovieDto, Movie>()
+            .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => TimeSpan.FromSeconds(src.DurationInSeconds)));
+
         CreateMap<Movie, MovieDto>()
             .ForMember(dest => dest.DurationInSeconds, opt => opt.MapFrom(src => (int)src.Duration.TotalSeconds));
-
-        // Additional mappings can be added here
     }
 }
