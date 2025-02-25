@@ -26,7 +26,7 @@ internal class MovieRepository : IMovieRepository
 
     public async Task AddMoviesAsync(IEnumerable<Movie> domainMovies)
     {
-        var infraMovies = new List<Infrastructure.Entities.MovieEntity>();
+        var infraMovies = new List<MovieEntity>();
         var genresOfMovieIds = new Dictionary<Guid, List<string>>();
 
         foreach (var domainMovie in domainMovies)
@@ -38,7 +38,7 @@ internal class MovieRepository : IMovieRepository
                 throw new ArgumentException($"A movie with the Title \"{domainMovie.Title}\" from the year {domainMovie.ReleaseYear} is already stored!");
             }
 
-            var infraMovie = mapper.Map<Infrastructure.Entities.MovieEntity>(domainMovie);
+            var infraMovie = mapper.Map<MovieEntity>(domainMovie);
             infraMovies.Add(infraMovie);
 
             genresOfMovieIds.Add(infraMovie.Id, domainMovie.Genres);
