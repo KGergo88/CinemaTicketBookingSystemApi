@@ -1,8 +1,10 @@
+using CinemaTicketBooking.Web.Dtos.Movie;
+
 namespace CinemaTicketBooking.Web.Dtos.GetBookingDetails;
 
 public class GetBookingDetailsResponseDto
 {
-    MovieDto Movie { get; set; }
+    MovieWithIdDto Movie { get; set; }
 
     ScreeningDto Screening { get; set; }
 
