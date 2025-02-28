@@ -5,17 +5,19 @@ namespace CinemaTicketBooking.Web;
 
 internal class UnhandledExceptionFilter : IExceptionFilter
 {
+    private readonly ILogger<UnhandledExceptionFilter> logger;
+    private const string BasicErrorMessage = "An unexpected error occurred.";
+
+    public UnhandledExceptionFilter(ILogger<UnhandledExceptionFilter> logger)
+    {
+        this.logger = logger;
+    }
+
     public void OnException(ExceptionContext context)
     {
-        var errorResponse = new
-        {
-            Message = "An unexpected error occurred.",
-            // We may not want to show the details to the client in a production environment
-            // as it may cause vulnerabilities or contain secrets
-            Detail = context.Exception.Message
-        };
+        logger.LogError("{basicErrorMessage} Exception: {exception}", BasicErrorMessage, context.Exception);
 
-        context.Result = new JsonResult(errorResponse)
+        context.Result = new JsonResult(BasicErrorMessage)
         {
             StatusCode = StatusCodes.Status500InternalServerError
         };
