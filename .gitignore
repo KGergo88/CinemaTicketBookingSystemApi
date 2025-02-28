@@ -5,3 +5,4 @@
 *.DotSettings.user
 CinemaTicketBooking.Web/appsettings.*
 */Properties/*
+CinemaTicketBooking*.log
