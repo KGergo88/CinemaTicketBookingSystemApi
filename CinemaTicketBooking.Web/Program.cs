@@ -5,65 +5,87 @@ using CinemaTicketBooking.Web;
 using CinemaTicketBooking.Web.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using System.Reflection;
 
-var builder = WebApplication.CreateBuilder(args);
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .WriteTo.Console()
+    .WriteTo.Async(a => a.File("CinemaTicketBooking-.log", rollingInterval: RollingInterval.Day))
+    .CreateLogger();
 
-builder.Services.AddAutoMapper(
-    typeof(CinemaTicketBooking.Infrastructure.MappingProfile),
-    typeof(CinemaTicketBooking.Web.MappingProfile));
-
-var connectionStringName = "CinemaTicketBooking";
-var dbConnectionString = builder.Configuration.GetConnectionString(connectionStringName);
-if (dbConnectionString is null)
-    throw new StartupException($"Could not load the connection string: \"{connectionStringName}\"");
-
-var databaseBinding = DatabaseBindingFactory.Create(dbConnectionString);
-builder.Services.AddDbContext<CinemaTicketBookingDbContext>(
-    options => databaseBinding.SetDatabaseType(options, dbConnectionString));
-
-builder.Services.AddControllers(options =>
-    options.Filters.Add<UnhandledExceptionFilter>());
-
-builder.Services.AddCinemaTicketBookingInfrastructureServices()
-                .AddCinemaTicketBookingApplicationServices()
-                .AddHostedService<BookingTimeoutBackgroundService>();
-
-builder.Services.AddSwaggerGen(options =>
+try
 {
-    options.SwaggerDoc("v1", new OpenApiInfo
+    Log.Information("Starting web application");
+
+    var builder = WebApplication.CreateBuilder(args);
+
+    builder.Services.AddSerilog();
+
+    builder.Services.AddAutoMapper(
+        typeof(CinemaTicketBooking.Infrastructure.MappingProfile),
+        typeof(CinemaTicketBooking.Web.MappingProfile));
+
+    var connectionStringName = "CinemaTicketBooking";
+    var dbConnectionString = builder.Configuration.GetConnectionString(connectionStringName);
+    if (dbConnectionString is null)
+        throw new StartupException($"Could not load the connection string: \"{connectionStringName}\"");
+
+    var databaseBinding = DatabaseBindingFactory.Create(dbConnectionString);
+    builder.Services.AddDbContext<CinemaTicketBookingDbContext>(
+        options => databaseBinding.SetDatabaseType(options, dbConnectionString));
+
+    builder.Services.AddControllers(options =>
+        options.Filters.Add<UnhandledExceptionFilter>());
+
+    builder.Services.AddCinemaTicketBookingInfrastructureServices()
+                    .AddCinemaTicketBookingApplicationServices()
+                    .AddHostedService<BookingTimeoutBackgroundService>();
+
+    builder.Services.AddSwaggerGen(options =>
     {
-        Title = "Cinema Ticket Booking System API",
-        Description = "",
-        Version = "v1",
-        TermsOfService = null,
-        Contact = null,
-        License = new OpenApiLicense
+        options.SwaggerDoc("v1", new OpenApiInfo
         {
-            Name = "MIT",
-            Url = new Uri("https://github.com/KGergo88/CinemaTicketBookingSystemApi/blob/main/license")
-        }
+            Title = "Cinema Ticket Booking System API",
+            Description = "",
+            Version = "v1",
+            TermsOfService = null,
+            Contact = null,
+            License = new OpenApiLicense
+            {
+                Name = "MIT",
+                Url = new Uri("https://github.com/KGergo88/CinemaTicketBookingSystemApi/blob/main/license")
+            }
+        });
+
+        var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
     });
 
-    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-});
+    var app = builder.Build();
 
-var app = builder.Build();
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseDeveloperExceptionPage();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
+    else
+    {
+        app.UseExceptionHandler("/Home/Error");
+    }
 
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.MapControllers();
+    app.MapDefaultControllerRoute();
+
+    app.Run();
 }
-else
+catch (Exception ex)
 {
-    app.UseExceptionHandler("/Home/Error");
+    Log.Fatal(ex, "Application terminated unexpectedly");
 }
-
-app.MapControllers();
-app.MapDefaultControllerRoute();
-
-app.Run();
+finally
+{
+    Log.CloseAndFlush();
+}
