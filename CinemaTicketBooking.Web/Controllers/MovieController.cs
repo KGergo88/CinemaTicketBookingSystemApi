@@ -53,7 +53,7 @@ public class MovieController : ControllerBase
         }
     }
 
-    [HttpPost("[action]")]
+    [HttpPut("[action]")]
     public async Task<ActionResult> Update(MovieWithIdDto movieDto)
     {
         try
@@ -68,7 +68,7 @@ public class MovieController : ControllerBase
         }
     }
 
-    [HttpPost("[action]")]
+    [HttpDelete("[action]")]
     public async Task<ActionResult> Delete(IEnumerable<Guid> movieIdsToDelete)
     {
         try
