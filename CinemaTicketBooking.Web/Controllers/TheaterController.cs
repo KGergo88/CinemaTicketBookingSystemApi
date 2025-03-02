@@ -14,10 +14,10 @@ public class TheaterController : ControllerBase
 
     public TheaterController(
         IMapper mapper,
-        IAddTheatersUseCase addTheaterUseCase)
+        IAddTheatersUseCase addTheatersUseCase)
     {
         this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-        this.addTheatersUseCase = addTheaterUseCase ?? throw new ArgumentNullException(nameof(addTheaterUseCase));
+        this.addTheatersUseCase = addTheatersUseCase ?? throw new ArgumentNullException(nameof(addTheatersUseCase));
     }
 
     [HttpPost("[action]")]
