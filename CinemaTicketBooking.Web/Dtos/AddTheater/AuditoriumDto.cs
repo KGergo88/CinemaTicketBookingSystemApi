@@ -1,13 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace CinemaTicketBooking.Web.Dtos.AddTheater
-{
-    public class AuditoriumDto
-    {
-        [Required]
-        public string Name { get; set; }
+namespace CinemaTicketBooking.Web.Dtos.AddTheater;
 
-        [MinLength(1)]
-        public List<TierDto> Tiers { get; set; }
-    }
+public class AuditoriumDto
+{
+    [Required]
+    public string Name { get; set; }
+
+    [MinLength(1)]
+    public List<TierDto> Tiers { get; set; }
 }
