@@ -1,5 +1,6 @@
 using AutoMapper;
 using CinemaTicketBooking.Domain.Entities;
+using CinemaTicketBooking.Web.Dtos;
 using CinemaTicketBooking.Web.Dtos.Movie;
 
 namespace CinemaTicketBooking.Web;
@@ -19,5 +20,17 @@ public class MappingProfile : Profile
 
         CreateMap<Movie, MovieWithIdDto>()
             .IncludeBase<Movie, MovieWithoutIdDto>();
+
+        CreateMap<TheaterDto, Theater>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
+
+        CreateMap<AuditoriumDto, Auditorium>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
+
+        CreateMap<TierDto, Tier>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
+
+        CreateMap<SeatDto, Seat>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
     }
 }
