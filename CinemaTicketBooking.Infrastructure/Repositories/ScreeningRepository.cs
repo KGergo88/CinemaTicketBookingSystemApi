@@ -25,7 +25,7 @@ internal class ScreeningRepository : IScreeningRepository
 
     public async Task AddScreeningsAsync(IEnumerable<Screening> domainScreenings)
     {
-        var infraScreenings = mapper.Map<IList<ScreeningEntity>>(domainScreenings);
+        var infraScreenings = mapper.Map<IEnumerable<ScreeningEntity>>(domainScreenings);
         context.Screenings.AddRange(infraScreenings);
         await context.SaveChangesAsync();
     }
