@@ -42,7 +42,7 @@ internal class MakeBookingUseCase : IMakeBookingUseCase
         }
         catch (SeatReservationRepositoryException exception)
         {
-            throw new MakeBookingException($"Could not reserve seats! Error: \"{exception.Message}\"");
+            throw new MakeBookingException($"Could not reserve seats! Error: \"{exception.Message}\"", exception);
         }
 
         var booking = new Booking()
