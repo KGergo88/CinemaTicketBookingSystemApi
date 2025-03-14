@@ -1,7 +1,9 @@
 using AutoMapper;
 using CinemaTicketBooking.Domain.Entities;
 using CinemaTicketBooking.Web.Dtos;
+using CinemaTicketBooking.Web.Dtos.GetAvailableSeats;
 using CinemaTicketBooking.Web.Dtos.Movie;
+using CinemaTicketBooking.Web.Dtos.Seat;
 
 namespace CinemaTicketBooking.Web;
 
@@ -30,8 +32,13 @@ public class MappingProfile : Profile
         CreateMap<TierDto, Tier>()
             .ForMember(dest => dest.Id, opt => opt.Ignore());
 
-        CreateMap<SeatDto, Seat>()
-            .ForMember(dest => dest.Id, opt => opt.Ignore());
+        CreateMap<Seat, SeatWithIdDto>()
+            .IncludeBase<Seat, SeatWithoutIdDto>();
+
+        CreateMap<Seat, SeatWithoutIdDto>();
+
+        CreateMap<IEnumerable<Seat>, GetAvailableSeatsResponseDto>()
+            .ForMember(dest => dest.AvailableSeats, opt => opt.MapFrom(src => src));
 
         CreateMap<ScreeningDto, Screening>()
             .ForMember(dest => dest.Id, opt => opt.Ignore());
