@@ -113,8 +113,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 
             var sleepyHollowScreening = new Screening
             {
-                Auditorium = sopronElitMoziHuszarikTerem,
-                Movie = sleepyHollowMovie,
+                AuditoriumId = sopronElitMoziHuszarikTerem.Id.Value,
+                MovieId = sleepyHollowMovie.Id.Value,
                 Showtime = DateTimeOffset.Now,
                 Language = "English",
                 Subtitles = "English"
@@ -122,8 +122,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 
             var iAmLegendScreening = new Screening
             {
-                Auditorium = sopronElitMoziHuszarikTerem,
-                Movie = iAmLegendMovie,
+                AuditoriumId = sopronElitMoziHuszarikTerem.Id.Value,
+                MovieId = iAmLegendMovie.Id.Value,
                 Showtime = DateTimeOffset.Now,
                 Language = "English",
                 Subtitles = "Hungarian"
@@ -170,8 +170,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             foreach (var domainScreening in domainScreenings)
             {
                 var infraScreening = infraScreenings.Single(s => s.Showtime == domainScreening.Showtime);
-                Assert.Equal(domainScreening.Auditorium.Id, infraScreening.AuditoriumId);
-                Assert.Equal(domainScreening.Movie.Id, infraScreening.MovieId);
+                Assert.Equal(domainScreening.AuditoriumId, infraScreening.AuditoriumId);
+                Assert.Equal(domainScreening.MovieId, infraScreening.MovieId);
                 Assert.Equal(domainScreening.Language, infraScreening.Language);
                 Assert.Equal(domainScreening.Subtitles, infraScreening.Subtitles);
             }

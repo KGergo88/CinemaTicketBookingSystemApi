@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using CinemaTicketBooking.Application.Interfaces.Repositories;
 using CinemaTicketBooking.Domain.Entities;
 using CinemaTicketBooking.Infrastructure;
@@ -95,8 +95,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             var sleepyHollowScreening = new Screening
             {
                 Id = Guid.NewGuid(),
-                Auditorium = sopronElitMoziHuszarikTerem,
-                Movie = sleepyHollowMovie,
+                AuditoriumId = sopronElitMoziHuszarikTerem.Id.Value,
+                MovieId = sleepyHollowMovie.Id.Value,
                 Showtime = DateTimeOffset.Now,
                 Language = "English",
                 Subtitles = "English"
@@ -105,8 +105,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             var pricing = new Pricing
             {
                 Id = Guid.NewGuid(),
-                Screening = sleepyHollowScreening,
-                Tier = sopronElitMoziHuszarikTeremDefaultTier,
+                ScreeningId = sleepyHollowScreening.Id.Value,
+                TierId = sopronElitMoziHuszarikTeremDefaultTier.Id.Value,
                 Price = new Price
                 {
                     Amount = 4500,
@@ -263,8 +263,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             var sleepyHollowScreening = new Screening
             {
                 Id = Guid.NewGuid(),
-                Auditorium = sopronElitMoziHuszarikTerem,
-                Movie = sleepyHollowMovie,
+                AuditoriumId = sopronElitMoziHuszarikTerem.Id.Value,
+                MovieId = sleepyHollowMovie.Id.Value,
                 Showtime = DateTimeOffset.Now,
                 Language = "English",
                 Subtitles = "English"
@@ -273,8 +273,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             var pricing = new Pricing
             {
                 Id = Guid.NewGuid(),
-                Screening = sleepyHollowScreening,
-                Tier = sopronElitMoziHuszarikTeremDefaultTier,
+                ScreeningId = sleepyHollowScreening.Id.Value,
+                TierId = sopronElitMoziHuszarikTeremDefaultTier.Id.Value,
                 Price = new Price
                 {
                     Amount = 4500,
@@ -437,8 +437,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             var sleepyHollowScreening = new Screening
             {
                 Id = Guid.NewGuid(),
-                Auditorium = sopronElitMoziHuszarikTerem,
-                Movie = sleepyHollowMovie,
+                AuditoriumId = sopronElitMoziHuszarikTerem.Id.Value,
+                MovieId = sleepyHollowMovie.Id.Value,
                 Showtime = DateTimeOffset.Now,
                 Language = "English",
                 Subtitles = "English"
@@ -447,8 +447,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             var pricing = new Pricing
             {
                 Id = Guid.NewGuid(),
-                Screening = sleepyHollowScreening,
-                Tier = sopronElitMoziHuszarikTeremDefaultTier,
+                ScreeningId = sleepyHollowScreening.Id.Value,
+                TierId = sopronElitMoziHuszarikTeremDefaultTier.Id.Value,
                 Price = new Price
                 {
                     Amount = 4500,

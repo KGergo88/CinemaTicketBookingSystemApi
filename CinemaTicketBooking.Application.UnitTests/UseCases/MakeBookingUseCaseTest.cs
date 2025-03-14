@@ -108,8 +108,8 @@ public class MakeBookingUseCaseTest
                     (Guid id) => new Screening()
                     {
                         Id = id,
-                        Auditorium = new Auditorium() { Name = "Huszárik terem", Tiers = []},
-                        Movie = new Movie() { Title = "Paradise: Hope", ReleaseYear = 2013, Duration = TimeSpan.FromMinutes(92), Genres = [ "Drama" ] },
+                        AuditoriumId = Guid.NewGuid(),
+                        MovieId = Guid.NewGuid(),
                         Showtime = showTime,
                         Language = "German"
                     }
@@ -157,8 +157,8 @@ public class MakeBookingUseCaseTest
                     (Guid id) => new Screening()
                     {
                         Id = id,
-                        Auditorium = new Auditorium() { Name = "Huszárik terem", Tiers = []},
-                        Movie = new Movie() { Title = "Paradise: Hope", ReleaseYear = 2013, Duration = TimeSpan.FromMinutes(92), Genres = [ "Drama" ] },
+                        AuditoriumId = Guid.NewGuid(),
+                        MovieId = Guid.NewGuid(),
                         Showtime = DateTimeOffset.UtcNow + TimeSpan.FromDays(1),
                         Language = "German"
                     }
