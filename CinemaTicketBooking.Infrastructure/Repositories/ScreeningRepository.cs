@@ -46,4 +46,21 @@ internal class ScreeningRepository : IScreeningRepository
 
         await context.SaveChangesAsync();
     }
+
+    public async Task<List<Seat>> GetAllSeatsOfTheScreeningAsync(Guid screeningId)
+    {
+        var infraScreening = await context.Screenings.AsSplitQuery()
+                                                     .Include(s => s.Auditorium)
+                                                     .ThenInclude(a => a.Tiers)
+                                                     .ThenInclude(t => t.Seats)
+                                                     .Where(s => s.Id == screeningId)
+                                                     .SingleOrDefaultAsync();
+
+        if (infraScreening is null)
+            throw new SeatReservationRepositoryException("The requested screening entity does not exist!");
+
+        var allInfraSeats = infraScreening.Auditorium.Tiers.SelectMany(t => t.Seats);
+        var allSeats = mapper.Map<List<Seat>>(allInfraSeats);
+        return allSeats;
+    }
 }

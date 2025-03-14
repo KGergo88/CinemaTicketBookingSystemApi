@@ -9,7 +9,7 @@ public interface ISeatReservationRepository
 {
     public Task AddSeatReservationsAsync(IEnumerable<Guid> seatIdsToReserve, Guid bookingId, Guid screeningId);
 
-    public Task<List<Seat>> GetAvailableSeatsAsync(Guid screningId);
+    public Task<List<Seat>> GetReservedSeatsOfTheScreeningAsync(Guid screeningId);
 
     public Task<List<SeatReservation>> GetSeatReservationsOfABookingAsync(Guid bookingId);
 

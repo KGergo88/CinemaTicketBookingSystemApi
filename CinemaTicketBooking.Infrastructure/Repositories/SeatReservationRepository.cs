@@ -51,35 +51,16 @@ internal class SeatReservationRepository : ISeatReservationRepository
         }
     }
 
-    public async Task<List<Seat>> GetAvailableSeatsAsync(Guid screeningId)
+    public async Task<List<Seat>> GetReservedSeatsOfTheScreeningAsync(Guid screeningId)
     {
-        var screeningEntity = await context.Screenings.AsSplitQuery()
-                                                      .Include(s => s.Auditorium)
-                                                      .ThenInclude(a => a.Tiers)
-                                                      .ThenInclude(t => t.Seats)
-                                                      .Where(s => s.Id == screeningId)
-                                                      .SingleOrDefaultAsync();
-
-        if (screeningEntity is null)
-            throw new SeatReservationRepositoryException("The requested screening entity does not exist!");
-
-        var allSeatEntities = screeningEntity.Auditorium.Tiers.SelectMany(t => t.Seats)
-                                                              .ToDictionary(s => s.Id);
-
         var reservedSeatEntities = await context.SeatReservations.Include(sr => sr.Seat)
                                                                  .Include(sr => sr.Booking)
-                                                                 .Where(sr => sr.ScreeningId == screeningId
-                                                                              && (sr.Booking.BookingState == (int)BookingState.NonConfirmed
-                                                                                  || sr.Booking.BookingState == (int)BookingState.Confirmed))
+                                                                 .Where(sr => sr.ScreeningId == screeningId && IsReserved(sr.Booking.BookingState))
                                                                  .Select(sr => sr.Seat)
-                                                                 .ToDictionaryAsync(s => s.Id);
+                                                                 .ToListAsync();
 
-        foreach (var key in reservedSeatEntities.Keys)
-            allSeatEntities.Remove(key);
-
-        var availableSeatEntities = allSeatEntities.Values.ToList();
-
-        return mapper.Map<List<Seat>>(availableSeatEntities);
+        var reservedSeats = mapper.Map<List<Seat>>(reservedSeatEntities);
+        return reservedSeats;
     }
 
     public async Task<List<SeatReservation>> GetSeatReservationsOfABookingAsync(Guid bookingId)
@@ -109,5 +90,10 @@ internal class SeatReservationRepository : ISeatReservationRepository
                                                     .ToDictionary(x => x.SeatId, x => x.Pricing);
 
         return pricingsBySeats;
+    }
+
+    private bool IsReserved(int state)
+    {
+        return state == (int)BookingState.NonConfirmed || state == (int)BookingState.Confirmed;
     }
 }
