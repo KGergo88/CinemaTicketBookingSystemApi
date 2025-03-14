@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using CinemaTicketBooking.Application.Interfaces.Repositories;
 using CinemaTicketBooking.Domain.Entities;
 using CinemaTicketBooking.Infrastructure;
