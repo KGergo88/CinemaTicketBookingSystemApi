@@ -23,8 +23,15 @@ public class SeatReservationController : ControllerBase
     [HttpGet("[action]")]
     public async Task<ActionResult> GetAvailableSeats(Guid screeningId)
     {
-        var availableSeats = await getAvailableSeatsUseCase.ExecuteAsync(screeningId);
-        var response = mapper.Map<GetAvailableSeatsResponseDto>(availableSeats);
-        return Ok(response);
+        try
+        {
+            var availableSeats = await getAvailableSeatsUseCase.ExecuteAsync(screeningId);
+            var response = mapper.Map<GetAvailableSeatsResponseDto>(availableSeats);
+            return Ok(response);
+        }
+        catch (GetAvailableSeatsUseCaseException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 }

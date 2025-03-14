@@ -58,7 +58,10 @@ internal class SeatReservationRepository : ISeatReservationRepository
                                                       .ThenInclude(a => a.Tiers)
                                                       .ThenInclude(t => t.Seats)
                                                       .Where(s => s.Id == screningId)
-                                                      .SingleAsync();
+                                                      .SingleOrDefaultAsync();
+
+        if (screeningEntity is null)
+            throw new SeatReservationRepositoryException("The requested entity does not exist!");
 
         var allSeatEntities = screeningEntity.Auditorium.Tiers.SelectMany(t => t.Seats)
                                                               .ToDictionary(s => s.Id);
@@ -98,9 +101,9 @@ internal class SeatReservationRepository : ISeatReservationRepository
     private async Task<Dictionary<Guid, PricingEntity>> GetPricingEntitiesForSeatIds(Guid screeningId, IEnumerable<Guid> seatIds)
     {
         var pricingsOfTheScreening = await context.Pricings.Include(p => p.Tier)
-                                                    .ThenInclude(t => t.Seats)
-                                                    .Where(p => p.ScreeningId == screeningId)
-                                                    .ToListAsync();
+                                                           .ThenInclude(t => t.Seats)
+                                                           .Where(p => p.ScreeningId == screeningId)
+                                                           .ToListAsync();
 
         var pricingsBySeats = pricingsOfTheScreening.SelectMany(p => p.Tier.Seats.Select(s => new { SeatId = s.Id, Pricing = p }))
                                                     .ToDictionary(x => x.SeatId, x => x.Pricing);
