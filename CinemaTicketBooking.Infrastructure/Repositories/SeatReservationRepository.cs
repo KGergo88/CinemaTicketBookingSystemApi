@@ -72,9 +72,7 @@ internal class SeatReservationRepository : ISeatReservationRepository
                                                                  .ToDictionaryAsync(s => s.Id);
 
         foreach (var key in reservedSeatEntities.Keys)
-        {
             allSeatEntities.Remove(key);
-        }
 
         var availableSeatEntities = allSeatEntities.Values.ToList();
 
