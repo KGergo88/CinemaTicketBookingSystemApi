@@ -2,7 +2,8 @@ using CinemaTicketBooking.Domain.Entities;
 
 namespace CinemaTicketBooking.Application.Interfaces.UseCases;
 
-public class MakeBookingException(string message) : Exception(message) {}
+public class MakeBookingException(string message, Exception? innerException = null)
+    : Exception(message, innerException) { }
 
 public interface IMakeBookingUseCase
 {
