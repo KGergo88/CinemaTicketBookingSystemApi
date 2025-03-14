@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using CinemaTicketBooking.Application.Interfaces.Repositories;
 using CinemaTicketBooking.Domain.Entities;
 using CinemaTicketBooking.Infrastructure;
@@ -163,7 +163,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 
                 var screeningRepository = new ScreeningRepository(mapper, dbContext);
                 await screeningRepository.AddScreeningsAsync([screeningToSetup]);
-                await screeningRepository.SetPricingAsync(screeningToSetup.Id.Value, theaterToSetup.Auditoriums[0].Tiers[0].Id.Value, pricingToSetup);
+                await screeningRepository.SetPricingAsync(pricingToSetup);
 
                 var customerRepository = new CustomerRepository(mapper, dbContext);
                 await customerRepository.AddCustomerAsync(customerToSetup);
@@ -345,7 +345,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 
                 var screeningRepository = new ScreeningRepository(mapper, dbContext);
                 await screeningRepository.AddScreeningsAsync([screeningToSetup]);
-                await screeningRepository.SetPricingAsync(screeningToSetup.Id.Value, theaterToSetup.Auditoriums[0].Tiers[0].Id.Value, pricingToSetup);
+                await screeningRepository.SetPricingAsync(pricingToSetup);
 
                 var customerRepository = new CustomerRepository(mapper, dbContext);
                 await customerRepository.AddCustomerAsync(customerToSetup);
@@ -517,7 +517,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 
                 var screeningRepository = new ScreeningRepository(mapper, dbContext);
                 await screeningRepository.AddScreeningsAsync([screeningToSetup]);
-                await screeningRepository.SetPricingAsync(screeningToSetup.Id.Value, theaterToSetup.Auditoriums[0].Tiers[0].Id.Value, pricingToSetup);
+                await screeningRepository.SetPricingAsync(pricingToSetup);
 
                 var customerRepository = new CustomerRepository(mapper, dbContext);
                 await customerRepository.AddCustomerAsync(customerToSetup);
