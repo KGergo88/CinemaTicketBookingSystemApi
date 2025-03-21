@@ -17,7 +17,7 @@ internal class ScreeningRepository : IScreeningRepository
         this.context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
-    public async Task<Screening> GetScreeningOrNullAsync(Guid id)
+    public async Task<Screening?> GetScreeningOrNullAsync(Guid id)
     {
         var infraScreening = await context.Screenings.SingleOrDefaultAsync(s => s.Id == id);
         return mapper.Map<Screening>(infraScreening);
