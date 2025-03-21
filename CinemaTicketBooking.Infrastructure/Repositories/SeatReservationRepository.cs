@@ -22,7 +22,7 @@ internal class SeatReservationRepository : ISeatReservationRepository
 
     public async Task AddSeatReservationsAsync(IEnumerable<Guid> seatIdsToReserve, Guid bookingId, Guid screeningId)
     {
-        var pricingsBySeats = await GetPricingEntitiesForSeatIds(screeningId, seatIdsToReserve);
+        var pricingsBySeats = await GetPricingEntitiesBySeatId(screeningId);
         if (seatIdsToReserve.Any(sitr => !pricingsBySeats.ContainsKey(sitr)))
             throw new SeatReservationRepositoryException("Could not reserve seats as pricing information is not available for some one of them.");
 
@@ -79,7 +79,7 @@ internal class SeatReservationRepository : ISeatReservationRepository
                                       .ExecuteDeleteAsync();
     }
 
-    private async Task<Dictionary<Guid, PricingEntity>> GetPricingEntitiesForSeatIds(Guid screeningId, IEnumerable<Guid> seatIds)
+    private async Task<Dictionary<Guid, PricingEntity>> GetPricingEntitiesBySeatId(Guid screeningId)
     {
         var pricingsOfTheScreening = await context.Pricings.Include(p => p.Tier)
                                                            .ThenInclude(t => t.Seats)
