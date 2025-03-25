@@ -1,7 +1,7 @@
 using AutoMapper;
 using CinemaTicketBooking.Application.Interfaces.UseCases;
 using CinemaTicketBooking.Domain.Entities;
-using CinemaTicketBooking.Web.Dtos;
+using CinemaTicketBooking.Web.Dtos.Movie;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CinemaTicketBooking.Web.Controllers;
@@ -31,33 +31,54 @@ public class MovieController : ControllerBase
     }
 
     [HttpGet("[action]")]
-    public async Task<ActionResult<List<MovieDto>>> List()
+    public async Task<ActionResult<List<MovieWithIdDto>>> List()
     {
         var movies = await getMoviesUseCase.ExecuteAsync();
-        var movieDtos = mapper.Map<List<MovieDto>>(movies);
+        var movieDtos = mapper.Map<List<MovieWithIdDto>>(movies);
         return Ok(movieDtos);
     }
 
     [HttpPost("[action]")]
-    public async Task<ActionResult> Add(IEnumerable<MovieDto> moviesDtos)
+    public async Task<ActionResult> Add(IEnumerable<MovieWithoutIdDto> moviesDtos)
     {
-        var movies = mapper.Map<List<Movie>>(moviesDtos);
-        await addMoviesUseCase.ExecuteAsync(movies);
-        return Ok();
+        try
+        {
+            var movies = mapper.Map<List<Movie>>(moviesDtos);
+            await addMoviesUseCase.ExecuteAsync(movies);
+            return Ok();
+        }
+        catch (AddMoviesUseCaseException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
-    [HttpPost("[action]")]
-    public async Task<ActionResult> Update(MovieDto movieDto)
+    [HttpPut("[action]")]
+    public async Task<ActionResult> Update(MovieWithIdDto movieDto)
     {
-        var movie = mapper.Map<Movie>(movieDto);
-        await updateMovieUseCase.ExecuteAsync(movie);
-        return Ok();
+        try
+        {
+            var movie = mapper.Map<Movie>(movieDto);
+            await updateMovieUseCase.ExecuteAsync(movie);
+            return Ok();
+        }
+        catch (UpdateMovieUseCaseException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
-    [HttpPost("[action]")]
+    [HttpDelete("[action]")]
     public async Task<ActionResult> Delete(IEnumerable<Guid> movieIdsToDelete)
     {
-        await deleteMoviesUseCase.ExecuteAsync(movieIdsToDelete);
-        return Ok();
+        try
+        {
+            await deleteMoviesUseCase.ExecuteAsync(movieIdsToDelete);
+            return Ok();
+        }
+        catch (DeleteMoviesUseCaseException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 }

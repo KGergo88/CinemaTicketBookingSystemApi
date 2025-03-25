@@ -65,10 +65,10 @@ internal class BookingRepository : IBookingRepository
             await context.SaveChangesAsync();
             await transaction.CommitAsync();
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
             await transaction.RollbackAsync();
-            throw new BookingRepositoryException(e.Message);
+            throw new BookingRepositoryException(ex.Message);
         }
     }
 }

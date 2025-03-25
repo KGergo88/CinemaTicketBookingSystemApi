@@ -158,7 +158,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                 var theaterRepository = new TheaterRepository(mapper, dbContext);
                 await theaterRepository.AddTheatersAsync([theaterToSetup]);
 
-                var movieRepository = new MovieRepository(mapper, dbContext);
+                var movieRepository = new MovieRepository(mapper, databaseBinding, dbContext);
                 await movieRepository.AddMoviesAsync([movieToSetup]);
 
                 var screeningRepository = new ScreeningRepository(mapper, dbContext);
@@ -340,7 +340,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                 var theaterRepository = new TheaterRepository(mapper, dbContext);
                 await theaterRepository.AddTheatersAsync([theaterToSetup]);
 
-                var movieRepository = new MovieRepository(mapper, dbContext);
+                var movieRepository = new MovieRepository(mapper, databaseBinding, dbContext);
                 await movieRepository.AddMoviesAsync([movieToSetup]);
 
                 var screeningRepository = new ScreeningRepository(mapper, dbContext);
@@ -512,7 +512,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                 var theaterRepository = new TheaterRepository(mapper, dbContext);
                 await theaterRepository.AddTheatersAsync([theaterToSetup]);
 
-                var movieRepository = new MovieRepository(mapper, dbContext);
+                var movieRepository = new MovieRepository(mapper, databaseBinding, dbContext);
                 await movieRepository.AddMoviesAsync([movieToSetup]);
 
                 var screeningRepository = new ScreeningRepository(mapper, dbContext);

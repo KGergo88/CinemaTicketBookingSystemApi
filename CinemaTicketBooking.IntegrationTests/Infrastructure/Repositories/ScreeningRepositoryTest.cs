@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CinemaTicketBooking.Domain.Entities;
 using CinemaTicketBooking.Infrastructure;
+using CinemaTicketBooking.Infrastructure.DatabaseBindings;
 using CinemaTicketBooking.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +10,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
     public class ScreeningRepositoryTest : TestDatabase
     {
         private IMapper mapper;
+        private readonly IDatabaseBinding databaseBinding;
 
         public ScreeningRepositoryTest()
         {
@@ -17,6 +19,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                 mc.AddProfile(new MappingProfile());
             });
             mapper = mappingConfig.CreateMapper();
+
+            databaseBinding = DatabaseBindingFactory.Create("CinemaTicketBookingDbContext");
         }
 
         #region AddScreeningsAsync Tests
@@ -153,7 +157,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                 var theaterRepository = new TheaterRepository(mapper, dbContext);
                 await theaterRepository.AddTheatersAsync(theatersToSetup);
 
-                var movieRepository = new MovieRepository(mapper, dbContext);
+                var movieRepository = new MovieRepository(mapper, databaseBinding, dbContext);
                 await movieRepository.AddMoviesAsync(moviesToSetup);
             }
 

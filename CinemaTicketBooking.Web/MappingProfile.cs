@@ -1,7 +1,6 @@
 using AutoMapper;
-using CinemaTicketBooking.Domain;
 using CinemaTicketBooking.Domain.Entities;
-using CinemaTicketBooking.Web.Dtos;
+using CinemaTicketBooking.Web.Dtos.Movie;
 
 namespace CinemaTicketBooking.Web;
 
@@ -9,10 +8,16 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        // Create mappings between domain models and DTOs
-        CreateMap<Movie, MovieDto>()
+        CreateMap<MovieWithoutIdDto, Movie>()
+            .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => TimeSpan.FromSeconds(src.DurationInSeconds)));
+
+        CreateMap<MovieWithIdDto, Movie>()
+            .IncludeBase<MovieWithoutIdDto, Movie>();
+
+        CreateMap<Movie, MovieWithoutIdDto>()
             .ForMember(dest => dest.DurationInSeconds, opt => opt.MapFrom(src => (int)src.Duration.TotalSeconds));
 
-        // Additional mappings can be added here
+        CreateMap<Movie, MovieWithIdDto>()
+            .IncludeBase<Movie, MovieWithoutIdDto>();
     }
 }

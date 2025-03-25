@@ -47,6 +47,17 @@ You can find a suitable `.bacpac` and a JSON file in the `configurations/Databas
 If you want to seed your database with JSON data, please make sure that the schema of the database is created
 by running the [migration command](#applying-migrations-to-the-database) first.
 
+### Run the project
+
+```bash
+# Executed in the CinemaTicketBooking.Web folder
+$ dotnet run
+```
+
+Open the URL contained by the log messages, for example: `Now listening on: https://localhost:50721`.
+You can start exploring the API with the [Swagger UI](https://swagger.io/tools/swagger-ui/).
+Just add `/swagger` to the URL in your browser.
+
 ## Working with database migrations
 
 [Migrations](https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli) represent changes to the database schema.

@@ -2,6 +2,8 @@ using CinemaTicketBooking.Domain.Entities;
 
 namespace CinemaTicketBooking.Application.Interfaces.Repositories;
 
+public class MovieRepositoryException(string message, Exception? innerException = null) : Exception(message, innerException) { }
+
 public interface IMovieRepository
 {
     public Task<List<Movie>> GetMoviesAsync();
