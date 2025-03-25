@@ -1,15 +1,14 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace CinemaTicketBooking.Web.Dtos
-{
-    public class SeatDto
-    {
-        [Required]
-        [Range(1, int.MaxValue)]
-        public int Row { get; set; }
+namespace CinemaTicketBooking.Web.Dtos;
 
-        [Required]
-        [Range(1, int.MaxValue)]
-        public int Column { get; set; }
-    }
+public class SeatDto
+{
+    [Required]
+    [Range(1, int.MaxValue)]
+    public int Row { get; set; }
+
+    [Required]
+    [Range(1, int.MaxValue)]
+    public int Column { get; set; }
 }
