@@ -25,6 +25,13 @@
     </PackageReference>
   </ItemGroup>
 
+  <Target Name="CopyFilesToOutput" BeforeTargets="Build">
+    <ItemGroup>
+      <FilesToCopy Include="..\configurations\DatabaseSeeding\IntegrationTestsDefaultSeedData.json" />
+    </ItemGroup>
+    <Copy SourceFiles="@(FilesToCopy)" DestinationFolder="$(OutputPath)" SkipUnchangedFiles="true" />
+  </Target>
+
   <ItemGroup>
     <ProjectReference Include="..\CinemaTicketBooking.Infrastructure\CinemaTicketBooking.Infrastructure.csproj" />
   </ItemGroup>
