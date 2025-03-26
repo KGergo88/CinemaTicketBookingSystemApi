@@ -10,6 +10,7 @@ public class GetBookingDetailsUseCaseTest
 {
     private readonly Mock<IBookingRepository> mockBookingRepository = new();
     private readonly Mock<ITheaterRepository> mockTheaterRepository = new();
+    private readonly Mock<IScreeningRepository> mockScreeningRepository = new();
     private readonly Mock<ISeatReservationRepository> mockSeatReservationRepository = new();
 
     #region ExecuteAsync Tests
@@ -20,6 +21,7 @@ public class GetBookingDetailsUseCaseTest
         // Arrange
         var getBookingDetailsUseCase = new GetBookingDetailsUseCase(mockBookingRepository.Object,
                                                                     mockTheaterRepository.Object,
+                                                                    mockScreeningRepository.Object,
                                                                     mockSeatReservationRepository.Object);
 
         // Act
@@ -61,6 +63,7 @@ public class GetBookingDetailsUseCaseTest
             );
         var getBookingDetailsUseCase = new GetBookingDetailsUseCase(mockBookingRepository.Object,
                                                                     mockTheaterRepository.Object,
+                                                                    mockScreeningRepository.Object,
                                                                     mockSeatReservationRepository.Object);
 
         // Act
@@ -78,6 +81,7 @@ public class GetBookingDetailsUseCaseTest
     {
         // Arrange
         var bookingId = Guid.NewGuid();
+        var screeningId = Guid.NewGuid();
         mockBookingRepository.Setup(
             mbr => mbr.GetBookingAsync(bookingId))
             .ReturnsAsync(
@@ -101,15 +105,16 @@ public class GetBookingDetailsUseCaseTest
                     new SeatReservation
                     {
                         Id = Guid.NewGuid(),
-                        Booking = null,
-                        Screening = null,
-                        Seat = null,
+                        BookingId = Guid.NewGuid(),
+                        ScreeningId = screeningId,
+                        SeatId = Guid.NewGuid(),
                         Price = null
                     }
                 ]
             );
         var getBookingDetailsUseCase = new GetBookingDetailsUseCase(mockBookingRepository.Object,
                                                                     mockTheaterRepository.Object,
+                                                                    mockScreeningRepository.Object,
                                                                     mockSeatReservationRepository.Object);
 
         // Act
@@ -119,7 +124,7 @@ public class GetBookingDetailsUseCaseTest
 
         // Assert
         Assert.IsType<GetBookingDetailsException>(exception);
-        Assert.Equal($"Could not get screening data from seat reservations! BookingId: {bookingId}", exception.Message);
+        Assert.Equal($"The screening of the booking does not exist! ScreeningId: {screeningId} BookingId: {bookingId}", exception.Message);
     }
 
     #endregion

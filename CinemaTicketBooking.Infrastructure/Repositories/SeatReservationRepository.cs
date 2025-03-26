@@ -65,9 +65,7 @@ internal class SeatReservationRepository : ISeatReservationRepository
 
     public async Task<List<SeatReservation>> GetSeatReservationsOfABookingAsync(Guid bookingId)
     {
-        var seatReservationEntities = await context.SeatReservations.Include(sr => sr.Seat)
-                                                                    .Include(sr => sr.Screening)
-                                                                    .Where(sr => sr.BookingId == bookingId)
+        var seatReservationEntities = await context.SeatReservations.Where(sr => sr.BookingId == bookingId)
                                                                     .ToListAsync();
 
         return mapper.Map<List<SeatReservation>>(seatReservationEntities);
