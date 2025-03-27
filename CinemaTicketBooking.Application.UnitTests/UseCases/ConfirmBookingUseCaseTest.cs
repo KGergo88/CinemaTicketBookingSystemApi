@@ -67,13 +67,7 @@ public class ConfirmBookingUseCaseTest
         {
             Id = bookingId,
             BookingState = bookingState,
-            Customer = new Customer()
-            {
-                Id = Guid.NewGuid(),
-                FirstName = "Hans Jürgen",
-                LastName = "Waldmann",
-                Email = "hansjuergenwaldmann@gmail.com"
-            },
+            CustomerId = Guid.NewGuid(),
             CreatedOn = DateTimeOffset.Now
         };
         mockBookingRepository.Setup(
@@ -94,10 +88,7 @@ public class ConfirmBookingUseCaseTest
                 mbr => mbr.UpdateBookingAsync(
                     It.Is<Booking>(b => b.Id == bookingId
                                         && b.BookingState == BookingState.Confirmed
-                                        && b.Customer.Id == mockBooking.Customer.Id
-                                        && b.Customer.FirstName == mockBooking.Customer.FirstName
-                                        && b.Customer.LastName == mockBooking.Customer.LastName
-                                        && b.Customer.Email == mockBooking.Customer.Email
+                                        && b.CustomerId == mockBooking.CustomerId
                                         && b.CreatedOn == mockBooking.CreatedOn)),
                 Times.Once);
         }

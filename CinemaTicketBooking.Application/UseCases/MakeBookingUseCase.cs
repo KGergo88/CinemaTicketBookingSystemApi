@@ -49,7 +49,7 @@ internal class MakeBookingUseCase : IMakeBookingUseCase
         {
             Id = bookingId,
             BookingState = BookingState.NonConfirmed,
-            Customer = customer,
+            CustomerId = customer.Id.Value,
             CreatedOn = DateTime.UtcNow
         };
         await bookingRepository.AddBookingAsync(booking);

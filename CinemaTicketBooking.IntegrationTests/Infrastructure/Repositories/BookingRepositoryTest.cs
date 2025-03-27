@@ -39,7 +39,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                 {
                     Id = Guid.NewGuid(),
                     BookingState = BookingState.Confirmed,
-                    Customer = hansJuergenCustomer,
+                    CustomerId = hansJuergenCustomer.Id.Value,
                     CreatedOn = DateTimeOffset.UtcNow - TimeSpan.FromDays(3),
                 },
                 BookingState.Confirmed
@@ -53,7 +53,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                 {
                     Id = Guid.NewGuid(),
                     BookingState = BookingState.NonConfirmed,
-                    Customer = hansJuergenCustomer,
+                    CustomerId = hansJuergenCustomer.Id.Value,
                     CreatedOn = DateTimeOffset.UtcNow - TimeSpan.FromDays(3),
                 },
                 BookingState.ConfirmationTimeout

@@ -47,12 +47,7 @@ public class GetBookingDetailsUseCaseTest
                 {
                     Id = bookingId,
                     BookingState = BookingState.Confirmed,
-                    Customer = new Customer()
-                    {
-                        FirstName = "John",
-                        LastName = "Doe",
-                        Email = "john.doe@gmail.com"
-                    },
+                    CustomerId = Guid.NewGuid(),
                     CreatedOn = DateTimeOffset.UtcNow
                 }
             );
@@ -89,12 +84,7 @@ public class GetBookingDetailsUseCaseTest
                 {
                     Id = bookingId,
                     BookingState = BookingState.Confirmed,
-                    Customer = new Customer()
-                    {
-                        FirstName = "John",
-                        LastName = "Doe",
-                        Email = "john.doe@gmail.com"
-                    },
+                    CustomerId = Guid.NewGuid(),
                     CreatedOn = DateTimeOffset.UtcNow
                 }
             );
