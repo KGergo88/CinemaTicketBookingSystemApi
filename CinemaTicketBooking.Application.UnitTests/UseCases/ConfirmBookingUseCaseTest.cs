@@ -63,11 +63,13 @@ public class ConfirmBookingUseCaseTest
     {
         // Arrange
         var bookingId = Guid.NewGuid();
+        var screeningId = Guid.NewGuid();
         var mockBooking = new Booking()
         {
             Id = bookingId,
             BookingState = bookingState,
             CustomerId = Guid.NewGuid(),
+            ScreeningId = screeningId,
             CreatedOn = DateTimeOffset.Now
         };
         mockBookingRepository.Setup(
@@ -89,6 +91,7 @@ public class ConfirmBookingUseCaseTest
                     It.Is<Booking>(b => b.Id == bookingId
                                         && b.BookingState == BookingState.Confirmed
                                         && b.CustomerId == mockBooking.CustomerId
+                                        && b.ScreeningId == screeningId
                                         && b.CreatedOn == mockBooking.CreatedOn)),
                 Times.Once);
         }

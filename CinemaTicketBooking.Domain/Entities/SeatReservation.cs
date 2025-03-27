@@ -6,6 +6,8 @@ public class SeatReservation
 
     public required Guid BookingId { get; set; }
 
+    // This is a redundant reference as the booking already references the screening,
+    // but with this included, we can ensure that the same seat is not reserved multiple times for the same screening
     public required Guid ScreeningId { get; set; }
 
     public required Guid SeatId { get; set; }

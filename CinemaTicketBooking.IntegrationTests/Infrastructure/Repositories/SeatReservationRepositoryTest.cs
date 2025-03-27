@@ -127,6 +127,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                 Id = Guid.NewGuid(),
                 BookingState = BookingState.Confirmed,
                 CustomerId = hansJuergenCustomer.Id.Value,
+                ScreeningId = sleepyHollowScreening.Id.Value,
                 CreatedOn = DateTimeOffset.UtcNow - TimeSpan.FromDays(3),
             };
 
@@ -295,6 +296,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                 Id = Guid.NewGuid(),
                 BookingState = BookingState.ConfirmationTimeout,
                 CustomerId = hansJuergenCustomer.Id.Value,
+                ScreeningId = sleepyHollowScreening.Id.Value,
                 CreatedOn = DateTimeOffset.UtcNow - TimeSpan.FromDays(3),
             };
 

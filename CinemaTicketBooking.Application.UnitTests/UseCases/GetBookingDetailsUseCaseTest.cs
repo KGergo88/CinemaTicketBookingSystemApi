@@ -48,6 +48,7 @@ public class GetBookingDetailsUseCaseTest
                     Id = bookingId,
                     BookingState = BookingState.Confirmed,
                     CustomerId = Guid.NewGuid(),
+                    ScreeningId = Guid.NewGuid(),
                     CreatedOn = DateTimeOffset.UtcNow
                 }
             );
@@ -85,6 +86,7 @@ public class GetBookingDetailsUseCaseTest
                     Id = bookingId,
                     BookingState = BookingState.Confirmed,
                     CustomerId = Guid.NewGuid(),
+                    ScreeningId = screeningId,
                     CreatedOn = DateTimeOffset.UtcNow
                 }
             );

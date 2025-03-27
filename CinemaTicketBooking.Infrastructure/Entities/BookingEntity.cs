@@ -21,5 +21,10 @@ internal class BookingEntity
     public CustomerEntity Customer { get; set; }
 
     [Required]
+    public Guid ScreeningId { get; set; }
+
+    public ScreeningEntity Screening { get; set; }
+
+    [Required]
     public DateTimeOffset CreatedOn { get; set; }
 }

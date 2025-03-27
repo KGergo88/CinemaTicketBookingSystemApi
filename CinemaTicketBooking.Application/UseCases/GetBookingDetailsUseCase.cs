@@ -33,7 +33,7 @@ internal class GetBookingDetailsUseCase : IGetBookingDetailsUseCase
         if (seatReservations.Count == 0)
             throw new GetBookingDetailsException($"There are no seat reservations for this booking! BookingId: {bookingId}");
 
-        var screeningId = seatReservations.First().ScreeningId;
+        var screeningId = booking.ScreeningId;
         var screening = await screeningRepository.GetScreeningOrNullAsync(screeningId);
         if (screening is null)
             throw new GetBookingDetailsException($"The screening of the booking does not exist! ScreeningId: {screeningId} BookingId: {bookingId}");
