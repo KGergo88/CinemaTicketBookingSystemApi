@@ -12,5 +12,6 @@ public class SeatReservation
 
     public required Guid SeatId { get; set; }
 
+    // Not referencing a pricing as the pricing may change after the reservation but a reservation should keep the same price
     public required Price Price { get; set; }
 }
