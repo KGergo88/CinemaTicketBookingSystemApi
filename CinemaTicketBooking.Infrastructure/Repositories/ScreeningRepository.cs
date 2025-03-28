@@ -47,6 +47,20 @@ internal class ScreeningRepository : IScreeningRepository
         await context.SaveChangesAsync();
     }
 
+    public async Task<Dictionary<Guid, Pricing>> GetPricingsBySeatIdAsync(Guid screeningId)
+    {
+        var infraPricings = await context.Pricings.Include(p => p.Tier)
+                                                  .ThenInclude(t => t.Seats)
+                                                  .Where(p => p.ScreeningId == screeningId)
+                                                  .ToListAsync();
+
+        var infraPricingsBySeatId = infraPricings.SelectMany(p => p.Tier.Seats.Select(s => new { SeatId = s.Id, InfraPricing = p }))
+                                                 .ToDictionary(x => x.SeatId, x => x.InfraPricing);
+
+        var pricingsBySeatId = mapper.Map<Dictionary<Guid, Pricing>>(infraPricingsBySeatId);
+        return pricingsBySeatId;
+    }
+
     public async Task<List<Seat>> GetAllSeatsOfTheScreeningAsync(Guid screeningId)
     {
         var infraScreening = await context.Screenings.AsSplitQuery()
@@ -62,5 +76,21 @@ internal class ScreeningRepository : IScreeningRepository
         var allInfraSeats = infraScreening.Auditorium.Tiers.SelectMany(t => t.Seats);
         var allSeats = mapper.Map<List<Seat>>(allInfraSeats);
         return allSeats;
+    }
+
+    public async Task<List<Guid>> FindNotExistingSeatIdsAsync(Guid screeningId, IEnumerable<Guid> seatIdsToCheck)
+    {
+        if (!seatIdsToCheck.Any())
+            return [];
+
+        var seatsOfTheScreening = await GetAllSeatsOfTheScreeningAsync(screeningId);
+        if (seatsOfTheScreening is null || !seatsOfTheScreening.Any())
+            throw new SeatReservationRepositoryException($"Could not load the seats of the screening! ScreeningId: {screeningId}");
+
+        var seatIdsOfTheScreening = seatsOfTheScreening.Select(sots => sots.Id.Value)
+                                                       .ToHashSet();
+        var notExistingSeatIds = seatIdsToCheck.Where(sitc => !seatIdsOfTheScreening.Contains(sitc))
+                                               .ToList();
+        return notExistingSeatIds;
     }
 }
