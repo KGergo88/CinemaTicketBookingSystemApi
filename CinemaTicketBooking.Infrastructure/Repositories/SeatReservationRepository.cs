@@ -51,6 +51,25 @@ internal class SeatReservationRepository : ISeatReservationRepository
         }
     }
 
+    public async Task AddSeatReservationsAsync(IEnumerable<SeatReservation> seatReservations)
+    {
+        var infraSeatReservations = mapper.Map<List<SeatReservationEntity>>(seatReservations);
+        context.SeatReservations.AddRange(infraSeatReservations);
+
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex)
+        {
+            if (databaseBinding.IsUniqueIndexException(ex))
+                throw new SeatReservationRepositoryException(
+                    "Could not reserve seats as at least one of them seems to be already reserved.", ex);
+
+            throw;
+        }
+    }
+
     public async Task DeleteSeatReservationsAsync(IEnumerable<Guid> seatReservationIds)
     {
         await context.SeatReservations.Where(sr => seatReservationIds.Contains(sr.Id))
