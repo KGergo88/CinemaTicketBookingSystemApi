@@ -51,6 +51,12 @@ internal class SeatReservationRepository : ISeatReservationRepository
         }
     }
 
+    public async Task DeleteSeatReservationsAsync(IEnumerable<Guid> seatReservationIds)
+    {
+        await context.SeatReservations.Where(sr => seatReservationIds.Contains(sr.Id))
+                                      .ExecuteDeleteAsync();
+    }
+
     public async Task<List<Seat>> GetReservedSeatsOfTheScreeningAsync(Guid screeningId)
     {
         var reservedSeatEntities = await context.SeatReservations.Include(sr => sr.Seat)
