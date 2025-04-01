@@ -20,37 +20,6 @@ internal class SeatReservationRepository : ISeatReservationRepository
         this.context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
-    public async Task AddSeatReservationsAsync(IEnumerable<Guid> seatIdsToReserve, Guid bookingId, Guid screeningId)
-    {
-        var pricingsBySeats = await GetPricingEntitiesBySeatId(screeningId);
-        if (seatIdsToReserve.Any(sitr => !pricingsBySeats.ContainsKey(sitr)))
-            throw new SeatReservationRepositoryException("Could not reserve seats as pricing information is not available for some one of them.");
-
-        var infraSeatReservations = seatIdsToReserve.Select(sitr => new SeatReservationEntity()
-        {
-            Id = Guid.NewGuid(),
-            BookingId = bookingId,
-            ScreeningId = screeningId,
-            SeatId = sitr,
-            Price = pricingsBySeats[sitr].Price,
-            Currency = pricingsBySeats[sitr].Currency
-        });
-        context.SeatReservations.AddRange(infraSeatReservations);
-
-        try
-        {
-            await context.SaveChangesAsync();
-        }
-        catch (DbUpdateException ex)
-        {
-            if (databaseBinding.IsUniqueIndexException(ex))
-                throw new SeatReservationRepositoryException(
-                    "Could not reserve seats as at least one of them seems to be already reserved.", ex);
-
-            throw;
-        }
-    }
-
     public async Task AddSeatReservationsAsync(IEnumerable<SeatReservation> seatReservations)
     {
         var infraSeatReservations = mapper.Map<List<SeatReservationEntity>>(seatReservations);

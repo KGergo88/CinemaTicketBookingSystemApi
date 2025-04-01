@@ -174,15 +174,32 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 
                 await dbContext.SaveChangesAsync();
             }
-            var seatToReserve = theaterToSetup.Auditoriums[0].Tiers[0].Seats[0].Id.Value;
+            var seatIdToReserve = theaterToSetup.Auditoriums[0].Tiers[0].Seats[0].Id.Value;
             var bookingId = bookingToSetup.Id.Value;
             var screeningId = screeningToSetup.Id.Value;
 
+            var firstSeatReservation = new SeatReservation()
+            {
+                Id = Guid.NewGuid(),
+                BookingId = bookingId,
+                ScreeningId = screeningId,
+                SeatId = seatIdToReserve,
+                Price = new Price { Amount = 10, Currency = "EUR" },
+            };
+            var secondSeatReservation = new SeatReservation()
+            {
+                Id = Guid.NewGuid(),
+                BookingId = bookingId,
+                ScreeningId = screeningId,
+                SeatId = seatIdToReserve,
+                Price = new Price { Amount = 10, Currency = "EUR" },
+            };
+
             // Act
             var firstCallException = await Record.ExceptionAsync(
-                () => seatReservationRepository.AddSeatReservationsAsync([seatToReserve], bookingId, screeningId));
+                () => seatReservationRepository.AddSeatReservationsAsync([firstSeatReservation]));
             var secondCallException = await Record.ExceptionAsync(
-                () => seatReservationRepository.AddSeatReservationsAsync([seatToReserve], bookingId, screeningId));
+                () => seatReservationRepository.AddSeatReservationsAsync([secondSeatReservation]));
 
             // Assert
             Assert.Null(firstCallException);
@@ -355,9 +372,20 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 
                 await dbContext.SaveChangesAsync();
             }
+            var seatIdToReserve = theaterToSetup.Auditoriums[0].Tiers[0].Seats[0].Id.Value;
             var bookingId = bookingToSetup.Id.Value;
             var screeningId = screeningToSetup.Id.Value;
-            await seatReservationRepository.AddSeatReservationsAsync(seatIdsToReserve, bookingId, screeningId);
+
+            var seatReservation = new SeatReservation()
+            {
+                Id = Guid.NewGuid(),
+                BookingId = bookingId,
+                ScreeningId = screeningId,
+                SeatId = seatIdToReserve,
+                Price = new Price { Amount = 10, Currency = "EUR" },
+            };
+
+            await seatReservationRepository.AddSeatReservationsAsync([seatReservation]);
 
             // Act
             var seatReservationsBefore = await seatReservationRepository.GetSeatReservationsOfABookingAsync(bookingId);
