@@ -102,6 +102,15 @@ internal class SeatReservationRepository : ISeatReservationRepository
                                       .ExecuteDeleteAsync();
     }
 
+    public async Task<List<Guid>> FindAlreadyReservedSeatIdsAsync(Guid screeningId, IEnumerable<Guid> seatIdsToCheck)
+    {
+        var reservedSeats = await GetReservedSeatsOfTheScreeningAsync(screeningId);
+        var reservedSeatsById = reservedSeats.ToDictionary(rs => rs.Id.Value);
+        var alreadyReservedSeatIds = seatIdsToCheck.Where(reservedSeatsById.ContainsKey)
+                                                   .ToList();
+        return alreadyReservedSeatIds;
+    }
+
     private async Task<Dictionary<Guid, PricingEntity>> GetPricingEntitiesBySeatId(Guid screeningId)
     {
         var pricingsOfTheScreening = await context.Pricings.Include(p => p.Tier)
