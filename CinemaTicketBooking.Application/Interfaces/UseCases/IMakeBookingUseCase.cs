@@ -7,5 +7,5 @@ public class MakeBookingException(string message, Exception? innerException = nu
 
 public interface IMakeBookingUseCase
 {
-    public Task<Booking> ExecuteAsync(Guid customerId, Guid screeningId, IEnumerable<Guid> seatsToReserve);
+    public Task<Booking> ExecuteAsync(Guid customerId, Guid screeningId, IEnumerable<Guid> seatIdsToReserve);
 }

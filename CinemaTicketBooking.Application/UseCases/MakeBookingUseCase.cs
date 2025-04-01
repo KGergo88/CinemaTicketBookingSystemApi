@@ -22,7 +22,7 @@ internal class MakeBookingUseCase : IMakeBookingUseCase
         this.seatReservationRepository = seatReservationRepository ?? throw new ArgumentNullException(nameof(seatReservationRepository));
     }
 
-    public async Task<Booking> ExecuteAsync(Guid customerId, Guid screeningId, IEnumerable<Guid> seatsToReserve)
+    public async Task<Booking> ExecuteAsync(Guid customerId, Guid screeningId, IEnumerable<Guid> seatIdsToReserve)
     {
         var customer = await customerRepository.GetCustomerOrNullAsync(customerId);
         if (customer is null)
@@ -38,7 +38,7 @@ internal class MakeBookingUseCase : IMakeBookingUseCase
         var bookingId = Guid.NewGuid();
         try
         {
-            await seatReservationRepository.AddSeatReservationsAsync(seatsToReserve, bookingId, screeningId);
+            await seatReservationRepository.AddSeatReservationsAsync(seatIdsToReserve, bookingId, screeningId);
         }
         catch (SeatReservationRepositoryException exception)
         {
