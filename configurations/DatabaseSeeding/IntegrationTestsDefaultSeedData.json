@@ -1,0 +1,396 @@
+{
+  "Theaters": [
+    {
+      "Name": "Elit Mozi",
+      "Address": "9400 Sopron, Torna utca 14",
+      "Auditoriums": [
+        {
+          "Name": "Huszárik terem",
+          "Tiers": [
+            {
+              "Name": "Nézötér",
+              "Seats": [
+                { "Row": 1, "Column": 1 },
+                { "Row": 1, "Column": 2 },
+                { "Row": 1, "Column": 3 },
+                { "Row": 1, "Column": 4 },
+                { "Row": 2, "Column": 1 },
+                { "Row": 2, "Column": 2 },
+                { "Row": 2, "Column": 3 },
+                { "Row": 2, "Column": 4 },
+                { "Row": 3, "Column": 1 },
+                { "Row": 3, "Column": 2 },
+                { "Row": 3, "Column": 3 },
+                { "Row": 3, "Column": 4 },
+                { "Row": 4, "Column": 1 },
+                { "Row": 4, "Column": 2 },
+                { "Row": 4, "Column": 3 },
+                { "Row": 4, "Column": 4 },
+                { "Row": 5, "Column": 1 },
+                { "Row": 5, "Column": 2 },
+                { "Row": 5, "Column": 3 },
+                { "Row": 5, "Column": 4 },
+                { "Row": 6, "Column": 1 },
+                { "Row": 6, "Column": 2 },
+                { "Row": 6, "Column": 3 },
+                { "Row": 6, "Column": 4 },
+                { "Row": 7, "Column": 1 },
+                { "Row": 7, "Column": 2 },
+                { "Row": 7, "Column": 3 },
+                { "Row": 7, "Column": 4 }
+              ]
+            }
+          ]
+        },
+        {
+          "Name": "Nagyterem",
+          "Tiers": [
+            {
+              "Name": "Erkély",
+              "Seats": [
+                { "Row": 1, "Column": 1 },
+                { "Row": 1, "Column": 2 },
+                { "Row": 1, "Column": 3 },
+                { "Row": 1, "Column": 4 },
+                { "Row": 1, "Column": 5 },
+                { "Row": 1, "Column": 6 },
+                { "Row": 1, "Column": 7 },
+                { "Row": 1, "Column": 8 },
+                { "Row": 1, "Column": 9 },
+                { "Row": 1, "Column": 10 },
+                { "Row": 1, "Column": 11 },
+                { "Row": 1, "Column": 12 },
+                { "Row": 1, "Column": 13 },
+                { "Row": 1, "Column": 14 },
+                { "Row": 1, "Column": 15 },
+                { "Row": 1, "Column": 16 },
+
+                { "Row": 2, "Column": 1 },
+                { "Row": 2, "Column": 2 },
+                { "Row": 2, "Column": 3 },
+                { "Row": 2, "Column": 4 },
+                { "Row": 2, "Column": 5 },
+                { "Row": 2, "Column": 6 },
+                { "Row": 2, "Column": 7 },
+                { "Row": 2, "Column": 8 },
+                { "Row": 2, "Column": 9 },
+                { "Row": 2, "Column": 10 },
+                { "Row": 2, "Column": 11 },
+                { "Row": 2, "Column": 12 },
+                { "Row": 2, "Column": 13 },
+                { "Row": 2, "Column": 14 },
+
+                { "Row": 3, "Column": 1 },
+                { "Row": 3, "Column": 2 },
+                { "Row": 3, "Column": 3 },
+                { "Row": 3, "Column": 4 },
+                { "Row": 3, "Column": 5 },
+                { "Row": 3, "Column": 6 },
+                { "Row": 3, "Column": 7 },
+                { "Row": 3, "Column": 8 },
+                { "Row": 3, "Column": 9 },
+                { "Row": 3, "Column": 10 },
+                { "Row": 3, "Column": 11 },
+                { "Row": 3, "Column": 12 },
+                { "Row": 3, "Column": 13 },
+                { "Row": 3, "Column": 14 },
+                { "Row": 3, "Column": 15 },
+                { "Row": 3, "Column": 16 },
+
+                { "Row": 4, "Column": 1 },
+                { "Row": 4, "Column": 2 },
+                { "Row": 4, "Column": 3 },
+                { "Row": 4, "Column": 4 },
+                { "Row": 4, "Column": 5 },
+                { "Row": 4, "Column": 6 },
+                { "Row": 4, "Column": 7 },
+                { "Row": 4, "Column": 8 },
+                { "Row": 4, "Column": 9 },
+                { "Row": 4, "Column": 10 }
+              ]
+            },
+            {
+              "Name": "Nézőtér",
+              "Seats": [
+                { "Row": 1, "Column": 1 },
+                { "Row": 1, "Column": 2 },
+                { "Row": 1, "Column": 3 },
+                { "Row": 1, "Column": 4 },
+                { "Row": 1, "Column": 5 },
+                { "Row": 1, "Column": 6 },
+                { "Row": 1, "Column": 7 },
+                { "Row": 1, "Column": 8 },
+                { "Row": 1, "Column": 9 },
+                { "Row": 1, "Column": 10 },
+                { "Row": 1, "Column": 11 },
+                { "Row": 1, "Column": 12 },
+                { "Row": 1, "Column": 13 },
+                { "Row": 1, "Column": 14 },
+                { "Row": 1, "Column": 15 },
+                { "Row": 1, "Column": 16 },
+
+                { "Row": 2, "Column": 1 },
+                { "Row": 2, "Column": 2 },
+                { "Row": 2, "Column": 3 },
+                { "Row": 2, "Column": 4 },
+                { "Row": 2, "Column": 5 },
+                { "Row": 2, "Column": 6 },
+                { "Row": 2, "Column": 7 },
+                { "Row": 2, "Column": 8 },
+                { "Row": 2, "Column": 9 },
+                { "Row": 2, "Column": 10 },
+                { "Row": 2, "Column": 11 },
+                { "Row": 2, "Column": 12 },
+                { "Row": 2, "Column": 13 },
+                { "Row": 2, "Column": 14 },
+                { "Row": 2, "Column": 15 },
+                { "Row": 2, "Column": 16 },
+                { "Row": 2, "Column": 17 },
+
+                { "Row": 3, "Column": 1 },
+                { "Row": 3, "Column": 2 },
+                { "Row": 3, "Column": 3 },
+                { "Row": 3, "Column": 4 },
+                { "Row": 3, "Column": 5 },
+                { "Row": 3, "Column": 6 },
+                { "Row": 3, "Column": 7 },
+                { "Row": 3, "Column": 8 },
+                { "Row": 3, "Column": 9 },
+                { "Row": 3, "Column": 10 },
+                { "Row": 3, "Column": 11 },
+                { "Row": 3, "Column": 12 },
+                { "Row": 3, "Column": 13 },
+                { "Row": 3, "Column": 14 },
+                { "Row": 3, "Column": 15 },
+                { "Row": 3, "Column": 16 },
+
+                { "Row": 4, "Column": 1 },
+                { "Row": 4, "Column": 2 },
+                { "Row": 4, "Column": 3 },
+                { "Row": 4, "Column": 4 },
+                { "Row": 4, "Column": 5 },
+                { "Row": 4, "Column": 6 },
+                { "Row": 4, "Column": 7 },
+                { "Row": 4, "Column": 8 },
+                { "Row": 4, "Column": 9 },
+                { "Row": 4, "Column": 10 },
+                { "Row": 4, "Column": 11 },
+                { "Row": 4, "Column": 12 },
+                { "Row": 4, "Column": 13 },
+                { "Row": 4, "Column": 14 },
+                { "Row": 4, "Column": 15 },
+                { "Row": 4, "Column": 16 },
+                { "Row": 4, "Column": 17 },
+
+                { "Row": 5, "Column": 1 },
+                { "Row": 5, "Column": 2 },
+                { "Row": 5, "Column": 3 },
+                { "Row": 5, "Column": 4 },
+                { "Row": 5, "Column": 5 },
+                { "Row": 5, "Column": 6 },
+                { "Row": 5, "Column": 7 },
+                { "Row": 5, "Column": 8 },
+                { "Row": 5, "Column": 9 },
+                { "Row": 5, "Column": 10 },
+                { "Row": 5, "Column": 11 },
+                { "Row": 5, "Column": 12 },
+                { "Row": 5, "Column": 13 },
+                { "Row": 5, "Column": 14 },
+                { "Row": 5, "Column": 15 },
+                { "Row": 5, "Column": 16 },
+
+                { "Row": 6, "Column": 1 },
+                { "Row": 6, "Column": 2 },
+                { "Row": 6, "Column": 3 },
+                { "Row": 6, "Column": 4 },
+                { "Row": 6, "Column": 5 },
+                { "Row": 6, "Column": 6 },
+                { "Row": 6, "Column": 7 },
+                { "Row": 6, "Column": 8 },
+                { "Row": 6, "Column": 9 },
+                { "Row": 6, "Column": 10 },
+                { "Row": 6, "Column": 11 },
+                { "Row": 6, "Column": 12 },
+                { "Row": 6, "Column": 13 },
+                { "Row": 6, "Column": 14 },
+                { "Row": 6, "Column": 15 },
+                { "Row": 6, "Column": 16 },
+                { "Row": 6, "Column": 17 },
+
+                { "Row": 7, "Column": 1 },
+                { "Row": 7, "Column": 2 },
+                { "Row": 7, "Column": 3 },
+                { "Row": 7, "Column": 4 },
+                { "Row": 7, "Column": 5 },
+                { "Row": 7, "Column": 6 },
+                { "Row": 7, "Column": 7 },
+                { "Row": 7, "Column": 8 },
+                { "Row": 7, "Column": 9 },
+                { "Row": 7, "Column": 10 },
+                { "Row": 7, "Column": 11 },
+                { "Row": 7, "Column": 12 },
+                { "Row": 7, "Column": 13 },
+                { "Row": 7, "Column": 14 },
+                { "Row": 7, "Column": 15 },
+                { "Row": 7, "Column": 16 },
+
+                { "Row": 8, "Column": 1 },
+                { "Row": 8, "Column": 2 },
+                { "Row": 8, "Column": 3 },
+                { "Row": 8, "Column": 4 },
+                { "Row": 8, "Column": 5 },
+                { "Row": 8, "Column": 6 },
+                { "Row": 8, "Column": 7 },
+                { "Row": 8, "Column": 8 },
+                { "Row": 8, "Column": 9 },
+                { "Row": 8, "Column": 10 },
+                { "Row": 8, "Column": 11 },
+                { "Row": 8, "Column": 12 },
+                { "Row": 8, "Column": 13 },
+                { "Row": 8, "Column": 14 },
+                { "Row": 8, "Column": 15 },
+                { "Row": 8, "Column": 16 },
+                { "Row": 8, "Column": 17 },
+
+                { "Row": 9, "Column": 1 },
+                { "Row": 9, "Column": 2 },
+                { "Row": 9, "Column": 3 },
+                { "Row": 9, "Column": 4 },
+                { "Row": 9, "Column": 5 },
+                { "Row": 9, "Column": 6 },
+                { "Row": 9, "Column": 7 },
+                { "Row": 9, "Column": 8 },
+                { "Row": 9, "Column": 9 },
+                { "Row": 9, "Column": 10 },
+                { "Row": 9, "Column": 11 },
+                { "Row": 9, "Column": 12 },
+                { "Row": 9, "Column": 13 },
+                { "Row": 9, "Column": 14 },
+                { "Row": 9, "Column": 15 },
+                { "Row": 9, "Column": 16 },
+
+                { "Row": 10, "Column": 1 },
+                { "Row": 10, "Column": 2 },
+                { "Row": 10, "Column": 3 },
+                { "Row": 10, "Column": 4 },
+                { "Row": 10, "Column": 5 },
+                { "Row": 10, "Column": 6 },
+                { "Row": 10, "Column": 7 },
+                { "Row": 10, "Column": 8 },
+                { "Row": 10, "Column": 9 },
+                { "Row": 10, "Column": 10 },
+                { "Row": 10, "Column": 11 },
+                { "Row": 10, "Column": 12 },
+                { "Row": 10, "Column": 13 },
+                { "Row": 10, "Column": 14 },
+                { "Row": 10, "Column": 15 },
+                { "Row": 10, "Column": 16 },
+                { "Row": 10, "Column": 17 },
+
+                { "Row": 11, "Column": 1 },
+                { "Row": 11, "Column": 2 },
+                { "Row": 11, "Column": 3 },
+                { "Row": 11, "Column": 4 },
+                { "Row": 11, "Column": 5 },
+                { "Row": 11, "Column": 6 },
+                { "Row": 11, "Column": 7 },
+                { "Row": 11, "Column": 8 },
+                { "Row": 11, "Column": 9 },
+                { "Row": 11, "Column": 10 },
+                { "Row": 11, "Column": 11 },
+                { "Row": 11, "Column": 12 },
+                { "Row": 11, "Column": 13 },
+                { "Row": 11, "Column": 14 },
+                { "Row": 11, "Column": 15 },
+                { "Row": 11, "Column": 16 },
+
+                { "Row": 12, "Column": 1 },
+                { "Row": 12, "Column": 2 },
+                { "Row": 12, "Column": 3 },
+                { "Row": 12, "Column": 4 },
+                { "Row": 12, "Column": 5 },
+                { "Row": 12, "Column": 6 },
+                { "Row": 12, "Column": 7 },
+                { "Row": 12, "Column": 8 },
+                { "Row": 12, "Column": 9 },
+                { "Row": 12, "Column": 10 },
+                { "Row": 12, "Column": 11 },
+                { "Row": 12, "Column": 12 },
+                { "Row": 12, "Column": 13 },
+
+                { "Row": 13, "Column": 1 },
+                { "Row": 13, "Column": 2 },
+                { "Row": 13, "Column": 3 },
+                { "Row": 13, "Column": 4 },
+                { "Row": 13, "Column": 5 },
+                { "Row": 13, "Column": 6 },
+                { "Row": 13, "Column": 7 },
+                { "Row": 13, "Column": 8 }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "Movies": [
+    {
+      "Title": "Sleepy Hollow",
+      "ReleaseYear": 1999,
+      "Description": "Ichabod Crane is sent to Sleepy Hollow to investigate the decapitations of three people; the culprit is legendary apparition The Headless Horseman.",
+      "DurationInSeconds": 6300,
+      "Genres": [
+        {
+          "Name": "Dark Fantasy"
+        },
+        {
+            "Name": "Slasher Horror"
+        },
+        {
+            "Name": "Supernatural Horror"
+        },
+        {
+            "Name": "Fantasy"
+        },
+        {
+            "Name": "Horror"
+        },
+        {
+            "Name": "Mistery"
+        }
+      ]
+    },
+    {
+      "Title": "Melancholia",
+      "ReleaseYear": 2011,
+      "Description": "Two sisters find their already strained relationship challenged as a mysterious new planet threatens to collide with Earth.",
+      "DurationInSeconds": 8100,
+      "Genres": [
+        {
+          "Name": "Psychological Drama"
+        },
+        {
+            "Name": "Tragedy"
+        },
+        {
+            "Name": "Drama"
+        },
+        {
+            "Name": "Sci-Fi"
+        }
+      ]
+    }
+  ],
+  "Customers": [
+    {
+      "FirstName": "Hans Jürgen",
+      "LastName": "Waldmann",
+      "Email": "hans.juergen.waldmann@gmail.com"
+    },
+    {
+      "FirstName": "Susie",
+      "LastName": "Stressed",
+      "Email": "susie.stressed@gmail.com"
+    }
+  ]
+}
