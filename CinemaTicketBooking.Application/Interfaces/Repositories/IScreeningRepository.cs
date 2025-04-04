@@ -8,5 +8,5 @@ public interface IScreeningRepository
 
     public Task AddScreeningsAsync(IEnumerable<Screening> domainScreenings);
 
-    public Task SetPricingAsync(Guid screeningId, Guid tierId, Pricing pricing);
+    public Task SetPricingAsync(Pricing pricing);
 }

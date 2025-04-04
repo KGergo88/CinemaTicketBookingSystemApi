@@ -32,5 +32,8 @@ public class MappingProfile : Profile
 
         CreateMap<SeatDto, Seat>()
             .ForMember(dest => dest.Id, opt => opt.Ignore());
+
+        CreateMap<ScreeningDto, Screening>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
     }
 }

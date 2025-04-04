@@ -4,8 +4,6 @@ namespace CinemaTicketBooking.Web.Dtos;
 
 public class ScreeningDto
 {
-    public Guid? Id { get; set; }
-
     [Required]
     public Guid AuditoriumId { get; set; }
 

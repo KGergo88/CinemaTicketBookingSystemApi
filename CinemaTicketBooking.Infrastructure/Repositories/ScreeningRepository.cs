@@ -25,25 +25,24 @@ internal class ScreeningRepository : IScreeningRepository
 
     public async Task AddScreeningsAsync(IEnumerable<Screening> domainScreenings)
     {
-        var infraScreenings = mapper.Map<IList<ScreeningEntity>>(domainScreenings);
+        var infraScreenings = mapper.Map<IEnumerable<ScreeningEntity>>(domainScreenings);
         context.Screenings.AddRange(infraScreenings);
         await context.SaveChangesAsync();
     }
 
-    public async Task SetPricingAsync(Guid screeningId, Guid tierId, Pricing pricing)
+    public async Task SetPricingAsync(Pricing pricing)
     {
-        var infraPricing = await context.Pricings.SingleOrDefaultAsync(p => p.ScreeningId == screeningId
-                                                                            && p.TierId == tierId);
+        var infraPricing = await context.Pricings.SingleOrDefaultAsync(p => p.ScreeningId == pricing.ScreeningId
+                                                                            && p.TierId == pricing.TierId);
         if (infraPricing is null) {
             infraPricing = mapper.Map<PricingEntity>(pricing);
-            infraPricing.ScreeningId = screeningId;
-            infraPricing.TierId = tierId;
             context.Pricings.Add(infraPricing);
         }
-
-        infraPricing.Price = pricing.Price.Amount;
-        infraPricing.Currency = pricing.Price.Currency;
-
+        else
+        {
+            infraPricing.Price = pricing.Price.Amount;
+            infraPricing.Currency = pricing.Price.Currency;
+        }
 
         await context.SaveChangesAsync();
     }

@@ -95,8 +95,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             var sleepyHollowScreening = new Screening
             {
                 Id = Guid.NewGuid(),
-                Auditorium = sopronElitMoziHuszarikTerem,
-                Movie = sleepyHollowMovie,
+                AuditoriumId = sopronElitMoziHuszarikTerem.Id.Value,
+                MovieId = sleepyHollowMovie.Id.Value,
                 Showtime = DateTimeOffset.Now,
                 Language = "English",
                 Subtitles = "English"
@@ -105,8 +105,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             var pricing = new Pricing
             {
                 Id = Guid.NewGuid(),
-                Screening = sleepyHollowScreening,
-                Tier = sopronElitMoziHuszarikTeremDefaultTier,
+                ScreeningId = sleepyHollowScreening.Id.Value,
+                TierId = sopronElitMoziHuszarikTeremDefaultTier.Id.Value,
                 Price = new Price
                 {
                     Amount = 4500,
@@ -163,7 +163,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 
                 var screeningRepository = new ScreeningRepository(mapper, dbContext);
                 await screeningRepository.AddScreeningsAsync([screeningToSetup]);
-                await screeningRepository.SetPricingAsync(screeningToSetup.Id.Value, theaterToSetup.Auditoriums[0].Tiers[0].Id.Value, pricingToSetup);
+                await screeningRepository.SetPricingAsync(pricingToSetup);
 
                 var customerRepository = new CustomerRepository(mapper, dbContext);
                 await customerRepository.AddCustomerAsync(customerToSetup);
@@ -263,8 +263,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             var sleepyHollowScreening = new Screening
             {
                 Id = Guid.NewGuid(),
-                Auditorium = sopronElitMoziHuszarikTerem,
-                Movie = sleepyHollowMovie,
+                AuditoriumId = sopronElitMoziHuszarikTerem.Id.Value,
+                MovieId = sleepyHollowMovie.Id.Value,
                 Showtime = DateTimeOffset.Now,
                 Language = "English",
                 Subtitles = "English"
@@ -273,8 +273,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             var pricing = new Pricing
             {
                 Id = Guid.NewGuid(),
-                Screening = sleepyHollowScreening,
-                Tier = sopronElitMoziHuszarikTeremDefaultTier,
+                ScreeningId = sleepyHollowScreening.Id.Value,
+                TierId = sopronElitMoziHuszarikTeremDefaultTier.Id.Value,
                 Price = new Price
                 {
                     Amount = 4500,
@@ -345,7 +345,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 
                 var screeningRepository = new ScreeningRepository(mapper, dbContext);
                 await screeningRepository.AddScreeningsAsync([screeningToSetup]);
-                await screeningRepository.SetPricingAsync(screeningToSetup.Id.Value, theaterToSetup.Auditoriums[0].Tiers[0].Id.Value, pricingToSetup);
+                await screeningRepository.SetPricingAsync(pricingToSetup);
 
                 var customerRepository = new CustomerRepository(mapper, dbContext);
                 await customerRepository.AddCustomerAsync(customerToSetup);
@@ -437,8 +437,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             var sleepyHollowScreening = new Screening
             {
                 Id = Guid.NewGuid(),
-                Auditorium = sopronElitMoziHuszarikTerem,
-                Movie = sleepyHollowMovie,
+                AuditoriumId = sopronElitMoziHuszarikTerem.Id.Value,
+                MovieId = sleepyHollowMovie.Id.Value,
                 Showtime = DateTimeOffset.Now,
                 Language = "English",
                 Subtitles = "English"
@@ -447,8 +447,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             var pricing = new Pricing
             {
                 Id = Guid.NewGuid(),
-                Screening = sleepyHollowScreening,
-                Tier = sopronElitMoziHuszarikTeremDefaultTier,
+                ScreeningId = sleepyHollowScreening.Id.Value,
+                TierId = sopronElitMoziHuszarikTeremDefaultTier.Id.Value,
                 Price = new Price
                 {
                     Amount = 4500,
@@ -517,7 +517,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 
                 var screeningRepository = new ScreeningRepository(mapper, dbContext);
                 await screeningRepository.AddScreeningsAsync([screeningToSetup]);
-                await screeningRepository.SetPricingAsync(screeningToSetup.Id.Value, theaterToSetup.Auditoriums[0].Tiers[0].Id.Value, pricingToSetup);
+                await screeningRepository.SetPricingAsync(pricingToSetup);
 
                 var customerRepository = new CustomerRepository(mapper, dbContext);
                 await customerRepository.AddCustomerAsync(customerToSetup);

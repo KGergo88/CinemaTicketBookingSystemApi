@@ -4,9 +4,9 @@ public class Screening
 {
     public Guid? Id { get; set; }
 
-    public required Auditorium Auditorium { get; set; }
+    public required Guid AuditoriumId { get; set; }
 
-    public required Movie Movie { get; set; }
+    public required Guid MovieId { get; set; }
 
     public required DateTimeOffset Showtime { get; set; }
 
