@@ -20,11 +20,8 @@ internal class GetAvailableSeatsUseCase : IGetAvailableSeatsUseCase
     {
         try
         {
-            var allSeatsTask = screeningRepository.GetAllSeatsOfTheScreeningAsync(screeningId);
-            var reserveSeatsTask = seatReservationRepository.GetReservedSeatsOfTheScreeningAsync(screeningId);
-            await Task.WhenAll(allSeatsTask, reserveSeatsTask);
-            var allSeats = allSeatsTask.Result;
-            var reservedSeats = reserveSeatsTask.Result;
+            var allSeats = await screeningRepository.GetAllSeatsOfTheScreeningAsync(screeningId);
+            var reservedSeats = await seatReservationRepository.GetReservedSeatsOfTheScreeningAsync(screeningId);
 
             var reservedSeatsDictionary = reservedSeats.ToDictionary(rs => rs.Id);
             var availableSeats = allSeats.Where(seat => !reservedSeatsDictionary.ContainsKey(seat.Id))
