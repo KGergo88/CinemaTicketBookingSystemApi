@@ -6,7 +6,9 @@ public class Booking
 
     public required BookingState BookingState { get; set; }
 
-    public required Customer Customer { get; set; }
+    public required Guid CustomerId { get; set; }
+
+    public required Guid ScreeningId { get; set; }
 
     public required DateTimeOffset CreatedOn { get; set; }
 }

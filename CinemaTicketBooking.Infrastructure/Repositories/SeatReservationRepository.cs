@@ -20,21 +20,9 @@ internal class SeatReservationRepository : ISeatReservationRepository
         this.context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
-    public async Task AddSeatReservationsAsync(IEnumerable<Guid> seatIdsToReserve, Guid bookingId, Guid screeningId)
+    public async Task AddSeatReservationsAsync(IEnumerable<SeatReservation> seatReservations)
     {
-        var pricingsBySeats = await GetPricingEntitiesForSeatIds(screeningId, seatIdsToReserve);
-        if (seatIdsToReserve.Any(sitr => !pricingsBySeats.ContainsKey(sitr)))
-            throw new SeatReservationRepositoryException("Could not reserve seats as pricing information is not available for some one of them.");
-
-        var infraSeatReservations = seatIdsToReserve.Select(sitr => new SeatReservationEntity()
-        {
-            Id = Guid.NewGuid(),
-            BookingId = bookingId,
-            ScreeningId = screeningId,
-            SeatId = sitr,
-            Price = pricingsBySeats[sitr].Price,
-            Currency = pricingsBySeats[sitr].Currency
-        });
+        var infraSeatReservations = mapper.Map<List<SeatReservationEntity>>(seatReservations);
         context.SeatReservations.AddRange(infraSeatReservations);
 
         try
@@ -51,41 +39,29 @@ internal class SeatReservationRepository : ISeatReservationRepository
         }
     }
 
-    public async Task<List<Seat>> GetAvailableSeatsAsync(Guid screningId)
+    public async Task DeleteSeatReservationsAsync(IEnumerable<Guid> seatReservationIds)
     {
-        var screeningEntity = await context.Screenings.AsSplitQuery()
-                                                      .Include(s => s.Auditorium)
-                                                      .ThenInclude(a => a.Tiers)
-                                                      .ThenInclude(t => t.Seats)
-                                                      .Where(s => s.Id == screningId)
-                                                      .SingleAsync();
+        await context.SeatReservations.Where(sr => seatReservationIds.Contains(sr.Id))
+                                      .ExecuteDeleteAsync();
+    }
 
-        var allSeatEntities = screeningEntity.Auditorium.Tiers.SelectMany(t => t.Seats)
-                                                              .ToDictionary(s => s.Id);
-
+    public async Task<List<Seat>> GetReservedSeatsOfTheScreeningAsync(Guid screeningId)
+    {
         var reservedSeatEntities = await context.SeatReservations.Include(sr => sr.Seat)
                                                                  .Include(sr => sr.Booking)
-                                                                 .Where(sr => sr.ScreeningId == screningId
+                                                                 .Where(sr => sr.ScreeningId == screeningId
                                                                               && (sr.Booking.BookingState == (int)BookingState.NonConfirmed
                                                                                   || sr.Booking.BookingState == (int)BookingState.Confirmed))
                                                                  .Select(sr => sr.Seat)
-                                                                 .ToDictionaryAsync(s => s.Id);
+                                                                 .ToListAsync();
 
-        foreach (var key in reservedSeatEntities.Keys)
-        {
-            allSeatEntities.Remove(key);
-        }
-
-        var availableSeatEntities = allSeatEntities.Values.ToList();
-
-        return mapper.Map<List<Seat>>(availableSeatEntities);
+        var reservedSeats = mapper.Map<List<Seat>>(reservedSeatEntities);
+        return reservedSeats;
     }
 
     public async Task<List<SeatReservation>> GetSeatReservationsOfABookingAsync(Guid bookingId)
     {
-        var seatReservationEntities = await context.SeatReservations.Include(sr => sr.Seat)
-                                                                    .Include(sr => sr.Screening)
-                                                                    .Where(sr => sr.BookingId == bookingId)
+        var seatReservationEntities = await context.SeatReservations.Where(sr => sr.BookingId == bookingId)
                                                                     .ToListAsync();
 
         return mapper.Map<List<SeatReservation>>(seatReservationEntities);
@@ -97,12 +73,21 @@ internal class SeatReservationRepository : ISeatReservationRepository
                                       .ExecuteDeleteAsync();
     }
 
-    private async Task<Dictionary<Guid, PricingEntity>> GetPricingEntitiesForSeatIds(Guid screeningId, IEnumerable<Guid> seatIds)
+    public async Task<List<Guid>> FindAlreadyReservedSeatIdsAsync(Guid screeningId, IEnumerable<Guid> seatIdsToCheck)
+    {
+        var reservedSeats = await GetReservedSeatsOfTheScreeningAsync(screeningId);
+        var reservedSeatsById = reservedSeats.ToDictionary(rs => rs.Id.Value);
+        var alreadyReservedSeatIds = seatIdsToCheck.Where(reservedSeatsById.ContainsKey)
+                                                   .ToList();
+        return alreadyReservedSeatIds;
+    }
+
+    private async Task<Dictionary<Guid, PricingEntity>> GetPricingEntitiesBySeatId(Guid screeningId)
     {
         var pricingsOfTheScreening = await context.Pricings.Include(p => p.Tier)
-                                                    .ThenInclude(t => t.Seats)
-                                                    .Where(p => p.ScreeningId == screeningId)
-                                                    .ToListAsync();
+                                                           .ThenInclude(t => t.Seats)
+                                                           .Where(p => p.ScreeningId == screeningId)
+                                                           .ToListAsync();
 
         var pricingsBySeats = pricingsOfTheScreening.SelectMany(p => p.Tier.Seats.Select(s => new { SeatId = s.Id, Pricing = p }))
                                                     .ToDictionary(x => x.SeatId, x => x.Pricing);

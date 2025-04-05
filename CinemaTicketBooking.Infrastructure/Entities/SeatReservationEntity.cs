@@ -17,6 +17,8 @@ internal class SeatReservationEntity
 
     public BookingEntity Booking { get; set; }
 
+    // This is a redundant reference as the booking already references the screening,
+    // but with this included, we can ensure that the same seat is not reserved multiple times for the same screening
     [Required]
     public Guid ScreeningId { get; set; }
 

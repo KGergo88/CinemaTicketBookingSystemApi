@@ -1,6 +1,7 @@
 namespace CinemaTicketBooking.Application.Interfaces.UseCases;
 
-public class DeleteMoviesUseCaseException(string message, Exception? innerException) : Exception(message, innerException) { }
+public class DeleteMoviesUseCaseException(string message, Exception? innerException)
+    : Exception(message, innerException) { }
 
 public interface IDeleteMovieUseCase
 {

@@ -8,14 +8,17 @@ internal class GetBookingDetailsUseCase : IGetBookingDetailsUseCase
 {
     private readonly IBookingRepository bookingRepository;
     private readonly ITheaterRepository theaterRepository;
+    private readonly IScreeningRepository screeningRepository;
     private readonly ISeatReservationRepository seatReservationRepository;
 
     public GetBookingDetailsUseCase(IBookingRepository bookingRepository,
                                     ITheaterRepository theaterRepository,
+                                    IScreeningRepository screeningRepository,
                                     ISeatReservationRepository seatReservationRepository)
     {
         this.bookingRepository = bookingRepository ?? throw new ArgumentNullException(nameof(bookingRepository));
         this.theaterRepository = theaterRepository ?? throw new ArgumentNullException(nameof(theaterRepository));
+        this.screeningRepository = screeningRepository ?? throw new ArgumentNullException(nameof(screeningRepository));
         this.seatReservationRepository = seatReservationRepository ?? throw new ArgumentNullException(nameof(seatReservationRepository));
     }
 
@@ -30,11 +33,12 @@ internal class GetBookingDetailsUseCase : IGetBookingDetailsUseCase
         if (seatReservations.Count == 0)
             throw new GetBookingDetailsException($"There are no seat reservations for this booking! BookingId: {bookingId}");
 
-        var screening = seatReservations.FirstOrDefault()?.Screening;
-        if (screening?.Id is null || screening.Id == Guid.Empty)
-            throw new GetBookingDetailsException($"Could not get screening data from seat reservations! BookingId: {bookingId}");
+        var screeningId = booking.ScreeningId;
+        var screening = await screeningRepository.GetScreeningOrNullAsync(screeningId);
+        if (screening is null)
+            throw new GetBookingDetailsException($"The screening of the booking does not exist! ScreeningId: {screeningId} BookingId: {bookingId}");
 
-        var theater = await theaterRepository.GetTheaterOfAScreeningAsync(screening.Id.Value);
+        var theater = await theaterRepository.GetTheaterOfAScreeningAsync(screeningId);
         var totalPrice = seatReservations.Sum(sr => sr.Price.Amount);
         var currency = seatReservations.First().Price.Currency;
 

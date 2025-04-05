@@ -1,3 +1,4 @@
+using CinemaTicketBooking.Web.Dtos.Seat;
 using System.ComponentModel.DataAnnotations;
 
 namespace CinemaTicketBooking.Web.Dtos.GetBookingDetails;
@@ -11,7 +12,7 @@ public class SeatReservationDto
     public string TierName { get; set; }
 
     [Required]
-    public SeatDto Seat { get; set; }
+    public SeatWithIdDto Seat { get; set; }
 
     [Required]
     public PriceDto Price { get; set; }

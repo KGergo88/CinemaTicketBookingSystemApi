@@ -91,6 +91,7 @@ public class MakeBookingUseCaseTest
     public async Task PastScreeningsCannotBeBookedAsync(DateTimeOffset showTime, MakeBookingException? expectedException)
     {
         // Arrange
+        var seatIdsToReserve = new List<Guid> { Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() };
         mockCustomerRepository.Setup(
             mcr => mcr.GetCustomerOrNullAsync(
                 It.IsAny<Guid>())).ReturnsAsync(
@@ -114,6 +115,33 @@ public class MakeBookingUseCaseTest
                         Language = "German"
                     }
             );
+        mockScreeningRepository.Setup(
+            msr => msr.FindNotExistingSeatIdsAsync(
+                It.IsAny<Guid>(), It.IsAny<IEnumerable<Guid>>())).ReturnsAsync(
+                    (Guid screeningId, IEnumerable<Guid> seatIdsToCheck) => new List<Guid>()
+            );
+        mockSeatReservationRepository.Setup(
+            msrr => msrr.GetReservedSeatsOfTheScreeningAsync(
+                It.IsAny<Guid>())).ReturnsAsync(
+                    (Guid screeningId) => new List<Seat>()
+            );
+        mockSeatReservationRepository.Setup(
+            msrr => msrr.FindAlreadyReservedSeatIdsAsync(
+                It.IsAny<Guid>(), It.IsAny<IEnumerable<Guid>>())).ReturnsAsync(
+                    (Guid screeningId, IEnumerable<Guid> seatIdsToCheck) => new List<Guid>()
+            );
+        mockScreeningRepository.Setup(
+            msr => msr.GetPricingsBySeatIdAsync(
+                It.IsAny<Guid>())).ReturnsAsync(
+                    (Guid screeningId) => seatIdsToReserve.ToDictionary(sitr => sitr,
+                                                                        sitr => new Pricing
+                                                                        {
+                                                                            Id = Guid.NewGuid(),
+                                                                            ScreeningId = screeningId,
+                                                                            TierId = Guid.NewGuid(),
+                                                                            Price = new Price { Amount = 10, Currency = "EUR" }
+                                                                        })
+            );
         var makeBookingUseCase = new MakeBookingUseCase(mockBookingRepository.Object,
                                                         mockCustomerRepository.Object,
                                                         mockScreeningRepository.Object,
@@ -121,7 +149,7 @@ public class MakeBookingUseCaseTest
 
         // Act
         var exception = await Record.ExceptionAsync(
-            () => makeBookingUseCase.ExecuteAsync(Guid.NewGuid(), Guid.NewGuid(), [])
+            () => makeBookingUseCase.ExecuteAsync(Guid.NewGuid(), Guid.NewGuid(), seatIdsToReserve)
         );
 
         // Assert
@@ -140,6 +168,7 @@ public class MakeBookingUseCaseTest
     public async Task SeatReservationRepositoryExceptionsAreHandledAsync()
     {
         // Arrange
+        var seatIdsToReserve = new List<Guid> { Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() };
         mockCustomerRepository.Setup(
             mcr => mcr.GetCustomerOrNullAsync(
                 It.IsAny<Guid>())).ReturnsAsync(
@@ -163,10 +192,37 @@ public class MakeBookingUseCaseTest
                         Language = "German"
                     }
             );
+        mockScreeningRepository.Setup(
+            msr => msr.FindNotExistingSeatIdsAsync(
+                It.IsAny<Guid>(), It.IsAny<IEnumerable<Guid>>())).ReturnsAsync(
+                    (Guid screeningId, IEnumerable<Guid> seatIdsToCheck) => new List<Guid>()
+            );
+        mockSeatReservationRepository.Setup(
+            msrr => msrr.GetReservedSeatsOfTheScreeningAsync(
+                It.IsAny<Guid>())).ReturnsAsync(
+                    (Guid screeningId) => new List<Seat>()
+            );
+        mockSeatReservationRepository.Setup(
+            msrr => msrr.FindAlreadyReservedSeatIdsAsync(
+                It.IsAny<Guid>(), It.IsAny<IEnumerable<Guid>>())).ReturnsAsync(
+                    (Guid screeningId, IEnumerable<Guid> seatIdsToCheck) => new List<Guid>()
+            );
+        mockScreeningRepository.Setup(
+            msr => msr.GetPricingsBySeatIdAsync(
+                It.IsAny<Guid>())).ReturnsAsync(
+                    (Guid screeningId) => seatIdsToReserve.ToDictionary(sitr => sitr,
+                                                                        sitr => new Pricing
+                                                                        {
+                                                                            Id = Guid.NewGuid(),
+                                                                            ScreeningId = screeningId,
+                                                                            TierId = Guid.NewGuid(),
+                                                                            Price = new Price { Amount = 10, Currency = "EUR" }
+                                                                        })
+            );
         var seatReservationRepositoryExceptionMessage = "Some known exception from the repository.";
         mockSeatReservationRepository.Setup(
             msrr => msrr.AddSeatReservationsAsync(
-                It.IsAny<IEnumerable<Guid>>(), It.IsAny<Guid>(), It.IsAny<Guid>())).ThrowsAsync(
+                It.IsAny<IEnumerable<SeatReservation>>())).ThrowsAsync(
                     new SeatReservationRepositoryException(seatReservationRepositoryExceptionMessage)
             );
         var makeBookingUseCase = new MakeBookingUseCase(mockBookingRepository.Object,
@@ -176,7 +232,7 @@ public class MakeBookingUseCaseTest
 
         // Act
         var exception = await Record.ExceptionAsync(
-            () => makeBookingUseCase.ExecuteAsync(Guid.NewGuid(), Guid.NewGuid(), [])
+            () => makeBookingUseCase.ExecuteAsync(Guid.NewGuid(), Guid.NewGuid(), seatIdsToReserve)
         );
 
         // Assert

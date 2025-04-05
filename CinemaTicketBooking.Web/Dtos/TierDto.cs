@@ -1,3 +1,4 @@
+using CinemaTicketBooking.Web.Dtos.Seat;
 using System.ComponentModel.DataAnnotations;
 
 namespace CinemaTicketBooking.Web.Dtos;
@@ -8,5 +9,5 @@ public class TierDto
     public string Name { get; set; }
 
     [MinLength(1)]
-    public List<SeatDto> Seats { get; set; }
+    public List<SeatWithoutIdDto> Seats { get; set; }
 }

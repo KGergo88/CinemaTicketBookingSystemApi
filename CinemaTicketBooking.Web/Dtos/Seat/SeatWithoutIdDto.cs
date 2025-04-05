@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace CinemaTicketBooking.Web.Dtos;
+namespace CinemaTicketBooking.Web.Dtos.Seat;
 
-public class SeatDto
+public class SeatWithoutIdDto
 {
     [Required]
     [Range(1, int.MaxValue)]
