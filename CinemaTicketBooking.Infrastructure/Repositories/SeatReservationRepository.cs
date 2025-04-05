@@ -49,7 +49,9 @@ internal class SeatReservationRepository : ISeatReservationRepository
     {
         var reservedSeatEntities = await context.SeatReservations.Include(sr => sr.Seat)
                                                                  .Include(sr => sr.Booking)
-                                                                 .Where(sr => sr.ScreeningId == screeningId && IsReserved(sr.Booking.BookingState))
+                                                                 .Where(sr => sr.ScreeningId == screeningId
+                                                                              && (sr.Booking.BookingState == (int)BookingState.NonConfirmed
+                                                                                  || sr.Booking.BookingState == (int)BookingState.Confirmed))
                                                                  .Select(sr => sr.Seat)
                                                                  .ToListAsync();
 
@@ -91,10 +93,5 @@ internal class SeatReservationRepository : ISeatReservationRepository
                                                     .ToDictionary(x => x.SeatId, x => x.Pricing);
 
         return pricingsBySeats;
-    }
-
-    private bool IsReserved(int state)
-    {
-        return state == (int)BookingState.NonConfirmed || state == (int)BookingState.Confirmed;
     }
 }
