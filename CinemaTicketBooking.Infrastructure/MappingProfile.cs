@@ -74,7 +74,7 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Currency, opt => opt.MapFrom(src => src.Price.Currency));
 
         CreateMap<SeatReservationEntity, SeatReservation>()
-            .ForMember(dest => dest.Price, opt => opt.MapFrom(src => new Price{ Amount = src.Price, Currency = src.Currency }));
+            .ForMember(dest => dest.Price, opt => opt.MapFrom(src => new Price { Amount = src.Price, Currency = src.Currency }));
 
         CreateMap<SeatReservation, SeatReservationEntity>()
             // For previously not stored entities (Guid is empty), a valid Guid needs to be created
