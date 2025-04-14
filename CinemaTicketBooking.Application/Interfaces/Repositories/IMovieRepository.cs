@@ -7,6 +7,8 @@ public class MovieRepositoryException(string message, Exception? innerException 
 
 public interface IMovieRepository
 {
+    public Task<Movie> GetMovieOrNullAsync(Guid movieId);
+
     public Task<List<Movie>> GetMoviesAsync();
 
     public Task AddMoviesAsync(IEnumerable<Movie> domainMovies);
