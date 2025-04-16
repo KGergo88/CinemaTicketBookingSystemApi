@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace CinemaTicketBooking.Web.Dtos;
+namespace CinemaTicketBooking.Web.Dtos.Theater;
 
-public class TheaterDto
+public abstract class TheaterDtoBase<TAuditoriumDto>
 {
     [Required]
     public string Name { get; set; }
@@ -11,5 +11,5 @@ public class TheaterDto
     public string Address { get; set; }
 
     [MinLength(1)]
-    public List<AuditoriumDto> Auditoriums { get; set; }
+    public List<TAuditoriumDto> Auditoriums { get; set; }
 }

@@ -1,7 +1,7 @@
 using AutoMapper;
 using CinemaTicketBooking.Application.Interfaces.UseCases;
 using CinemaTicketBooking.Domain.Entities;
-using CinemaTicketBooking.Web.Dtos.GetBookingDetails;
+using CinemaTicketBooking.Web.Dtos;
 using CinemaTicketBooking.Web.Dtos.MakeBooking;
 using Microsoft.AspNetCore.Mvc;
 
@@ -67,7 +67,7 @@ public class BookingController : ControllerBase
         try
         {
             var bookingDetails = await getBookingDetailsUseCase.ExecuteAsync(bookingId);
-            var response = mapper.Map<GetBookingDetailsResponseDto>(bookingDetails);
+            var response = mapper.Map<BookingDetailsDto>(bookingDetails);
             return Ok(response);
         }
         catch (GetBookingDetailsException ex)

@@ -31,10 +31,10 @@ public class MovieController : ControllerBase
     }
 
     [HttpGet("[action]")]
-    public async Task<ActionResult<List<MovieWithIdDto>>> List()
+    public async Task<ActionResult<List<MovieDto>>> List()
     {
         var movies = await getMoviesUseCase.ExecuteAsync();
-        var movieDtos = mapper.Map<List<MovieWithIdDto>>(movies);
+        var movieDtos = mapper.Map<List<MovieDto>>(movies);
         return Ok(movieDtos);
     }
 
@@ -54,7 +54,7 @@ public class MovieController : ControllerBase
     }
 
     [HttpPut("[action]")]
-    public async Task<ActionResult> Update(MovieWithIdDto movieDto)
+    public async Task<ActionResult> Update(MovieDto movieDto)
     {
         try
         {
