@@ -39,11 +39,11 @@ public class MovieController : ControllerBase
     }
 
     [HttpPost("[action]")]
-    public async Task<ActionResult> Add(IEnumerable<MovieWithoutIdDto> moviesDtos)
+    public async Task<ActionResult> Add(IEnumerable<MovieWithoutIdDto> movieDtos)
     {
         try
         {
-            var movies = mapper.Map<List<Movie>>(moviesDtos);
+            var movies = mapper.Map<List<Movie>>(movieDtos);
             await addMoviesUseCase.ExecuteAsync(movies);
             return Ok();
         }
