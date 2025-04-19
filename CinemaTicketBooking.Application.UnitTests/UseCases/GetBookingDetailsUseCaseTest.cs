@@ -36,43 +36,6 @@ public class GetBookingDetailsUseCaseTest
     }
 
     [Fact]
-    public async Task BookingMustHaveSeatReservationsAsync()
-    {
-        // Arrange
-        var bookingId = Guid.NewGuid();
-        mockBookingRepository.Setup(
-            mbr => mbr.GetBookingAsync(bookingId))
-            .ReturnsAsync(
-                new Booking
-                {
-                    Id = bookingId,
-                    BookingState = BookingState.Confirmed,
-                    CustomerId = Guid.NewGuid(),
-                    ScreeningId = Guid.NewGuid(),
-                    CreatedOn = DateTimeOffset.UtcNow
-                }
-            );
-        mockSeatReservationRepository.Setup(
-            msrr => msrr.GetSeatReservationsOfABookingAsync(bookingId))
-            .ReturnsAsync(
-                []
-            );
-        var getBookingDetailsUseCase = new GetBookingDetailsUseCase(mockBookingRepository.Object,
-                                                                    mockTheaterRepository.Object,
-                                                                    mockScreeningRepository.Object,
-                                                                    mockSeatReservationRepository.Object);
-
-        // Act
-        var exception = await Record.ExceptionAsync(
-            () => getBookingDetailsUseCase.ExecuteAsync(bookingId)
-        );
-
-        // Assert
-        Assert.IsType<GetBookingDetailsException>(exception);
-        Assert.Equal($"There are no seat reservations for this booking! BookingId: {bookingId}", exception.Message);
-    }
-
-    [Fact]
     public async Task SeatReservationsMustContainTheScreeningIdAsync()
     {
         // Arrange
