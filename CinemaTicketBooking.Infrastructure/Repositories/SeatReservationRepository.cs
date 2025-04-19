@@ -76,8 +76,9 @@ internal class SeatReservationRepository : ISeatReservationRepository
     public async Task<List<Guid>> FindAlreadyReservedSeatIdsAsync(Guid screeningId, IEnumerable<Guid> seatIdsToCheck)
     {
         var reservedSeats = await GetReservedSeatsOfTheScreeningAsync(screeningId);
-        var reservedSeatsById = reservedSeats.ToDictionary(rs => rs.Id.Value);
-        var alreadyReservedSeatIds = seatIdsToCheck.Where(reservedSeatsById.ContainsKey)
+        var reservedSeatsIds = reservedSeats.Select(rs => rs.Id.Value)
+                                            .ToHashSet();
+        var alreadyReservedSeatIds = seatIdsToCheck.Where(reservedSeatsIds.Contains)
                                                    .ToList();
         return alreadyReservedSeatIds;
     }
