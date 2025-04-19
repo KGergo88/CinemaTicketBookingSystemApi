@@ -24,7 +24,7 @@ internal class GetBookingDetailsUseCase : IGetBookingDetailsUseCase
 
     public async Task<BookingDetails> ExecuteAsync(Guid bookingId)
     {
-        var booking = await bookingRepository.GetBookingAsync(bookingId);
+        var booking = await bookingRepository.GetBookingOrNullAsync(bookingId);
         if (booking == null)
             throw new GetBookingDetailsException($"Booking not found! Id: {bookingId}");
 

@@ -34,7 +34,7 @@ public class ConfirmBookingUseCaseTest
     {
         // Arrange
         mockBookingRepository.Setup(
-            mbr => mbr.GetBookingAsync(
+            mbr => mbr.GetBookingOrNullAsync(
                 It.IsAny<Guid>())).ReturnsAsync(null as Booking);
         var confirmBookingUseCase = new ConfirmBookingUseCase(mockBookingRepository.Object);
         var bookingId = Guid.NewGuid();
@@ -73,7 +73,7 @@ public class ConfirmBookingUseCaseTest
             CreatedOn = DateTimeOffset.Now
         };
         mockBookingRepository.Setup(
-            mbr => mbr.GetBookingAsync(
+            mbr => mbr.GetBookingOrNullAsync(
                 It.IsAny<Guid>())).ReturnsAsync(mockBooking);
         var confirmBookingUseCase = new ConfirmBookingUseCase(mockBookingRepository.Object);
 

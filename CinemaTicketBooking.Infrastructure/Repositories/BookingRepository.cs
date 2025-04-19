@@ -24,7 +24,7 @@ internal class BookingRepository : IBookingRepository
         await context.SaveChangesAsync();
     }
 
-    public async Task<Booking?> GetBookingAsync(Guid bookingId)
+    public async Task<Booking?> GetBookingOrNullAsync(Guid bookingId)
     {
         var infraBooking = await context.Bookings.SingleOrDefaultAsync(b => b.Id == bookingId);
 

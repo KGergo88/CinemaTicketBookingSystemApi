@@ -9,7 +9,7 @@ public interface IBookingRepository
 {
     public Task AddBookingAsync(Booking domainBooking);
 
-    public Task<Booking?> GetBookingAsync(Guid bookingId);
+    public Task<Booking?> GetBookingOrNullAsync(Guid bookingId);
 
     public Task UpdateBookingAsync(Booking domainBooking);
 

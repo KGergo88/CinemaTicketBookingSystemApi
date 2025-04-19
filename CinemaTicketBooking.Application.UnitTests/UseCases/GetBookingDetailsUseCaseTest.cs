@@ -79,7 +79,7 @@ public class GetBookingDetailsUseCaseTest
         var bookingId = Guid.NewGuid();
         var screeningId = Guid.NewGuid();
         mockBookingRepository.Setup(
-            mbr => mbr.GetBookingAsync(bookingId))
+            mbr => mbr.GetBookingOrNullAsync(bookingId))
             .ReturnsAsync(
                 new Booking
                 {

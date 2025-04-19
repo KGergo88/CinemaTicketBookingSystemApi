@@ -190,7 +190,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             await bookingRepository.TimeoutUnconfirmedBookingsAsync(timeoutInMinutes);
 
             // Assert
-            var booking = await bookingRepository.GetBookingAsync(bookingId);
+            var booking = await bookingRepository.GetBookingOrNullAsync(bookingId);
             Assert.Equal(expectedBookingState, booking.BookingState);
         }
 
