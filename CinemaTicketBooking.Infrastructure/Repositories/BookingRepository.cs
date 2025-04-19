@@ -39,6 +39,11 @@ internal class BookingRepository : IBookingRepository
         await context.Bookings.Where(b => b.Id == bookingId)
                               .ExecuteUpdateAsync(setters => setters.SetProperty(b => b.BookingState, (int)bookingState));
     }
+
+    public async Task DeleteBookingAsync(Guid bookingId)
+    {
+        await context.Bookings.Where(b => b.Id == bookingId)
+                              .ExecuteDeleteAsync();
     }
 
     public async Task TimeoutUnconfirmedBookingsAsync(int timeoutInMinutes)
