@@ -87,12 +87,9 @@ public class ConfirmBookingUseCaseTest
         {
             Assert.Null(exception);
             mockBookingRepository.Verify(
-                mbr => mbr.UpdateBookingAsync(
-                    It.Is<Booking>(b => b.Id == bookingId
-                                        && b.BookingState == BookingState.Confirmed
-                                        && b.CustomerId == mockBooking.CustomerId
-                                        && b.ScreeningId == screeningId
-                                        && b.CreatedOn == mockBooking.CreatedOn)),
+                mbr => mbr.SetBookingStateAsync(
+                    It.Is<Guid>(bi => bi == bookingId),
+                    It.Is<BookingState>(bs => bs == BookingState.Confirmed)),
                 Times.Once);
         }
         else

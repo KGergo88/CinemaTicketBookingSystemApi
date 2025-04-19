@@ -11,7 +11,7 @@ public interface IBookingRepository
 
     public Task<Booking?> GetBookingOrNullAsync(Guid bookingId);
 
-    public Task UpdateBookingAsync(Booking domainBooking);
+    public Task SetBookingStateAsync(Guid bookingId, BookingState bookingState);
 
     public Task TimeoutUnconfirmedBookingsAsync(int timeoutInMinutes);
 }

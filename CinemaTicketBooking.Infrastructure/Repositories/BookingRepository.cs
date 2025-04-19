@@ -34,11 +34,11 @@ internal class BookingRepository : IBookingRepository
         return mapper.Map<Booking>(infraBooking);
     }
 
-    public async Task UpdateBookingAsync(Booking booking)
+    public async Task SetBookingStateAsync(Guid bookingId, BookingState bookingState)
     {
-        var infraBooking = mapper.Map<BookingEntity>(booking);
-        context.Bookings.Update(infraBooking);
-        await context.SaveChangesAsync();
+        await context.Bookings.Where(b => b.Id == bookingId)
+                              .ExecuteUpdateAsync(setters => setters.SetProperty(b => b.BookingState, (int)bookingState));
+    }
     }
 
     public async Task TimeoutUnconfirmedBookingsAsync(int timeoutInMinutes)
