@@ -69,7 +69,8 @@ internal class SeatReservationRepository : ISeatReservationRepository
 
     public async Task ReleaseSeatsOfTimeoutedBookingsAsync()
     {
-        await context.SeatReservations.Where(sr => sr.Booking.BookingState == (int)BookingState.ConfirmationTimeout)
+        await context.SeatReservations.Include(sr => sr.Booking)
+                                      .Where(sr => sr.Booking.BookingState == (int)BookingState.ConfirmationTimeout)
                                       .ExecuteDeleteAsync();
     }
 
