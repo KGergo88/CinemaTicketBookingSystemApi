@@ -1,7 +1,7 @@
 using AutoMapper;
 using CinemaTicketBooking.Application.Interfaces.UseCases;
 using CinemaTicketBooking.Domain.Entities;
-using CinemaTicketBooking.Web.Dtos;
+using CinemaTicketBooking.Web.Dtos.Theater;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CinemaTicketBooking.Web.Controllers;
@@ -22,7 +22,7 @@ public class TheaterController : ControllerBase
     }
 
     [HttpPost("[action]")]
-    public async Task<ActionResult> AddTheaters(IEnumerable<TheaterDto> theaterDtos)
+    public async Task<ActionResult> AddTheaters(IEnumerable<TheaterWithoutIdDto> theaterDtos)
     {
         var theaters = mapper.Map<List<Theater>>(theaterDtos);
         await addTheatersUseCase.ExecuteAsync(theaters);

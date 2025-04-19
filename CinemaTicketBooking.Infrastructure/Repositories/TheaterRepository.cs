@@ -26,11 +26,13 @@ internal class TheaterRepository : ITheaterRepository
 
     public async Task<Theater> GetTheaterOfAScreeningAsync(Guid screeningId)
     {
-        var screeningEntity = await context.Screenings.AsSplitQuery()
-                                                      .Include(s => s.Auditorium)
-                                                      .ThenInclude(a => a.Theater)
-                                                      .SingleAsync(s => s.Id == screeningId);
+        var infraScreening = await context.Screenings.Include(s => s.Auditorium)
+                                                     .ThenInclude(a => a.Theater)
+                                                     .ThenInclude(t => t.Auditoriums)
+                                                     .ThenInclude(a => a.Tiers)
+                                                     .ThenInclude(t => t.Seats)
+                                                     .SingleAsync(s => s.Id == screeningId);
 
-        return mapper.Map<Theater>(screeningEntity.Auditorium.Theater);
+        return mapper.Map<Theater>(infraScreening.Auditorium.Theater);
     }
 }

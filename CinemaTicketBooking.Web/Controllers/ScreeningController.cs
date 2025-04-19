@@ -12,13 +12,16 @@ public class ScreeningController : ControllerBase
 {
     private readonly IMapper mapper;
     private readonly IAddScreeningsUseCase addScreeningsUseCase;
+    private readonly ISetPricingUseCase setPricingUseCase;
 
     public ScreeningController(
         IMapper mapper,
-        IAddScreeningsUseCase addScreeningsUseCase)
+        IAddScreeningsUseCase addScreeningsUseCase,
+        ISetPricingUseCase setPricingUseCase)
     {
         this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         this.addScreeningsUseCase = addScreeningsUseCase ?? throw new ArgumentNullException(nameof(addScreeningsUseCase));
+        this.setPricingUseCase = setPricingUseCase ?? throw new ArgumentNullException(nameof(setPricingUseCase));
     }
 
     [HttpPost("[action]")]
@@ -26,6 +29,14 @@ public class ScreeningController : ControllerBase
     {
         var screenings = mapper.Map<IEnumerable<Screening>>(screeningDtos);
         await addScreeningsUseCase.ExecuteAsync(screenings);
+        return Ok();
+    }
+
+    [HttpPost("[action]")]
+    public async Task<ActionResult> SetPricing(PricingDto pricingDto)
+    {
+        var pricing = mapper.Map<Pricing>(pricingDto);
+        await setPricingUseCase.ExecuteAsync(pricing);
         return Ok();
     }
 }

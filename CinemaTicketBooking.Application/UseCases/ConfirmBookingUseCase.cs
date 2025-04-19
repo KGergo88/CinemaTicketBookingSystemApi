@@ -18,7 +18,7 @@ internal class ConfirmBookingUseCase : IConfirmBookingUseCase
         if (bookingId == Guid.Empty)
             throw new ConfirmBookingException($"Invalid booking ID: {bookingId}");
 
-        var booking = await bookingRepository.GetBookingAsync(bookingId);
+        var booking = await bookingRepository.GetBookingOrNullAsync(bookingId);
 
         if (booking == null)
             throw new ConfirmBookingException("Booking not found!");
@@ -26,7 +26,6 @@ internal class ConfirmBookingUseCase : IConfirmBookingUseCase
         if (booking.BookingState != BookingState.NonConfirmed)
             throw new ConfirmBookingException("Booking is not confirmable!");
 
-        booking.BookingState = BookingState.Confirmed;
-        await bookingRepository.UpdateBookingAsync(booking);
+        await bookingRepository.SetBookingStateAsync(bookingId, BookingState.Confirmed);
     }
 }

@@ -4,7 +4,7 @@ namespace CinemaTicketBooking.Web.Services;
 
 internal class BookingTimeoutBackgroundService : IHostedService, IDisposable
 {
-    public const double TimeoutLimitInMinutes = 15.0;
+    public const double TimerPeriodInMinutes = 15.0;
     private readonly IServiceScopeFactory serviceScopeFactory;
     private readonly ILogger<BookingTimeoutBackgroundService> logger;
     private System.Timers.Timer timer;
@@ -16,7 +16,7 @@ internal class BookingTimeoutBackgroundService : IHostedService, IDisposable
 
         this.logger = logger;
 
-        timer = new System.Timers.Timer(TimeSpan.FromMinutes(TimeoutLimitInMinutes));
+        timer = new System.Timers.Timer(TimeSpan.FromMinutes(TimerPeriodInMinutes));
         timer.Elapsed += async (sender, args) => await DoWorkAsync();
         timer.AutoReset = true;
     }

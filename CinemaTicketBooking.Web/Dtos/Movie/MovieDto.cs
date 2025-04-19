@@ -2,7 +2,7 @@
 
 namespace CinemaTicketBooking.Web.Dtos.Movie;
 
-public class MovieWithIdDto : MovieWithoutIdDto
+public class MovieDto : MovieDtoBase
 {
     [Required]
     public Guid Id { get; set; }

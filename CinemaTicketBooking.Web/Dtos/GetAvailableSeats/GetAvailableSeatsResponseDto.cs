@@ -4,5 +4,5 @@ namespace CinemaTicketBooking.Web.Dtos.GetAvailableSeats;
 
 public class GetAvailableSeatsResponseDto
 {
-    public required List<SeatWithIdDto> AvailableSeats { get; set; }
+    public required List<SeatDto> AvailableSeats { get; set; }
 }

@@ -27,6 +27,8 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Auditorium, opt => opt.Ignore())
             .ForMember(dest => dest.Movie, opt => opt.Ignore());
 
+        CreateMap<TheaterEntity, Theater>();
+
         CreateMap<Theater, TheaterEntity>()
             // For previously not stored entities (Guid is empty), a valid Guid needs to be created
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => CreateNewGuidIfNullOrEmpty(src.Id)));
@@ -73,8 +75,11 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price.Amount))
             .ForMember(dest => dest.Currency, opt => opt.MapFrom(src => src.Price.Currency));
 
+        CreateMap<PricingEntity, Pricing>()
+            .ForMember(dest => dest.Price, opt => opt.MapFrom(src => new Price { Amount = src.Price, Currency = src.Currency }));
+
         CreateMap<SeatReservationEntity, SeatReservation>()
-            .ForMember(dest => dest.Price, opt => opt.MapFrom(src => new Price{ Amount = src.Price, Currency = src.Currency }));
+            .ForMember(dest => dest.Price, opt => opt.MapFrom(src => new Price { Amount = src.Price, Currency = src.Currency }));
 
         CreateMap<SeatReservation, SeatReservationEntity>()
             // For previously not stored entities (Guid is empty), a valid Guid needs to be created

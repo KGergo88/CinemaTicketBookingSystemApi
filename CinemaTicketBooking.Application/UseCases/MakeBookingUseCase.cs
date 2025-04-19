@@ -54,34 +54,14 @@ internal class MakeBookingUseCase : IMakeBookingUseCase
 
         var pricingsBySeatId = await screeningRepository.GetPricingsBySeatIdAsync(screeningId);
         if (seatIdsToReserve.Any(sitr => !pricingsBySeatId.ContainsKey(sitr)))
-            throw new MakeBookingException("Could not reserve seats as pricing information is not available for some one of them.");
-
-        var bookingId = Guid.NewGuid();
-        var seatReservations = new List<SeatReservation>();
-        try
-        {
-            seatReservations = seatIdsToReserve.Select(sitr => new SeatReservation()
-            {
-                Id = Guid.NewGuid(),
-                BookingId = bookingId,
-                ScreeningId = screeningId,
-                SeatId = sitr,
-                Price = pricingsBySeatId[sitr].Price,
-            }).ToList();
-
-            await seatReservationRepository.AddSeatReservationsAsync(seatReservations);
-        }
-        catch (SeatReservationRepositoryException exception)
-        {
-            throw new MakeBookingException($"Could not reserve seats! Error: \"{exception.Message}\"", exception);
-        }
+            throw new MakeBookingException("Could not reserve seats as pricing information is not available for at least one of them.");
 
         Booking booking;
         try
         {
             booking = new Booking()
             {
-                Id = bookingId,
+                Id = Guid.NewGuid(),
                 BookingState = BookingState.NonConfirmed,
                 CustomerId = customer.Id.Value,
                 ScreeningId = screeningId,
@@ -91,9 +71,25 @@ internal class MakeBookingUseCase : IMakeBookingUseCase
         }
         catch
         {
-            var seatReservationIds = seatReservations.Select(sr => sr.Id.Value);
-            await seatReservationRepository.DeleteSeatReservationsAsync(seatReservationIds);
-            throw new MakeBookingException($"Could not create booking! Reserved seats are released.");
+            throw new MakeBookingException($"Could not create booking! No seats were reserved!");
+        }
+
+        try
+        {
+            var seatReservations = seatIdsToReserve.Select(sitr => new SeatReservation()
+            {
+                BookingId = booking.Id.Value,
+                ScreeningId = screeningId,
+                SeatId = sitr,
+                Price = pricingsBySeatId[sitr].Price,
+            }).ToList();
+
+            await seatReservationRepository.AddSeatReservationsAsync(seatReservations);
+        }
+        catch (SeatReservationRepositoryException exception)
+        {
+            await bookingRepository.DeleteBookingAsync(booking.Id.Value);
+            throw new MakeBookingException($"Could not reserve seats! Error: \"{exception.Message}\"", exception);
         }
 
         return booking;

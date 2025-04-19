@@ -11,7 +11,7 @@ public class ScreeningDto
     public Guid MovieId { get; set; }
 
     [Required]
-    public DateTime ShowTime { get; set; }
+    public DateTimeOffset ShowTime { get; set; }
 
     [Required]
     public string Language { get; set; }

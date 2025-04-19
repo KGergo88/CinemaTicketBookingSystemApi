@@ -18,6 +18,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IGetMoviesUseCase, GetMoviesUseCase>();
         services.AddScoped<IMakeBookingUseCase, MakeBookingUseCase>();
         services.AddScoped<IManageBookingTimeoutUseCase, ManageBookingTimeoutUseCase>();
+        services.AddScoped<ISetPricingUseCase, SetPricingsUseCase>();
         services.AddScoped<IUpdateMovieUseCase, UpdateMovieUseCase>();
 
         return services;

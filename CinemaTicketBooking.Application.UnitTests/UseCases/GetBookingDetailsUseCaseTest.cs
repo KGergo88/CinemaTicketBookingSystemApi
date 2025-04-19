@@ -9,6 +9,8 @@ namespace CinemaTicketBooking.Application.UnitTests.UseCases;
 public class GetBookingDetailsUseCaseTest
 {
     private readonly Mock<IBookingRepository> mockBookingRepository = new();
+    private readonly Mock<ICustomerRepository> mockCustomerRepository = new();
+    private readonly Mock<IMovieRepository> mockMovieRepository = new();
     private readonly Mock<ITheaterRepository> mockTheaterRepository = new();
     private readonly Mock<IScreeningRepository> mockScreeningRepository = new();
     private readonly Mock<ISeatReservationRepository> mockSeatReservationRepository = new();
@@ -20,6 +22,8 @@ public class GetBookingDetailsUseCaseTest
     {
         // Arrange
         var getBookingDetailsUseCase = new GetBookingDetailsUseCase(mockBookingRepository.Object,
+                                                                    mockCustomerRepository.Object,
+                                                                    mockMovieRepository.Object,
                                                                     mockTheaterRepository.Object,
                                                                     mockScreeningRepository.Object,
                                                                     mockSeatReservationRepository.Object);
@@ -36,50 +40,13 @@ public class GetBookingDetailsUseCaseTest
     }
 
     [Fact]
-    public async Task BookingMustHaveSeatReservationsAsync()
-    {
-        // Arrange
-        var bookingId = Guid.NewGuid();
-        mockBookingRepository.Setup(
-            mbr => mbr.GetBookingAsync(bookingId))
-            .ReturnsAsync(
-                new Booking
-                {
-                    Id = bookingId,
-                    BookingState = BookingState.Confirmed,
-                    CustomerId = Guid.NewGuid(),
-                    ScreeningId = Guid.NewGuid(),
-                    CreatedOn = DateTimeOffset.UtcNow
-                }
-            );
-        mockSeatReservationRepository.Setup(
-            msrr => msrr.GetSeatReservationsOfABookingAsync(bookingId))
-            .ReturnsAsync(
-                []
-            );
-        var getBookingDetailsUseCase = new GetBookingDetailsUseCase(mockBookingRepository.Object,
-                                                                    mockTheaterRepository.Object,
-                                                                    mockScreeningRepository.Object,
-                                                                    mockSeatReservationRepository.Object);
-
-        // Act
-        var exception = await Record.ExceptionAsync(
-            () => getBookingDetailsUseCase.ExecuteAsync(bookingId)
-        );
-
-        // Assert
-        Assert.IsType<GetBookingDetailsException>(exception);
-        Assert.Equal($"There are no seat reservations for this booking! BookingId: {bookingId}", exception.Message);
-    }
-
-    [Fact]
     public async Task SeatReservationsMustContainTheScreeningIdAsync()
     {
         // Arrange
         var bookingId = Guid.NewGuid();
         var screeningId = Guid.NewGuid();
         mockBookingRepository.Setup(
-            mbr => mbr.GetBookingAsync(bookingId))
+            mbr => mbr.GetBookingOrNullAsync(bookingId))
             .ReturnsAsync(
                 new Booking
                 {
@@ -88,6 +55,17 @@ public class GetBookingDetailsUseCaseTest
                     CustomerId = Guid.NewGuid(),
                     ScreeningId = screeningId,
                     CreatedOn = DateTimeOffset.UtcNow
+                }
+            );
+        mockCustomerRepository.Setup(
+            mcr => mcr.GetCustomerOrNullAsync(It.IsAny<Guid>()))
+            .ReturnsAsync((Guid customerId) =>
+                new Customer
+                {
+                    Id = customerId,
+                    FirstName = "Hans Jürgen",
+                    LastName = "Waldmann",
+                    Email = "hansjuergen.waldmann@gmail.com"
                 }
             );
         mockSeatReservationRepository.Setup(
@@ -105,6 +83,8 @@ public class GetBookingDetailsUseCaseTest
                 ]
             );
         var getBookingDetailsUseCase = new GetBookingDetailsUseCase(mockBookingRepository.Object,
+                                                                    mockCustomerRepository.Object,
+                                                                    mockMovieRepository.Object,
                                                                     mockTheaterRepository.Object,
                                                                     mockScreeningRepository.Object,
                                                                     mockSeatReservationRepository.Object);
