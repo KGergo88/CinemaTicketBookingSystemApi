@@ -57,11 +57,10 @@ internal class BookingRepository : IBookingRepository
         await using var transaction = await context.Database.BeginTransactionAsync();
         try
         {
-            var bookingsToTimeout = await context.Bookings.Where(b => b.BookingState == (int)BookingState.NonConfirmed
-                                                                      && (b.CreatedOn.AddMinutes(timeoutInMinutes) <
-                                                                          DateTimeOffset.UtcNow))
+            var infraBookingsToTimeout = await context.Bookings.Where(b => b.BookingState == (int)BookingState.NonConfirmed
+                                                                           && (b.CreatedOn.AddMinutes(timeoutInMinutes) < DateTimeOffset.UtcNow))
                                                           .ToListAsync();
-            bookingsToTimeout.ForEach(b => b.BookingState = (int)BookingState.ConfirmationTimeout);
+            infraBookingsToTimeout.ForEach(b => b.BookingState = (int)BookingState.ConfirmationTimeout);
             await context.SaveChangesAsync();
             await transaction.CommitAsync();
         }
