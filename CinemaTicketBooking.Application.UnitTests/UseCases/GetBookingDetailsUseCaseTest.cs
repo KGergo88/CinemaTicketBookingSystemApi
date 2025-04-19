@@ -9,6 +9,8 @@ namespace CinemaTicketBooking.Application.UnitTests.UseCases;
 public class GetBookingDetailsUseCaseTest
 {
     private readonly Mock<IBookingRepository> mockBookingRepository = new();
+    private readonly Mock<ICustomerRepository> mockCustomerRepository = new();
+    private readonly Mock<IMovieRepository> mockMovieRepository = new();
     private readonly Mock<ITheaterRepository> mockTheaterRepository = new();
     private readonly Mock<IScreeningRepository> mockScreeningRepository = new();
     private readonly Mock<ISeatReservationRepository> mockSeatReservationRepository = new();
@@ -20,6 +22,8 @@ public class GetBookingDetailsUseCaseTest
     {
         // Arrange
         var getBookingDetailsUseCase = new GetBookingDetailsUseCase(mockBookingRepository.Object,
+                                                                    mockCustomerRepository.Object,
+                                                                    mockMovieRepository.Object,
                                                                     mockTheaterRepository.Object,
                                                                     mockScreeningRepository.Object,
                                                                     mockSeatReservationRepository.Object);
@@ -53,6 +57,17 @@ public class GetBookingDetailsUseCaseTest
                     CreatedOn = DateTimeOffset.UtcNow
                 }
             );
+        mockCustomerRepository.Setup(
+            mcr => mcr.GetCustomerOrNullAsync(It.IsAny<Guid>()))
+            .ReturnsAsync((Guid customerId) =>
+                new Customer
+                {
+                    Id = customerId,
+                    FirstName = "Hans Jürgen",
+                    LastName = "Waldmann",
+                    Email = "hansjuergen.waldmann@gmail.com"
+                }
+            );
         mockSeatReservationRepository.Setup(
             msrr => msrr.GetSeatReservationsOfABookingAsync(bookingId))
             .ReturnsAsync(
@@ -68,6 +83,8 @@ public class GetBookingDetailsUseCaseTest
                 ]
             );
         var getBookingDetailsUseCase = new GetBookingDetailsUseCase(mockBookingRepository.Object,
+                                                                    mockCustomerRepository.Object,
+                                                                    mockMovieRepository.Object,
                                                                     mockTheaterRepository.Object,
                                                                     mockScreeningRepository.Object,
                                                                     mockSeatReservationRepository.Object);
