@@ -6,9 +6,9 @@ public class PriceDto
 {
     [Required]
     [Range(0, float.MaxValue)]
-    public float Amount { get; set; }
+    public required float Amount { get; set; }
 
     [Required]
     [MaxLength(50)]
-    public string Currency { get; set; }
+    public required string Currency { get; set; }
 }

@@ -5,17 +5,17 @@ namespace CinemaTicketBooking.Web.Dtos;
 
 public class BookingDetailsDto
 {
-    public BookingDto Booking { get; set; }
+    public required BookingDto Booking { get; set; }
 
-    public CustomerDto Customer { get; set; }
+    public required CustomerDto Customer { get; set; }
 
-    public TheaterDto Theater { get; set; }
+    public required TheaterDto Theater { get; set; }
 
-    public ScreeningDto Screening { get; set; }
+    public required ScreeningDto Screening { get; set; }
 
-    public MovieDto Movie { get; set; }
+    public required MovieDto Movie { get; set; }
 
-    public List<SeatReservationDto> SeatReservations { get; set; }
+    public required List<SeatReservationDto> SeatReservations { get; set; }
 
-    public PriceDto TotalPrice { get; set; }
+    public required PriceDto TotalPrice { get; set; }
 }

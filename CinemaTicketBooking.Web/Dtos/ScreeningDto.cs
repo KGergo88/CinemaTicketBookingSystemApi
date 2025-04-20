@@ -5,16 +5,16 @@ namespace CinemaTicketBooking.Web.Dtos;
 public class ScreeningDto
 {
     [Required]
-    public Guid AuditoriumId { get; set; }
+    public required Guid AuditoriumId { get; set; }
 
     [Required]
-    public Guid MovieId { get; set; }
+    public required Guid MovieId { get; set; }
 
     [Required]
-    public DateTimeOffset ShowTime { get; set; }
+    public required DateTimeOffset ShowTime { get; set; }
 
     [Required]
-    public string Language { get; set; }
+    public required string Language { get; set; }
 
     public string? Subtitles { get; set; }
 }

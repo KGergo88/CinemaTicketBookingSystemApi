@@ -11,7 +11,7 @@ public abstract class MovieDtoBase
     // of the Evil, Mutant, Hellbound, Flesh-Eating Subhumanoid Zombified Living Dead, Part 3, 2005)
     [Required]
     [MaxLength(250)]
-    public string Title { get; set; }
+    public required string Title { get; set; }
 
     [Range(0, 9999, ErrorMessage = $"The {nameof(ReleaseYear)} must be a 4-digit number.")]
     public int? ReleaseYear { get; set; }
