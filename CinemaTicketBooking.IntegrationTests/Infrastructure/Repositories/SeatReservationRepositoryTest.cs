@@ -317,16 +317,6 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                 CreatedOn = DateTimeOffset.UtcNow - TimeSpan.FromDays(3),
             };
 
-            var seatIdsToReserve = new List<Guid>() {
-                sopronElitMoziHuszarikTeremDefaultTier.Seats[0].Id,
-                sopronElitMoziHuszarikTeremDefaultTier.Seats[1].Id,
-            };
-
-            var expectedAvailableSeats = new List<Seat>() {
-                sopronElitMoziHuszarikTeremDefaultTier.Seats[2],
-                sopronElitMoziHuszarikTeremDefaultTier.Seats[3],
-            };
-
             yield return
             [
                 elitMozi,
@@ -334,8 +324,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                 sleepyHollowScreening,
                 pricing,
                 hansJuergenCustomer,
-                booking,
-                seatIdsToReserve,
+                booking
             ];
         }
 
@@ -346,8 +335,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                                                                                                     Screening screeningToSetup,
                                                                                                     Pricing pricingToSetup,
                                                                                                     Customer customerToSetup,
-                                                                                                    Booking bookingToSetup,
-                                                                                                    List<Guid> seatIdsToReserve)
+                                                                                                    Booking bookingToSetup)
         {
             // Arrange
             await using var db = await CreateDatabaseAsync();
