@@ -58,7 +58,7 @@ internal class MovieRepository : IMovieRepository
         var genresToCreate = genresByMovieId.Values.SelectMany(genres => genres)
                                                    .Distinct()
                                                    .Where(genre => !alreadyStoredGenres.Any(asg => asg.Name == genre))
-                                                   .Select(genre => new GenreEntity { Name = genre })
+                                                   .Select(genre => new GenreEntity { Name = genre, Movies = [] })
                                                    .ToList();
         context.Genres.AddRange(genresToCreate);
         alreadyStoredGenres.AddRange(genresToCreate);

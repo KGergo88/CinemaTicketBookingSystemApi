@@ -10,30 +10,30 @@ namespace CinemaTicketBooking.Infrastructure.Entities;
 internal class SeatReservationEntity
 {
     [Required]
-    public Guid Id { get; set; }
+    public required Guid Id { get; set; }
 
     [Required]
-    public Guid BookingId { get; set; }
+    public required Guid BookingId { get; set; }
 
-    public BookingEntity Booking { get; set; }
+    public required BookingEntity Booking { get; set; }
 
     // This is a redundant reference as the booking already references the screening,
     // but with this included, we can ensure that the same seat is not reserved multiple times for the same screening
     [Required]
-    public Guid ScreeningId { get; set; }
+    public required Guid ScreeningId { get; set; }
 
-    public ScreeningEntity Screening { get; set; }
+    public required ScreeningEntity Screening { get; set; }
 
     [Required]
-    public Guid SeatId { get; set; }
+    public required Guid SeatId { get; set; }
 
-    public SeatEntity Seat { get; set; }
+    public required SeatEntity Seat { get; set; }
 
     // Not referencing a pricing as the pricing may change after the reservation but a reservation should keep the same price
     // Negative prices are not valid
     [Required]
     [Range(0, float.MaxValue)]
-    public float Price { get; set; }
+    public required float Price { get; set; }
 
     // Constraints
     //   - A price without a currency does not make sense
@@ -41,5 +41,5 @@ internal class SeatReservationEntity
     // (Ditikolo Tsa Botshelo Jwa Dikoloto, Botswana)
     [Required]
     [MaxLength(50)]
-    public string Currency { get; set; }
+    public required string Currency { get; set; }
 }

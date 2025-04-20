@@ -30,55 +30,68 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
         {
             var darkFantasyGenre = new GenreEntity
             {
-                Name = "Dark Fantasy"
+                Name = "Dark Fantasy",
+                Movies = []
             };
             var slasherHorrorGenre = new GenreEntity
             {
-                Name = "Slasher Horror"
+                Name = "Slasher Horror",
+                Movies = []
             };
             var supernaturalHorrorGenre = new GenreEntity
             {
-                Name = "Supernatural Horror"
+                Name = "Supernatural Horror",
+                Movies = []
             };
             var fantasyGenre = new GenreEntity
             {
-                Name = "Fantasy"
+                Name = "Fantasy",
+                Movies = []
             };
             var horrorGenre = new GenreEntity
             {
-                Name = "Horror"
+                Name = "Horror",
+                Movies = []
             };
             var misteryGenre = new GenreEntity
             {
-                Name = "Mistery"
+                Name = "Mistery",
+                Movies = []
             };
             var dystopianSciFiGenre = new GenreEntity
             {
-                Name = "Dystopian Sci-Fi"
+                Name = "Dystopian Sci-Fi",
+                Movies = []
             };
             var survivalGenre = new GenreEntity
             {
-                Name = "Survival"
+                Name = "Survival",
+                Movies = []
             };
             var zombieHorrorGenre = new GenreEntity
             {
-                Name = "Zombie Horror"
+                Name = "Zombie Horror",
+                Movies = []
             };
             var actionGenre = new GenreEntity
             {
-                Name = "Action"
+                Name = "Action",
+                Movies = []
             };
             var dramaGenre = new GenreEntity
             {
-                Name = "Drama"
+                Name = "Drama",
+                Movies = []
             };
             var sciFiGenre = new GenreEntity
             {
-                Name = "Sci-Fi"
+                Name = "Sci-Fi",
+                Movies = []
             };
             var thrillerGenre = new GenreEntity
             {
-                Name = "Thriller"
+                Name = "Thriller",
+                Movies = []
             };
             var sleepyHollowMovie = new MovieEntity
             {
@@ -312,55 +325,68 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
         {
             var darkFantasyGenre = new GenreEntity
             {
-                Name = "Dark Fantasy"
+                Name = "Dark Fantasy",
+                Movies = []
             };
             var slasherHorrorGenre = new GenreEntity
             {
-                Name = "Slasher Horror"
+                Name = "Slasher Horror",
+                Movies = []
             };
             var supernaturalHorrorGenre = new GenreEntity
             {
-                Name = "Supernatural Horror"
+                Name = "Supernatural Horror",
+                Movies = []
             };
             var fantasyGenre = new GenreEntity
             {
-                Name = "Fantasy"
+                Name = "Fantasy",
+                Movies = []
             };
             var horrorGenre = new GenreEntity
             {
-                Name = "Horror"
+                Name = "Horror",
+                Movies = []
             };
             var misteryGenre = new GenreEntity
             {
-                Name = "Mistery"
+                Name = "Mistery",
+                Movies = []
             };
             var dystopianSciFiGenre = new GenreEntity
             {
-                Name = "Dystopian Sci-Fi"
+                Name = "Dystopian Sci-Fi",
+                Movies = []
             };
             var survivalGenre = new GenreEntity
             {
-                Name = "Survival"
+                Name = "Survival",
+                Movies = []
             };
             var zombieHorrorGenre = new GenreEntity
             {
-                Name = "Zombie Horror"
+                Name = "Zombie Horror",
+                Movies = []
             };
             var actionGenre = new GenreEntity
             {
-                Name = "Action"
+                Name = "Action",
+                Movies = []
             };
             var dramaGenre = new GenreEntity
             {
-                Name = "Drama"
+                Name = "Drama",
+                Movies = []
             };
             var sciFiGenre = new GenreEntity
             {
-                Name = "Sci-Fi"
+                Name = "Sci-Fi",
+                Movies = []
             };
             var thrillerGenre = new GenreEntity
             {
-                Name = "Thriller"
+                Name = "Thriller",
+                Movies = []
             };
             var infraGenres = new List<GenreEntity>()
             {
@@ -472,55 +498,68 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
         {
             var darkFantasyGenre = new GenreEntity
             {
-                Name = "Dark Fantasy"
+                Name = "Dark Fantasy",
+                Movies = []
             };
             var slasherHorrorGenre = new GenreEntity
             {
-                Name = "Slasher Horror"
+                Name = "Slasher Horror",
+                Movies = []
             };
             var supernaturalHorrorGenre = new GenreEntity
             {
-                Name = "Supernatural Horror"
+                Name = "Supernatural Horror",
+                Movies = []
             };
             var fantasyGenre = new GenreEntity
             {
-                Name = "Fantasy"
+                Name = "Fantasy",
+                Movies = []
             };
             var horrorGenre = new GenreEntity
             {
-                Name = "Horror"
+                Name = "Horror",
+                Movies = []
             };
             var misteryGenre = new GenreEntity
             {
-                Name = "Mistery"
+                Name = "Mistery",
+                Movies = []
             };
             var dystopianSciFiGenre = new GenreEntity
             {
-                Name = "Dystopian Sci-Fi"
+                Name = "Dystopian Sci-Fi",
+                Movies = []
             };
             var survivalGenre = new GenreEntity
             {
-                Name = "Survival"
+                Name = "Survival",
+                Movies = []
             };
             var zombieHorrorGenre = new GenreEntity
             {
-                Name = "Zombie Horror"
+                Name = "Zombie Horror",
+                Movies = []
             };
             var actionGenre = new GenreEntity
             {
-                Name = "Action"
+                Name = "Action",
+                Movies = []
             };
             var dramaGenre = new GenreEntity
             {
-                Name = "Drama"
+                Name = "Drama",
+                Movies = []
             };
             var sciFiGenre = new GenreEntity
             {
-                Name = "Sci-Fi"
+                Name = "Sci-Fi",
+                Movies = []
             };
             var thrillerGenre = new GenreEntity
             {
-                Name = "Thriller"
+                Name = "Thriller",
+                Movies = []
             };
             var infraGenres = new List<GenreEntity>()
             {

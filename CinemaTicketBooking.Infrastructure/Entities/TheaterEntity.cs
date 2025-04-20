@@ -11,15 +11,15 @@ namespace CinemaTicketBooking.Infrastructure.Entities;
 internal class TheaterEntity
 {
     [Required]
-    public Guid Id { get; set; }
+    public required Guid Id { get; set; }
 
     [Required]
     [MaxLength(100)]
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     [Required]
     [MaxLength(100)]
-    public string Address { get; set; }
+    public required string Address { get; set; }
 
-    public ICollection<AuditoriumEntity> Auditoriums { get; set; }
+    public required ICollection<AuditoriumEntity> Auditoriums { get; set; }
 }

@@ -10,29 +10,29 @@ namespace CinemaTicketBooking.Infrastructure.Entities;
 internal class ScreeningEntity
 {
     [Required]
-    public Guid Id { get; set; }
+    public required Guid Id { get; set; }
 
     [Required]
-    public Guid AuditoriumId { get; set; }
+    public required Guid AuditoriumId { get; set; }
 
-    public AuditoriumEntity Auditorium { get; set; }
-
-    [Required]
-    public Guid MovieId { get; set; }
-
-    public MovieEntity Movie { get; set; }
+    public required AuditoriumEntity Auditorium { get; set; }
 
     [Required]
-    public DateTimeOffset Showtime { get; set; }
+    public required Guid MovieId { get; set; }
+
+    public required MovieEntity Movie { get; set; }
+
+    [Required]
+    public required DateTimeOffset Showtime { get; set; }
 
     [Required]
     [MaxLength(50)]
-    public string Language { get; set; }
+    public required string Language { get; set; }
 
     [MaxLength(50)]
     public string? Subtitles { get; set; }
 
-    public ICollection<SeatReservationEntity> SeatReservations { get; set; }
+    public required ICollection<SeatReservationEntity> SeatReservations { get; set; }
 
-    public ICollection<PricingEntity> Pricings { get; set; }
+    public required ICollection<PricingEntity> Pricings { get; set; }
 }
