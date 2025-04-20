@@ -63,7 +63,7 @@ internal class MakeBookingUseCase : IMakeBookingUseCase
             {
                 Id = Guid.NewGuid(),
                 BookingState = BookingState.NonConfirmed,
-                CustomerId = customer.Id.Value,
+                CustomerId = customer.Id,
                 ScreeningId = screeningId,
                 CreatedOn = DateTimeOffset.UtcNow
             };
@@ -78,7 +78,7 @@ internal class MakeBookingUseCase : IMakeBookingUseCase
         {
             var seatReservations = seatIdsToReserve.Select(sitr => new SeatReservation()
             {
-                BookingId = booking.Id.Value,
+                BookingId = booking.Id,
                 ScreeningId = screeningId,
                 SeatId = sitr,
                 Price = pricingsBySeatId[sitr].Price,
@@ -88,7 +88,7 @@ internal class MakeBookingUseCase : IMakeBookingUseCase
         }
         catch (SeatReservationRepositoryException exception)
         {
-            await bookingRepository.DeleteBookingAsync(booking.Id.Value);
+            await bookingRepository.DeleteBookingAsync(booking.Id);
             throw new MakeBookingException($"Could not reserve seats! Error: \"{exception.Message}\"", exception);
         }
 

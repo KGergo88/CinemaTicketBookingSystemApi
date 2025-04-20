@@ -95,8 +95,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             var sleepyHollowScreening = new Screening
             {
                 Id = Guid.NewGuid(),
-                AuditoriumId = sopronElitMoziHuszarikTerem.Id.Value,
-                MovieId = sleepyHollowMovie.Id.Value,
+                AuditoriumId = sopronElitMoziHuszarikTerem.Id,
+                MovieId = sleepyHollowMovie.Id,
                 Showtime = DateTimeOffset.Now,
                 Language = "English",
                 Subtitles = "English"
@@ -105,8 +105,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             var pricing = new Pricing
             {
                 Id = Guid.NewGuid(),
-                ScreeningId = sleepyHollowScreening.Id.Value,
-                TierId = sopronElitMoziHuszarikTeremDefaultTier.Id.Value,
+                ScreeningId = sleepyHollowScreening.Id,
+                TierId = sopronElitMoziHuszarikTeremDefaultTier.Id,
                 Price = new Price
                 {
                     Amount = 4500,
@@ -126,8 +126,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             {
                 Id = Guid.NewGuid(),
                 BookingState = BookingState.Confirmed,
-                CustomerId = hansJuergenCustomer.Id.Value,
-                ScreeningId = sleepyHollowScreening.Id.Value,
+                CustomerId = hansJuergenCustomer.Id,
+                ScreeningId = sleepyHollowScreening.Id,
                 CreatedOn = DateTimeOffset.UtcNow - TimeSpan.FromDays(3),
             };
 
@@ -174,9 +174,9 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 
                 await dbContext.SaveChangesAsync();
             }
-            var seatIdToReserve = theaterToSetup.Auditoriums[0].Tiers[0].Seats[0].Id.Value;
-            var bookingId = bookingToSetup.Id.Value;
-            var screeningId = screeningToSetup.Id.Value;
+            var seatIdToReserve = theaterToSetup.Auditoriums[0].Tiers[0].Seats[0].Id;
+            var bookingId = bookingToSetup.Id;
+            var screeningId = screeningToSetup.Id;
 
             var firstSeatReservation = new SeatReservation()
             {
@@ -281,8 +281,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             var sleepyHollowScreening = new Screening
             {
                 Id = Guid.NewGuid(),
-                AuditoriumId = sopronElitMoziHuszarikTerem.Id.Value,
-                MovieId = sleepyHollowMovie.Id.Value,
+                AuditoriumId = sopronElitMoziHuszarikTerem.Id,
+                MovieId = sleepyHollowMovie.Id,
                 Showtime = DateTimeOffset.Now,
                 Language = "English",
                 Subtitles = "English"
@@ -291,8 +291,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             var pricing = new Pricing
             {
                 Id = Guid.NewGuid(),
-                ScreeningId = sleepyHollowScreening.Id.Value,
-                TierId = sopronElitMoziHuszarikTeremDefaultTier.Id.Value,
+                ScreeningId = sleepyHollowScreening.Id,
+                TierId = sopronElitMoziHuszarikTeremDefaultTier.Id,
                 Price = new Price
                 {
                     Amount = 4500,
@@ -312,14 +312,14 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             {
                 Id = Guid.NewGuid(),
                 BookingState = BookingState.ConfirmationTimeout,
-                CustomerId = hansJuergenCustomer.Id.Value,
-                ScreeningId = sleepyHollowScreening.Id.Value,
+                CustomerId = hansJuergenCustomer.Id,
+                ScreeningId = sleepyHollowScreening.Id,
                 CreatedOn = DateTimeOffset.UtcNow - TimeSpan.FromDays(3),
             };
 
             var seatIdsToReserve = new List<Guid>() {
-                sopronElitMoziHuszarikTeremDefaultTier.Seats[0].Id.Value,
-                sopronElitMoziHuszarikTeremDefaultTier.Seats[1].Id.Value,
+                sopronElitMoziHuszarikTeremDefaultTier.Seats[0].Id,
+                sopronElitMoziHuszarikTeremDefaultTier.Seats[1].Id,
             };
 
             var expectedAvailableSeats = new List<Seat>() {
@@ -372,9 +372,9 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 
                 await dbContext.SaveChangesAsync();
             }
-            var seatIdToReserve = theaterToSetup.Auditoriums[0].Tiers[0].Seats[0].Id.Value;
-            var bookingId = bookingToSetup.Id.Value;
-            var screeningId = screeningToSetup.Id.Value;
+            var seatIdToReserve = theaterToSetup.Auditoriums[0].Tiers[0].Seats[0].Id;
+            var bookingId = bookingToSetup.Id;
+            var screeningId = screeningToSetup.Id;
 
             var seatReservation = new SeatReservation()
             {

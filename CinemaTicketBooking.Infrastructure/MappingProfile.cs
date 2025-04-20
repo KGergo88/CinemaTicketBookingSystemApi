@@ -88,11 +88,8 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Currency, opt => opt.MapFrom(src => src.Price.Currency));
     }
 
-    private static Guid CreateNewGuidIfNullOrEmpty(Guid? id)
+    private static Guid CreateNewGuidIfNullOrEmpty(Guid id)
     {
-        if (id is null)
-            return Guid.NewGuid();
-
-        return (id.Value == Guid.Empty) ? Guid.NewGuid() : id.Value;
+        return (id == Guid.Empty) ? Guid.NewGuid() : id;
     }
 }

@@ -89,7 +89,7 @@ internal class GetBookingDetailsUseCase : IGetBookingDetailsUseCase
         var seatReservationsById = seatReservations.Select(sr => sr.SeatId)
                                                    .ToHashSet();
 
-        theater.Auditoriums.ForEach(a => a.Tiers.ForEach(t => t.Seats.FindAll(s => !seatReservationsById.Contains(s.Id.Value))
+        theater.Auditoriums.ForEach(a => a.Tiers.ForEach(t => t.Seats.FindAll(s => !seatReservationsById.Contains(s.Id))
                                                                      .ForEach(s => t.Seats.Remove(s))));
 
         theater.Auditoriums.ForEach(a => a.Tiers.RemoveAll(t => t.Seats.Count == 0));

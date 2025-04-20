@@ -87,7 +87,7 @@ internal class ScreeningRepository : IScreeningRepository
         if (seatsOfTheScreening is null || !seatsOfTheScreening.Any())
             throw new SeatReservationRepositoryException($"Could not load the seats of the screening! ScreeningId: {screeningId}");
 
-        var seatIdsOfTheScreening = seatsOfTheScreening.Select(sots => sots.Id.Value)
+        var seatIdsOfTheScreening = seatsOfTheScreening.Select(sots => sots.Id)
                                                        .ToHashSet();
         var notExistingSeatIds = seatIdsToCheck.Where(sitc => !seatIdsOfTheScreening.Contains(sitc))
                                                .ToList();

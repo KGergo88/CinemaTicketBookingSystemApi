@@ -113,8 +113,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 
             var sleepyHollowScreening = new Screening
             {
-                AuditoriumId = sopronElitMoziHuszarikTerem.Id.Value,
-                MovieId = sleepyHollowMovie.Id.Value,
+                AuditoriumId = sopronElitMoziHuszarikTerem.Id,
+                MovieId = sleepyHollowMovie.Id,
                 Showtime = DateTimeOffset.Now,
                 Language = "English",
                 Subtitles = "English"
@@ -122,8 +122,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 
             var iAmLegendScreening = new Screening
             {
-                AuditoriumId = sopronElitMoziHuszarikTerem.Id.Value,
-                MovieId = iAmLegendMovie.Id.Value,
+                AuditoriumId = sopronElitMoziHuszarikTerem.Id,
+                MovieId = iAmLegendMovie.Id,
                 Showtime = DateTimeOffset.Now,
                 Language = "English",
                 Subtitles = "Hungarian"

@@ -2,7 +2,7 @@ namespace CinemaTicketBooking.Domain.Entities;
 
 public class Customer
 {
-    public Guid? Id { get; set; }
+    public Guid Id { get; set; }
 
     public required string FirstName { get; set; }
 

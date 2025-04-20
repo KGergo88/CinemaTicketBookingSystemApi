@@ -92,8 +92,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             var sleepyHollowScreening = new Screening
             {
                 Id = Guid.NewGuid(),
-                AuditoriumId = sopronElitMoziHuszarikTerem.Id.Value,
-                MovieId = sleepyHollowMovie.Id.Value,
+                AuditoriumId = sopronElitMoziHuszarikTerem.Id,
+                MovieId = sleepyHollowMovie.Id,
                 Showtime = DateTimeOffset.Now,
                 Language = "English",
                 Subtitles = "English"
@@ -102,8 +102,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             var pricing = new Pricing
             {
                 Id = Guid.NewGuid(),
-                ScreeningId = sleepyHollowScreening.Id.Value,
-                TierId = sopronElitMoziHuszarikTeremDefaultTier.Id.Value,
+                ScreeningId = sleepyHollowScreening.Id,
+                TierId = sopronElitMoziHuszarikTeremDefaultTier.Id,
                 Price = new Price
                 {
                     Amount = 4500,
@@ -131,8 +131,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                 {
                     Id = Guid.NewGuid(),
                     BookingState = BookingState.Confirmed,
-                    CustomerId = hansJuergenCustomer.Id.Value,
-                    ScreeningId = sleepyHollowScreening.Id.Value,
+                    CustomerId = hansJuergenCustomer.Id,
+                    ScreeningId = sleepyHollowScreening.Id,
                     CreatedOn = DateTimeOffset.UtcNow - TimeSpan.FromDays(3),
                 },
                 BookingState.Confirmed
@@ -150,8 +150,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                 {
                     Id = Guid.NewGuid(),
                     BookingState = BookingState.NonConfirmed,
-                    CustomerId = hansJuergenCustomer.Id.Value,
-                    ScreeningId = sleepyHollowScreening.Id.Value,
+                    CustomerId = hansJuergenCustomer.Id,
+                    ScreeningId = sleepyHollowScreening.Id,
                     CreatedOn = DateTimeOffset.UtcNow - TimeSpan.FromDays(3),
                 },
                 BookingState.ConfirmationTimeout
@@ -184,7 +184,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             var bookingRepository = new BookingRepository(mapper, dbContext);
             await bookingRepository.AddBookingAsync(bookingToSetup);
             await dbContext.SaveChangesAsync();
-            var bookingId = bookingToSetup.Id.Value;
+            var bookingId = bookingToSetup.Id;
 
             // Act
             await bookingRepository.TimeoutUnconfirmedBookingsAsync(timeoutInMinutes);

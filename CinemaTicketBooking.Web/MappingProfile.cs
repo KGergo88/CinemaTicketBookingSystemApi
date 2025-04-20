@@ -112,7 +112,7 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Id, opt => opt.Ignore());
 
         CreateMap<Booking, BookingResponseDto>()
-            .ForMember(dest => dest.BookingId, opt => opt.MapFrom(src => src.Id.Value))
+            .ForMember(dest => dest.BookingId, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.BookingState, opt => opt.MapFrom(src => (int)src.BookingState));
 
         CreateMap<Booking, BookingDto>();
