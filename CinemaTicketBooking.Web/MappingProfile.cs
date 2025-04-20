@@ -16,7 +16,7 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         #region "Movie DTOs"
-        
+
         CreateMap<MovieDtoBase, Movie>()
             .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => TimeSpan.FromSeconds(src.DurationInSeconds)));
 
@@ -61,11 +61,11 @@ public class MappingProfile : Profile
 
 
         CreateMap<TierWithoutIdDto, Tier>();
-        
+
         CreateMap<TierDto, Tier>();
 
         CreateMap<Tier, TierWithoutIdDto>();
-        
+
         CreateMap<Tier, TierDto>();
 
         #endregion
@@ -86,7 +86,7 @@ public class MappingProfile : Profile
         #region "Theater DTOs"
 
         CreateMap<TheaterWithoutIdDto, Theater>();
-    
+
         CreateMap<TheaterDto, Theater>();
 
         CreateMap<Theater, TheaterDto>();
@@ -112,7 +112,7 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Id, opt => opt.Ignore());
 
         CreateMap<Booking, BookingResponseDto>()
-            .ForMember(dest => dest.BookingId, opt => opt.MapFrom(src => src.Id.Value))
+            .ForMember(dest => dest.BookingId, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.BookingState, opt => opt.MapFrom(src => (int)src.BookingState));
 
         CreateMap<Booking, BookingDto>();
