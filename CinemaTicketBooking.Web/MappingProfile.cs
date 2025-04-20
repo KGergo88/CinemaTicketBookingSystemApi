@@ -16,7 +16,7 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         #region "Movie DTOs"
-        
+
         CreateMap<MovieDtoBase, Movie>()
             .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => TimeSpan.FromSeconds(src.DurationInSeconds)));
 
@@ -61,11 +61,11 @@ public class MappingProfile : Profile
 
 
         CreateMap<TierWithoutIdDto, Tier>();
-        
+
         CreateMap<TierDto, Tier>();
 
         CreateMap<Tier, TierWithoutIdDto>();
-        
+
         CreateMap<Tier, TierDto>();
 
         #endregion
@@ -86,7 +86,7 @@ public class MappingProfile : Profile
         #region "Theater DTOs"
 
         CreateMap<TheaterWithoutIdDto, Theater>();
-    
+
         CreateMap<TheaterDto, Theater>();
 
         CreateMap<Theater, TheaterDto>();
