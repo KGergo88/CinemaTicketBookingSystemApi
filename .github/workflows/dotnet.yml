@@ -14,15 +14,43 @@ jobs:
 
     runs-on: windows-latest
 
+    env:
+      COVERAGEREPORT_FOLDER: "coveragereport"
+
     steps:
     - uses: actions/checkout@v4
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
+        dotnet-quality: 'ga'
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+    - name: Run Tests
+      run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage"
+    - name: Generate code coverage report
+      uses: danielpalme/ReportGenerator-GitHub-Action@5.4.5
+      with:
+        reports: ../**/coverage.cobertura.xml
+        targetdir: ${{ env.COVERAGEREPORT_FOLDER }}
+        reporttypes: Html;MarkdownSummaryGithub
+    - name: Upload code coverage report
+      id: upload-coverage-report
+      uses: actions/upload-artifact@v4
+      with:
+        name: CoverageReport
+        path: ${{ env.COVERAGEREPORT_FOLDER }}
+    - name: Combine messages
+      if: github.event_name == 'pull_request'
+      run: |
+        echo "# Code coverage report" > combined_comment.md
+        echo "${{ steps.upload-coverage-report.outputs.artifact-url }}" >> combined_comment.md
+        echo "" >> combined_comment.md
+        cat ${{ env.COVERAGEREPORT_FOLDER }}/SummaryGithub.md >> combined_comment.md
+    - name: Post single PR comment
+      if: github.event_name == 'pull_request'
+      run: gh pr comment ${{ github.event.number }} --body-file combined_comment.md
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
