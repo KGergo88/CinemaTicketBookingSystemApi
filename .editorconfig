@@ -1,0 +1,5 @@
+[*.{cs}]
+
+# CS1591 - Missing XML comment for publicly visible type or member 'Type_or_Member'
+# Link: https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-messages/cs1591
+dotnet_diagnostic.CS1591.severity = none
