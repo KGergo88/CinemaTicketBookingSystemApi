@@ -191,6 +191,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 
             // Assert
             var booking = await bookingRepository.GetBookingOrNullAsync(bookingId);
+            Assert.NotNull(booking);
             Assert.Equal(expectedBookingState, booking.BookingState);
         }
 
