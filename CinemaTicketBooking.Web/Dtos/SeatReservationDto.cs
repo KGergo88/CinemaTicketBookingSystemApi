@@ -5,8 +5,8 @@ namespace CinemaTicketBooking.Web.Dtos;
 public class SeatReservationDto
 {
     [Required]
-    public Guid SeatId { get; set; }
+    public required Guid SeatId { get; set; }
 
     [Required]
-    public PriceDto Price { get; set; }
+    public required PriceDto Price { get; set; }
 }

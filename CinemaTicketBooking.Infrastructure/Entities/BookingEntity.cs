@@ -10,21 +10,21 @@ namespace CinemaTicketBooking.Infrastructure.Entities;
 internal class BookingEntity
 {
     [Required]
-    public Guid Id { get; set; }
+    public required Guid Id { get; set; }
 
     [Required]
-    public int BookingState { get; set; }
+    public required int BookingState { get; set; }
 
     [Required]
-    public Guid CustomerId { get; set; }
+    public required Guid CustomerId { get; set; }
 
-    public CustomerEntity Customer { get; set; }
-
-    [Required]
-    public Guid ScreeningId { get; set; }
-
-    public ScreeningEntity Screening { get; set; }
+    public required CustomerEntity Customer { get; set; }
 
     [Required]
-    public DateTimeOffset CreatedOn { get; set; }
+    public required Guid ScreeningId { get; set; }
+
+    public required ScreeningEntity Screening { get; set; }
+
+    [Required]
+    public required DateTimeOffset CreatedOn { get; set; }
 }

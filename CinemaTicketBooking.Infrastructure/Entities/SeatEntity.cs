@@ -9,22 +9,22 @@ namespace CinemaTicketBooking.Infrastructure.Entities;
 internal class SeatEntity
 {
     [Required]
-    public Guid Id { get; set; }
+    public required Guid Id { get; set; }
 
     [Required]
-    public Guid TierId { get; set; }
+    public required Guid TierId { get; set; }
 
-    public TierEntity Tier { get; set; }
+    public required TierEntity Tier { get; set; }
 
     // Negative column numbers are not valid
     [Required]
     [Range(0, int.MaxValue)]
-    public int Row { get; set; }
+    public required int Row { get; set; }
 
     // Negative column numbers are not valid
     [Required]
     [Range(0, int.MaxValue)]
-    public int Column { get; set; }
+    public required int Column { get; set; }
 
-    public ICollection<SeatReservationEntity> SeatReservations { get; set; }
+    public required ICollection<SeatReservationEntity> SeatReservations { get; set; }
 }

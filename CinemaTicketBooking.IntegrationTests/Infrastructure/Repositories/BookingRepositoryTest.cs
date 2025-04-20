@@ -160,14 +160,14 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 
         [Theory]
         [MemberData(nameof(TimeoutUnconfirmedBookingsAsyncSetsBookingStateCorrectlyAsyncData))]
-        async Task TimeoutUnconfirmedBookingsAsyncSetsBookingStateCorrectlyAsync(int timeoutInMinutes,
-                                                                                 Theater theaterToSetup,
-                                                                                 Movie movieToSetup,
-                                                                                 Screening screeningToSetup,
-                                                                                 Pricing pricingToSetup,
-                                                                                 Customer customerToSetup,
-                                                                                 Booking bookingToSetup,
-                                                                                 BookingState expectedBookingState)
+        public async Task TimeoutUnconfirmedBookingsAsyncSetsBookingStateCorrectlyAsync(int timeoutInMinutes,
+                                                                                        Theater theaterToSetup,
+                                                                                        Movie movieToSetup,
+                                                                                        Screening screeningToSetup,
+                                                                                        Pricing pricingToSetup,
+                                                                                        Customer customerToSetup,
+                                                                                        Booking bookingToSetup,
+                                                                                        BookingState expectedBookingState)
         {
             // Arrange
             await using var db = await CreateDatabaseAsync();
@@ -191,13 +191,14 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 
             // Assert
             var booking = await bookingRepository.GetBookingOrNullAsync(bookingId);
+            Assert.NotNull(booking);
             Assert.Equal(expectedBookingState, booking.BookingState);
         }
 
         [Theory]
         [InlineData(-1)]
         [InlineData(0)]
-        async Task TimeoutUnconfirmedBookingsAsyncThrowsForInvalidTimeoutLimits(int timeoutInMinutes)
+        public async Task TimeoutUnconfirmedBookingsAsyncThrowsForInvalidTimeoutLimits(int timeoutInMinutes)
         {
             // Arrange
             await using var db = await CreateDatabaseAsync();

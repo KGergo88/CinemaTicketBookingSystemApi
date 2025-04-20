@@ -15,7 +15,7 @@ internal class GenreEntity
     [Key]
     [Required]
     [MaxLength(50)]
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
-    public ICollection<MovieEntity> Movies { get; set; }
+    public required ICollection<MovieEntity> Movies { get; set; }
 }

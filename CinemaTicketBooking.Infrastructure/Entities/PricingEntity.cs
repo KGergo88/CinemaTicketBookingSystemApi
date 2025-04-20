@@ -11,22 +11,22 @@ namespace CinemaTicketBooking.Infrastructure.Entities;
 internal class PricingEntity
 {
     [Required]
-    public Guid Id { get; set; }
+    public required Guid Id { get; set; }
 
     [Required]
-    public Guid ScreeningId { get; set; }
+    public required Guid ScreeningId { get; set; }
 
-    public ScreeningEntity Screening { get; set; }
+    public required ScreeningEntity Screening { get; set; }
 
     [Required]
-    public Guid TierId { get; set; }
+    public required Guid TierId { get; set; }
 
-    public TierEntity Tier { get; set; }
+    public required TierEntity Tier { get; set; }
 
     // Negative prices are not valid
     [Required]
     [Range(0, float.MaxValue)]
-    public float Price { get; set; }
+    public required float Price { get; set; }
 
     // Constraints
     //   - A price without a currency does not make sense
@@ -34,5 +34,5 @@ internal class PricingEntity
     // (Ditikolo Tsa Botshelo Jwa Dikoloto, Botswana)
     [Required]
     [MaxLength(50)]
-    public string Currency { get; set; }
+    public required string Currency { get; set; }
 }

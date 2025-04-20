@@ -5,11 +5,11 @@ namespace CinemaTicketBooking.Web.Dtos.Theater;
 public abstract class TheaterDtoBase<TAuditoriumDto>
 {
     [Required]
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     [Required]
-    public string Address { get; set; }
+    public required string Address { get; set; }
 
     [MinLength(1)]
-    public List<TAuditoriumDto> Auditoriums { get; set; }
+    public required List<TAuditoriumDto> Auditoriums { get; set; }
 }

@@ -9,18 +9,18 @@ namespace CinemaTicketBooking.Infrastructure.Entities;
 internal class CustomerEntity
 {
     [Required]
-    public Guid Id { get; set; }
+    public required Guid Id { get; set; }
 
     [Required]
     [MaxLength(50)]
-    public string FirstName { get; set; }
+    public required string FirstName { get; set; }
 
     [Required]
     [MaxLength(50)]
-    public string LastName { get; set; }
+    public required string LastName { get; set; }
 
     [Required]
     [MaxLength(50)]
     [RegularExpression(@"^[^@\s]+@[^@\s]+\.[^@\s]+$")]
-    public string Email { get; set; }
+    public required string Email { get; set; }
 }

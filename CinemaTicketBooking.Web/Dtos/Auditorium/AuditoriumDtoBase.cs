@@ -5,8 +5,8 @@ namespace CinemaTicketBooking.Web.Dtos.Auditorium;
 public abstract class AuditoriumDtoBase<TTierDto>
 {
     [Required]
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     [MinLength(1)]
-    public List<TTierDto> Tiers { get; set; }
+    public required List<TTierDto> Tiers { get; set; }
 }

@@ -10,20 +10,20 @@ namespace CinemaTicketBooking.Infrastructure.Entities;
 internal class TierEntity
 {
     [Required]
-    public Guid Id { get; set; }
+    public required Guid Id { get; set; }
 
     // Constraints
     //   - Every Tier must have a name, like Normal, Balkony...etc
     [Required]
     [MaxLength(50)]
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     [Required]
-    public Guid AuditoriumId { get; set; }
+    public required Guid AuditoriumId { get; set; }
 
-    public AuditoriumEntity Auditorium { get; set; }
+    public required AuditoriumEntity Auditorium { get; set; }
 
-    public ICollection<SeatEntity> Seats { get; set; }
+    public required ICollection<SeatEntity> Seats { get; set; }
 
-    public PricingEntity Pricing { get; set; }
+    public required PricingEntity Pricing { get; set; }
 }

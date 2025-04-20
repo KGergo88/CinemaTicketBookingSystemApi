@@ -38,7 +38,7 @@ internal class MovieRepository : IMovieRepository
     public async Task AddMoviesAsync(IEnumerable<Movie> domainMovies)
     {
         var infraMovies = new List<MovieEntity>();
-        var genresOfMovieIds = new Dictionary<Guid, List<string>>();
+        var genresByMovieId = new Dictionary<Guid, List<string>>();
 
         foreach (var domainMovie in domainMovies)
         {
@@ -51,19 +51,19 @@ internal class MovieRepository : IMovieRepository
             var infraMovie = mapper.Map<MovieEntity>(domainMovie);
             infraMovies.Add(infraMovie);
 
-            genresOfMovieIds.Add(infraMovie.Id, domainMovie.Genres);
+            genresByMovieId.Add(infraMovie.Id, domainMovie.Genres);
         }
 
         var alreadyStoredGenres = await context.Genres.ToListAsync();
-        var genresToCreate = genresOfMovieIds.Values.SelectMany(genres => genres)
-                                                    .Distinct()
-                                                    .Where(genre => !alreadyStoredGenres.Any(asg => asg.Name != genre))
-                                                    .Select(genre => new GenreEntity { Name = genre })
-                                                    .ToList();
+        var genresToCreate = genresByMovieId.Values.SelectMany(genres => genres)
+                                                   .Distinct()
+                                                   .Where(genre => !alreadyStoredGenres.Any(asg => asg.Name == genre))
+                                                   .Select(genre => new GenreEntity { Name = genre, Movies = [] })
+                                                   .ToList();
         context.Genres.AddRange(genresToCreate);
         alreadyStoredGenres.AddRange(genresToCreate);
 
-        infraMovies.ForEach(im => im.Genres = alreadyStoredGenres.Where(asg => genresOfMovieIds[im.Id].Contains(asg.Name))
+        infraMovies.ForEach(im => im.Genres = alreadyStoredGenres.Where(asg => genresByMovieId[im.Id].Contains(asg.Name))
                                                                  .ToList());
         context.AddRange(infraMovies);
 

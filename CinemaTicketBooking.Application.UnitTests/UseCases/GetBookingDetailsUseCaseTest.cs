@@ -78,7 +78,7 @@ public class GetBookingDetailsUseCaseTest
                         BookingId = Guid.NewGuid(),
                         ScreeningId = screeningId,
                         SeatId = Guid.NewGuid(),
-                        Price = null
+                        Price = new Price { Amount = 10, Currency = "EUR" }
                     }
                 ]
             );

@@ -12,7 +12,7 @@ namespace CinemaTicketBooking.Infrastructure.Entities;
 internal class MovieEntity
 {
     [Required]
-    public Guid Id { get; set; }
+    public required Guid Id { get; set; }
 
     // Constraints
     //   - Every movie must have a title
@@ -21,7 +21,7 @@ internal class MovieEntity
     // of the Evil, Mutant, Hellbound, Flesh-Eating Subhumanoid Zombified Living Dead, Part 3, 2005)
     [Required]
     [MaxLength(250)]
-    public string Title { get; set; }
+    public required string Title { get; set; }
 
     // Null means that the release is not known
     // Constraints
@@ -29,11 +29,11 @@ internal class MovieEntity
     [Precision(4)]
     public int? ReleaseYear { get; set; } = null;
 
-    public string Description { get; set; } = "";
+    public required string Description { get; set; } = "";
 
     // The longest movie Resan (The Journey), 1987 is 52380 seconds long
     [Precision(5)]
-    public int DurationInSeconds { get; set; }
+    public required int DurationInSeconds { get; set; }
 
-    public ICollection<GenreEntity> Genres { get; set; }
+    public required ICollection<GenreEntity> Genres { get; set; }
 }

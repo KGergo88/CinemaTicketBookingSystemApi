@@ -4,27 +4,27 @@ namespace CinemaTicketBooking.Infrastructure.DatabaseSeeding;
 
 internal class SeedData
 {
-    public List<MovieEntity> Movies { get; set; }
+    public required List<MovieEntity> Movies { get; set; }
 
-    public List<GenreEntity> Genres { get; set; }
+    public required List<GenreEntity> Genres { get; set; }
 
-    public List<TheaterEntity> Theaters { get; set; }
+    public required List<TheaterEntity> Theaters { get; set; }
 
-    public List<AuditoriumEntity> Auditoriums { get; set; }
+    public required List<AuditoriumEntity> Auditoriums { get; set; }
 
-    public List<TierEntity> Tiers { get; set; }
+    public required List<TierEntity> Tiers { get; set; }
 
-    public List<SeatEntity> Seats { get; set; }
+    public required List<SeatEntity> Seats { get; set; }
 
-    public List<ScreeningEntity> Screenings { get; set; }
+    public required List<ScreeningEntity> Screenings { get; set; }
 
-    public List<CustomerEntity> Customers { get; set; }
+    public required List<CustomerEntity> Customers { get; set; }
 
-    public List<BookingEntity> Bookings { get; set; }
+    public required List<BookingEntity> Bookings { get; set; }
 
-    public List<SeatReservationEntity> SeatReservations { get; set; }
+    public required List<SeatReservationEntity> SeatReservations { get; set; }
 
-    public List<PricingEntity> Pricings { get; set; }
+    public required List<PricingEntity> Pricings { get; set; }
 
     public IEnumerable<object> ToObjects()
     {
