@@ -144,12 +144,12 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 
         [Theory]
         [MemberData(nameof(AddSeatReservationsAsyncRejectsMultipleReservationsForTheSameSeatAsyncData))]
-        async Task AddSeatReservationsAsyncRejectsMultipleReservationsForTheSameSeatAsync(Theater theaterToSetup,
-                                                                                          Movie movieToSetup,
-                                                                                          Screening screeningToSetup,
-                                                                                          Pricing pricingToSetup,
-                                                                                          Customer customerToSetup,
-                                                                                          Booking bookingToSetup)
+        public async Task AddSeatReservationsAsyncRejectsMultipleReservationsForTheSameSeatAsync(Theater theaterToSetup,
+                                                                                                 Movie movieToSetup,
+                                                                                                 Screening screeningToSetup,
+                                                                                                 Pricing pricingToSetup,
+                                                                                                 Customer customerToSetup,
+                                                                                                 Booking bookingToSetup)
         {
             // Arrange
             await using var db = await CreateDatabaseAsync();
@@ -341,13 +341,13 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 
         [Theory]
         [MemberData(nameof(ReleaseSeatsOfTimeoutedBookingsAsyncDeletesTimeoutedSeatReservationsAsyncData))]
-        async Task ReleaseSeatsOfTimeoutedBookingsAsyncDeletesTimeoutedSeatReservationsAsync(Theater theaterToSetup,
-                                                                                             Movie movieToSetup,
-                                                                                             Screening screeningToSetup,
-                                                                                             Pricing pricingToSetup,
-                                                                                             Customer customerToSetup,
-                                                                                             Booking bookingToSetup,
-                                                                                             List<Guid> seatIdsToReserve)
+        public async Task ReleaseSeatsOfTimeoutedBookingsAsyncDeletesTimeoutedSeatReservationsAsync(Theater theaterToSetup,
+                                                                                                    Movie movieToSetup,
+                                                                                                    Screening screeningToSetup,
+                                                                                                    Pricing pricingToSetup,
+                                                                                                    Customer customerToSetup,
+                                                                                                    Booking bookingToSetup,
+                                                                                                    List<Guid> seatIdsToReserve)
         {
             // Arrange
             await using var db = await CreateDatabaseAsync();
