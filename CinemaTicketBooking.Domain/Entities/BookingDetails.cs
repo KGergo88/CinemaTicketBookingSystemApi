@@ -2,17 +2,17 @@ namespace CinemaTicketBooking.Domain.Entities;
 
 public class BookingDetails
 {
-    public Booking Booking { get; set; }
+    public required Booking Booking { get; set; }
 
-    public Customer Customer { get; set; }
+    public required Customer Customer { get; set; }
 
-    public Theater Theater { get; set;}
+    public required Theater Theater { get; set;}
 
-    public Screening Screening { get; set; }
+    public required Screening Screening { get; set; }
 
-    public Movie Movie { get; set; }
+    public required Movie Movie { get; set; }
 
-    public List<SeatReservation> SeatReservations { get; set; }
+    public required List<SeatReservation> SeatReservations { get; set; }
 
-    public Price TotalPrice { get; set; }
+    public required Price TotalPrice { get; set; }
 }
