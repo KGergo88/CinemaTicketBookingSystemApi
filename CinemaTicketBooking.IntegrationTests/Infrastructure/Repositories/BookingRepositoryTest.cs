@@ -7,6 +7,7 @@ using CinemaTicketBooking.Infrastructure.Repositories;
 
 namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 {
+    [Trait("Category", "LocalDbBasedTests")]
     public class BookingRepositoryTest : TestDatabase
     {
         private readonly IMapper mapper;
