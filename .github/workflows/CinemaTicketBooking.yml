@@ -1,0 +1,68 @@
+name: Cinema Ticket Booking System API
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build_and_test:
+    strategy:
+      matrix:
+        os: [windows-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    env:
+      COVERAGEREPORT_FOLDER: coveragereport
+      COMMENT_FILE: pull_request_comment.md
+
+    steps:
+      - name: Print OS
+        run: echo "Running job ${{ github.job }} on ${{ matrix.os }}"
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+          dotnet-quality: 'ga'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build solution
+        run: dotnet build --no-restore
+
+      - name: Run Tests
+        run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage"
+
+      - name: Generate code coverage report
+        uses: danielpalme/ReportGenerator-GitHub-Action@5.4.5
+        with:
+          reports: ../**/coverage.cobertura.xml
+          targetdir: ${{ env.COVERAGEREPORT_FOLDER }}
+          reporttypes: Html;MarkdownSummaryGithub
+
+      - name: Upload code coverage report
+        id: upload-coverage-report
+        uses: actions/upload-artifact@v4
+        with:
+          name: CoverageReport
+          path: ${{ env.COVERAGEREPORT_FOLDER }}
+
+      - name: Create pull request comment content
+        run: |
+          echo "# Code coverage report" > ${{ env.COMMENT_FILE }}
+          echo "${{ steps.upload-coverage-report.outputs.artifact-url }}" >> ${{ env.COMMENT_FILE }}
+          echo "" >> ${{ env.COMMENT_FILE }}
+          cat ${{ env.COVERAGEREPORT_FOLDER }}/SummaryGithub.md >> ${{ env.COMMENT_FILE }}
+
+      - name: Post pull request comment
+        if: github.event_name == 'pull_request'
+        run: gh pr comment ${{ github.event.pull_request.number }} --body-file ${{ env.COMMENT_FILE }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
