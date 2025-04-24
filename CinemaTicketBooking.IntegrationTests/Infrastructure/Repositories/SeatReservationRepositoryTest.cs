@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 {
+    [Trait("Category", "LocalDbBasedTests")]
     public class SeatReservationRepositoryTest : TestDatabase
     {
         private readonly IMapper mapper;
