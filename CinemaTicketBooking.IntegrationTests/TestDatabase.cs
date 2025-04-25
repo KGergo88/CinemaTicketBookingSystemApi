@@ -1,6 +1,5 @@
 using CinemaTicketBooking.Infrastructure;
 using CinemaTicketBooking.Infrastructure.DatabaseSeeding;
-using System.Runtime.CompilerServices;
 
 namespace CinemaTicketBooking.IntegrationTests
 {
@@ -13,9 +12,6 @@ namespace CinemaTicketBooking.IntegrationTests
                 constructInstance: builder => new(builder.Options));
 
         public static Task<SqlDatabase<CinemaTicketBookingDbContext>> CreateDatabaseAsync(
-            [CallerFilePath] string testFile = "",
-            string? databaseSuffix = null,
-            [CallerMemberName] string memberName = "",
             string? seedDataJsonPath = null)
         {
             var dbName = Guid.NewGuid().ToString();

@@ -3,7 +3,6 @@ using CinemaTicketBooking.Domain.Entities;
 using CinemaTicketBooking.Infrastructure;
 using CinemaTicketBooking.Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Runtime.CompilerServices;
 
 namespace CinemaTicketBooking.IntegrationTests
 {
@@ -11,12 +10,9 @@ namespace CinemaTicketBooking.IntegrationTests
     {
         public const string defaultSeedDataJsonPath = "IntegrationTestsDefaultSeedData.json";
 
-        public static Task<SqlDatabase<CinemaTicketBookingDbContext>> CreateDatabaseAsync(
-            [CallerFilePath] string testFile = "",
-            string? databaseSuffix = null,
-            [CallerMemberName] string memberName = "")
+        public static Task<SqlDatabase<CinemaTicketBookingDbContext>> CreateDatabaseAsync()
         {
-            return TestDatabase.CreateDatabaseAsync(testFile, databaseSuffix, memberName, defaultSeedDataJsonPath);
+            return TestDatabase.CreateDatabaseAsync(defaultSeedDataJsonPath);
         }
 
         internal static async Task<TheaterEntity> GetTheaterEntityAsync(CinemaTicketBookingDbContext context, string name)
@@ -45,7 +41,7 @@ namespace CinemaTicketBooking.IntegrationTests
 
         public static async Task<Auditorium> GetHuszarikTeremAuditoriumAsync(CinemaTicketBookingDbContext context)
         {
-            var entity = await GetAuditoriumEntityAsync(context, "Huszárik terem");
+            var entity = await GetAuditoriumEntityAsync(context, "Huszï¿½rik terem");
             var mapper = CreateMapper();
             return mapper.Map<Auditorium>(entity);
         }
