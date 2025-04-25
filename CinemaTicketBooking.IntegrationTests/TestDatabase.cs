@@ -6,7 +6,7 @@ namespace CinemaTicketBooking.IntegrationTests
 {
     public abstract class TestDatabase
     {
-        static SqlInstance<CinemaTicketBookingDbContext> sqlInstance;
+        private readonly static SqlInstance<CinemaTicketBookingDbContext> sqlInstance;
 
         static TestDatabase() =>
             sqlInstance = new(
