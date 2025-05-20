@@ -8,11 +8,11 @@ namespace CinemaTicketBooking.IntegrationTests
 {
     public abstract class TestDatabaseWithDefaultSeedData
     {
-        public const string defaultSeedDataJsonPath = "IntegrationTestsDefaultSeedData.json";
+        internal static readonly DefaultSeedData defaultSeedData = new DefaultSeedData();
 
         public static Task<SqlDatabase<CinemaTicketBookingDbContext>> CreateDatabaseAsync()
         {
-            return TestDatabase.CreateDatabaseAsync(defaultSeedDataJsonPath);
+            return TestDatabase.CreateDatabaseAsync(defaultSeedData);
         }
 
         internal static async Task<TheaterEntity> GetTheaterEntityAsync(CinemaTicketBookingDbContext context, string name)
