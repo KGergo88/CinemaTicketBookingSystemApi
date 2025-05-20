@@ -40,7 +40,7 @@ internal class SeedData
                                 .Concat(ToObjects(Pricings));
     }
 
-    private IEnumerable<object> ToObjects<TEntity>(IEnumerable<TEntity> entities)
+    private static IEnumerable<object> ToObjects<TEntity>(IEnumerable<TEntity> entities)
     {
         return (entities ?? Enumerable.Empty<TEntity>()).Cast<object>();
     }
