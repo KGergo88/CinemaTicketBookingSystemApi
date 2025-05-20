@@ -22,5 +22,14 @@ namespace CinemaTicketBooking.IntegrationTests
 
             return sqlInstance.Build(dbName, entities);
         }
+
+        internal static Task<SqlDatabase<CinemaTicketBookingDbContext>> CreateDatabaseAsync(
+            SeedData seedData)
+        {
+            var dbName = Guid.NewGuid().ToString();
+            var entities = seedData.ToObjects();
+
+            return sqlInstance.Build(dbName, entities);
+        }
     }
 }
