@@ -50,7 +50,7 @@ internal class SeatReservationRepository : ISeatReservationRepository
         var reservedSeatEntities = await context.SeatReservations.Include(sr => sr.Seat)
                                                                  .Include(sr => sr.Booking)
                                                                  .Where(sr => sr.ScreeningId == screeningId
-                                                                              && (sr.Booking.BookingState == (int)BookingState.NonConfirmed
+                                                                              && (sr.Booking!.BookingState == (int)BookingState.NonConfirmed
                                                                                   || sr.Booking.BookingState == (int)BookingState.Confirmed))
                                                                  .Select(sr => sr.Seat)
                                                                  .ToListAsync();
@@ -70,7 +70,7 @@ internal class SeatReservationRepository : ISeatReservationRepository
     public async Task ReleaseSeatsOfTimeoutedBookingsAsync()
     {
         await context.SeatReservations.Include(sr => sr.Booking)
-                                      .Where(sr => sr.Booking.BookingState == (int)BookingState.ConfirmationTimeout)
+                                      .Where(sr => sr.Booking!.BookingState == (int)BookingState.ConfirmationTimeout)
                                       .ExecuteDeleteAsync();
     }
 
@@ -87,11 +87,11 @@ internal class SeatReservationRepository : ISeatReservationRepository
     private async Task<Dictionary<Guid, PricingEntity>> GetPricingEntitiesBySeatId(Guid screeningId)
     {
         var pricingsOfTheScreening = await context.Pricings.Include(p => p.Tier)
-                                                           .ThenInclude(t => t.Seats)
+                                                           .ThenInclude(t => t!.Seats)
                                                            .Where(p => p.ScreeningId == screeningId)
                                                            .ToListAsync();
 
-        var pricingsBySeats = pricingsOfTheScreening.SelectMany(p => p.Tier.Seats.Select(s => new { SeatId = s.Id, Pricing = p }))
+        var pricingsBySeats = pricingsOfTheScreening.SelectMany(p => p.Tier!.Seats.Select(s => new { SeatId = s.Id, Pricing = p }))
                                                     .ToDictionary(x => x.SeatId, x => x.Pricing);
 
         return pricingsBySeats;
