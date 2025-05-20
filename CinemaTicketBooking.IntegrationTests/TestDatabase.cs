@@ -11,7 +11,7 @@ namespace CinemaTicketBooking.IntegrationTests
             sqlInstance = new(
                 constructInstance: builder => new(builder.Options));
 
-        public static Task<SqlDatabase<CinemaTicketBookingDbContext>> CreateDatabaseAsync(
+        internal static Task<SqlDatabase<CinemaTicketBookingDbContext>> CreateDatabaseAsync(
             string? seedDataJsonPath = null)
         {
             var dbName = Guid.NewGuid().ToString();
