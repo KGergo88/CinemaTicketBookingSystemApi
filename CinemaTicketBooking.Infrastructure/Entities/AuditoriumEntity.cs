@@ -13,7 +13,7 @@ internal class AuditoriumEntity
     [Required]
     public required Guid TheaterId { get; set; }
 
-    public required TheaterEntity Theater { get; set; }
+    public TheaterEntity? Theater { get; set; }
 
-    public required ICollection<TierEntity> Tiers { get; set; }
+    public ICollection<TierEntity> Tiers { get; set; } = new List<TierEntity>();
 }

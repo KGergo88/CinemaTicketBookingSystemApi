@@ -18,12 +18,12 @@ internal class BookingEntity
     [Required]
     public required Guid CustomerId { get; set; }
 
-    public required CustomerEntity Customer { get; set; }
+    public CustomerEntity? Customer { get; set; }
 
     [Required]
     public required Guid ScreeningId { get; set; }
 
-    public required ScreeningEntity Screening { get; set; }
+    public ScreeningEntity? Screening { get; set; }
 
     [Required]
     public required DateTimeOffset CreatedOn { get; set; }

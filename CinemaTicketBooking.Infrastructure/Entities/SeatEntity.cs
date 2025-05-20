@@ -14,7 +14,7 @@ internal class SeatEntity
     [Required]
     public required Guid TierId { get; set; }
 
-    public required TierEntity Tier { get; set; }
+    public TierEntity? Tier { get; set; }
 
     // Negative column numbers are not valid
     [Required]
@@ -26,5 +26,5 @@ internal class SeatEntity
     [Range(0, int.MaxValue)]
     public required int Column { get; set; }
 
-    public required ICollection<SeatReservationEntity> SeatReservations { get; set; }
+    public ICollection<SeatReservationEntity> SeatReservations { get; set; } = new List<SeatReservationEntity>();
 }

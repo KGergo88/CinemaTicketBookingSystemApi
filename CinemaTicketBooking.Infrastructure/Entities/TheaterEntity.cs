@@ -21,5 +21,5 @@ internal class TheaterEntity
     [MaxLength(100)]
     public required string Address { get; set; }
 
-    public required ICollection<AuditoriumEntity> Auditoriums { get; set; }
+    public ICollection<AuditoriumEntity> Auditoriums { get; set; } = new List<AuditoriumEntity>();
 }

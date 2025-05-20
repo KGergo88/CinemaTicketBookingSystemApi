@@ -35,5 +35,5 @@ internal class MovieEntity
     [Precision(5)]
     public required int DurationInSeconds { get; set; }
 
-    public required ICollection<GenreEntity> Genres { get; set; }
+    public ICollection<GenreEntity> Genres { get; set; } = new List<GenreEntity>();
 }

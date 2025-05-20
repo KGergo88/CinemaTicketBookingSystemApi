@@ -16,12 +16,12 @@ internal class PricingEntity
     [Required]
     public required Guid ScreeningId { get; set; }
 
-    public required ScreeningEntity Screening { get; set; }
+    public ScreeningEntity? Screening { get; set; }
 
     [Required]
     public required Guid TierId { get; set; }
 
-    public required TierEntity Tier { get; set; }
+    public TierEntity? Tier { get; set; }
 
     // Negative prices are not valid
     [Required]
