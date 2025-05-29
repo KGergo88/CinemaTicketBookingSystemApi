@@ -19,8 +19,8 @@ internal class SeedDatabaseCommandHandler
     {
         logger.LogInformation($"Using JSON file at: {jsonFilePath}");
 
-        var seedData = SeedDataLoader.LoadFromJson(jsonFilePath);
-        if (seedData is null)
+        var seedEntities = SeedEntityLoader.LoadFromJson(jsonFilePath);
+        if (seedEntities is null)
             throw new ApplicationException($"Could not load seed data from JSON file: {jsonFilePath}");
 
         var optionsBuilder = new DbContextOptionsBuilder<CinemaTicketBookingDbContext>();
@@ -34,7 +34,7 @@ internal class SeedDatabaseCommandHandler
             await context.Database.OpenConnectionAsync();
 
             logger.LogInformation($"Seeding the database...");
-            context.AddRange(seedData);
+            context.AddRange(seedEntities);
             await context.SaveChangesAsync();
 
             logger.LogInformation($"Successfully seeded the database!");

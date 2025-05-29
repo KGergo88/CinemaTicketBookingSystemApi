@@ -14,22 +14,23 @@ namespace CinemaTicketBooking.IntegrationTests
         internal static Task<SqlDatabase<CinemaTicketBookingDbContext>> CreateDatabaseAsync(
             string? seedDataJsonPath = null)
         {
-            var dbName = Guid.NewGuid().ToString();
-
-            IEnumerable<object>? entities = null;
+            SeedData? seedData = null;
             if (!string.IsNullOrEmpty(seedDataJsonPath))
-                entities = SeedDataLoader.LoadFromJson(seedDataJsonPath);
+                seedData = SeedDataLoader.LoadFromJson(seedDataJsonPath);
 
-            return sqlInstance.Build(dbName, entities);
+            return CreateDatabaseAsync(seedData);
         }
 
         internal static Task<SqlDatabase<CinemaTicketBookingDbContext>> CreateDatabaseAsync(
-            SeedData seedData)
+            SeedData? seedData)
         {
             var dbName = Guid.NewGuid().ToString();
-            var entities = seedData.ToObjects();
 
-            return sqlInstance.Build(dbName, entities);
+            IEnumerable<object>? seedEntities = null;
+            if (seedData is not null)
+                seedEntities = seedData.ToObjects();
+
+            return sqlInstance.Build(dbName, seedEntities);
         }
     }
 }
