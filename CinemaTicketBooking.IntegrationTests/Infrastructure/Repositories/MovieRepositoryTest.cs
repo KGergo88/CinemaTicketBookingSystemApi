@@ -2,6 +2,7 @@
 using CinemaTicketBooking.Domain.Entities;
 using CinemaTicketBooking.Infrastructure;
 using CinemaTicketBooking.Infrastructure.DatabaseBindings;
+using CinemaTicketBooking.Infrastructure.DatabaseSeeding;
 using CinemaTicketBooking.Infrastructure.Entities;
 using CinemaTicketBooking.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -9,20 +10,13 @@ using Microsoft.EntityFrameworkCore;
 namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 {
     [Trait("Category", "LocalDbBasedTests")]
-    public class MovieRepositoryWithSeedTest : TestDatabaseWithDefaultSeedData, IAsyncLifetime
+    public class MovieRepositoryWithSeedTest : TestDatabase
     {
-        #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
-                                       // Reason: The fields are initialized in the InitializeAsync method, which is called before the tests are run.
+        private readonly IMapper mapper;
+        private readonly static SeedData seedData = new DefaultSeedData();
+        private readonly IDatabaseBinding databaseBinding;
 
-        private IMapper mapper;
-        private IDatabaseBinding databaseBinding;
-        private SqlDatabase<CinemaTicketBookingDbContext> db;
-        private CinemaTicketBookingDbContext dbContext;
-        private MovieRepository movieRepository;
-
-        #pragma warning restore CS8618
-
-        public async Task InitializeAsync()
+        public MovieRepositoryWithSeedTest()
         {
             var mappingConfig = new MapperConfiguration(mc =>
             {
@@ -31,15 +25,6 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             mapper = mappingConfig.CreateMapper();
 
             databaseBinding = DatabaseBindingFactory.Create("CinemaTicketBookingDbContext");
-
-            db = await CreateDatabaseAsync();
-            dbContext = db.Context;
-            movieRepository = new MovieRepository(mapper, databaseBinding, dbContext);
-        }
-
-        public async Task DisposeAsync()
-        {
-            await db.DisposeAsync();
         }
 
         #region GetMoviesAsync Tests
@@ -48,7 +33,10 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
         async Task GetMoviesAsyncReturnsAllMoviesCorrectlyAsync()
         {
             // Arrange
-            var expectedDomainMovies = mapper.Map<List<Movie>>(defaultSeedData.Movies);
+            await using var db = await CreateDatabaseAsync(seedData);
+            var movieRepository = new MovieRepository(mapper, databaseBinding, db.Context);
+
+            var expectedDomainMovies = mapper.Map<List<Movie>>(seedData.Movies);
 
             // Act
             var domainMovies = await movieRepository.GetMoviesAsync();
@@ -59,7 +47,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 
         public static IEnumerable<object[]> UpdateMovieAsyncUpdatesMoviesAndGenresCorrectlyAsyncData()
         {
-            foreach (var infraMovie in defaultSeedData.Movies)
+            foreach (var infraMovie in seedData.Movies)
             {
                 yield return new object[]
                 {
@@ -68,11 +56,18 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             }
         }
 
+        #endregion
+
+        #region UpdateMovieAsync Tests
+
         [Theory]
         [MemberData(nameof(UpdateMovieAsyncUpdatesMoviesAndGenresCorrectlyAsyncData))]
         async Task UpdateMovieAsyncUpdatesMoviesAndGenresCorrectlyAsync(MovieEntity infraMovieToUpdate)
         {
             // Arrange
+            await using var db = await CreateDatabaseAsync(seedData);
+            var movieRepository = new MovieRepository(mapper, databaseBinding, db.Context);
+
             infraMovieToUpdate.Title = "Updated " + infraMovieToUpdate.Title;
             infraMovieToUpdate.ReleaseYear += 1;
             infraMovieToUpdate.Description = "Updated " + infraMovieToUpdate.Description;
@@ -84,8 +79,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             await movieRepository.UpdateMovieAsync(expectedDomainMovie);
 
             // Assert
-            var updatedMovie = await dbContext.Movies.Include(m => m.Genres)
-                                                     .SingleAsync(m => m.Id == expectedDomainMovie.Id);
+            var updatedMovie = await db.Context.Movies.Include(m => m.Genres)
+                                                      .SingleAsync(m => m.Id == expectedDomainMovie.Id);
 
             Assert.Equal(expectedDomainMovie.Title, updatedMovie.Title);
             Assert.Equal(expectedDomainMovie.ReleaseYear, updatedMovie.ReleaseYear);
@@ -104,7 +99,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 
         public static IEnumerable<object[]> DeleteMoviesAsyncDeletesMoviesCorrectlyAsyncData()
         {
-            foreach (var infraMovie in defaultSeedData.Movies)
+            foreach (var infraMovie in seedData.Movies)
             {
                 yield return new object[]
                 {
@@ -114,8 +109,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 
             yield return new object[]
             {
-                defaultSeedData.Movies.Select(m => m.Id)
-                                      .ToList()
+                seedData.Movies.Select(m => m.Id)
+                               .ToList()
             };
         }
 
@@ -123,13 +118,17 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
         [MemberData(nameof(DeleteMoviesAsyncDeletesMoviesCorrectlyAsyncData))]
         async Task DeleteMoviesAsyncDeletesMoviesCorrectlyAsync(List<Guid> movieIdsToDelete)
         {
+            // Arrange
+            await using var db = await CreateDatabaseAsync(seedData);
+            var movieRepository = new MovieRepository(mapper, databaseBinding, db.Context);
+
             // Act
             await movieRepository.DeleteMoviesAsync(movieIdsToDelete);
 
             // Assert
-            var storedMovies = await dbContext.Movies.ToListAsync();
-            var storedGenres = await dbContext.Genres.Include(g => g.Movies)
-                                                     .ToListAsync();
+            var storedMovies = await db.Context.Movies.ToListAsync();
+            var storedGenres = await db.Context.Genres.Include(g => g.Movies)
+                                                      .ToListAsync();
             foreach (var deletedMovieGuid in movieIdsToDelete)
             {
                 Assert.DoesNotContain(storedMovies, sm => sm.Id == deletedMovieGuid);
@@ -138,40 +137,6 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
         }
 
         #endregion
-    }
-
-    [Trait("Category", "LocalDbBasedTests")]
-    public class MovieRepositoryTest : TestDatabase, IAsyncLifetime
-    {
-        #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
-                                       // Reason: The fields are initialized in the InitializeAsync method, which is called before the tests are run.
-        private IMapper mapper;
-        private IDatabaseBinding databaseBinding;
-        private SqlDatabase<CinemaTicketBookingDbContext> db;
-        private CinemaTicketBookingDbContext dbContext;
-        private MovieRepository movieRepository;
-
-        #pragma warning restore CS8618
-
-        public async Task InitializeAsync()
-        {
-            var mappingConfig = new MapperConfiguration(mc =>
-            {
-                mc.AddProfile(new MappingProfile());
-            });
-            mapper = mappingConfig.CreateMapper();
-
-            databaseBinding = DatabaseBindingFactory.Create("CinemaTicketBookingDbContext");
-
-            db = await CreateDatabaseAsync();
-            dbContext = db.Context;
-            movieRepository = new MovieRepository(mapper, databaseBinding, dbContext);
-        }
-
-        public async Task DisposeAsync()
-        {
-            await db.DisposeAsync();
-        }
 
         #region AddMoviesAsync Tests
 
@@ -220,12 +185,16 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
         [MemberData(nameof(AddMoviesAsyncCreatesMoviesAndGenresCorrectlyAsyncData))]
         async Task AddMoviesAsyncCreatesMoviesAndGenresCorrectlyAsync(List<Movie> domainMovies)
         {
+            // Arrange
+            await using var db = await CreateDatabaseAsync();
+            var movieRepository = new MovieRepository(mapper, databaseBinding, db.Context);
+
             // Act
             await movieRepository.AddMoviesAsync(domainMovies);
 
             // Assert
-            var infraMovies = await dbContext.Movies.ToListAsync();
-            var infraGenres = await dbContext.Genres.ToListAsync();
+            var infraMovies = await db.Context.Movies.ToListAsync();
+            var infraGenres = await db.Context.Genres.ToListAsync();
 
             Assert.Equal(domainMovies.Count, infraMovies.Count);
             var expectedKnownGenreNames = domainMovies.SelectMany(dm => dm.Genres)
