@@ -36,7 +36,7 @@ public class CinemaTicketBookingDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // Definiging deletion behaviours for SeatReservation in order to solve database creation issue.
+        // Defining deletion behaviours for SeatReservation in order to solve database creation issue.
         // The Auditoriums table can be reached from the SeatReservations table in two routes.
         // This leads to the problem that deleting the parent in these relationships cannot delete the children.
         // Since deleting is not a case we want to solve now,
@@ -53,7 +53,7 @@ public class CinemaTicketBookingDbContext : DbContext
             .WithMany(e => e.SeatReservations)
             .OnDelete(DeleteBehavior.NoAction);
 
-        // Definiging deletion behaviours for Pricing in order to solve database creation issue.
+        // Defining deletion behaviours for Pricing in order to solve database creation issue.
         // The Auditoriums table can be reached from the Pricings table in two routes.
         // This leads to the problem that deleting the parent in these relationships cannot delete the children.
         // Since deleting is not a case we want to solve now,
