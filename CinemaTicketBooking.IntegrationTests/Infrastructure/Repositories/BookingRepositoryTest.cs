@@ -2,7 +2,7 @@
 using CinemaTicketBooking.Application.Interfaces.Repositories;
 using CinemaTicketBooking.Domain.Entities;
 using CinemaTicketBooking.Infrastructure;
-using CinemaTicketBooking.Infrastructure.DatabaseBindings;
+using CinemaTicketBooking.Infrastructure.DatabaseSeeding;
 using CinemaTicketBooking.Infrastructure.Repositories;
 
 namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
@@ -11,7 +11,6 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
     public class BookingRepositoryTest : TestDatabase
     {
         private readonly IMapper mapper;
-        private readonly IDatabaseBinding databaseBinding;
 
         public BookingRepositoryTest()
         {
@@ -20,180 +19,96 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                 mc.AddProfile(new MappingProfile());
             });
             mapper = mappingConfig.CreateMapper();
-
-            databaseBinding = DatabaseBindingFactory.Create("CinemaTicketBookingDbContext");
         }
 
         #region TimeoutUnconfirmedBookingsAsync Tests
 
-        public static IEnumerable<object[]> TimeoutUnconfirmedBookingsAsyncSetsBookingStateCorrectlyAsyncData()
+        static (Screening, Pricing, Booking) CreateTestEntities(SeedData seedData, BookingState bookingStateToSetup)
         {
-            var sopronElitMoziHuszarikTeremDefaultTier = new Tier
+            var auditorium = seedData.Auditoriums.First();
+            var tier = seedData.Tiers.First(t => t.AuditoriumId == auditorium.Id);
+            var movie = seedData.Movies.First();
+            var customer = seedData.Customers.First();
+            var screening = new Screening
             {
                 Id = Guid.NewGuid(),
-                Name = "default",
-                Seats = [
-                    new Seat
-                    {
-                        Id = Guid.NewGuid(),
-                        Row = 1,
-                        Column = 1
-                    },
-                    new Seat
-                    {
-                        Id = Guid.NewGuid(),
-                        Row = 2,
-                        Column = 1
-                    },
-                    new Seat
-                    {
-                        Id = Guid.NewGuid(),
-                        Row = 3,
-                        Column = 1
-                    },
-                    new Seat
-                    {
-                        Id = Guid.NewGuid(),
-                        Row = 4,
-                        Column = 1
-                    }
-                ]
-            };
-
-            var sopronElitMoziHuszarikTerem = new Auditorium
-            {
-                Id = Guid.NewGuid(),
-                Name = "Huszárik Terem",
-                Tiers = [
-                    sopronElitMoziHuszarikTeremDefaultTier
-                ]
-            };
-
-            var elitMozi = new Theater
-            {
-                Id = Guid.NewGuid(),
-                Name = "Elit Mozi",
-                Address = "Sopron, Torna u. 14, 9400 Hungary",
-                Auditoriums = new List<Auditorium>()
-                {
-                    sopronElitMoziHuszarikTerem
-                }
-            };
-
-            var sleepyHollowMovie = new Movie
-            {
-                Id = Guid.NewGuid(),
-                Title = "Sleepy Hollow",
-                ReleaseYear = 1999,
-                Description = "A movie about a headless horseman chopping other people´s heads off",
-                Duration = TimeSpan.FromSeconds(105),
-                Genres = new List<string> { "Dark Fantasy", "Slasher Horror", "Supernatural Horror", "Fantasy", "Horror", "Mistery" }
-            };
-
-            var sleepyHollowScreening = new Screening
-            {
-                Id = Guid.NewGuid(),
-                AuditoriumId = sopronElitMoziHuszarikTerem.Id,
-                MovieId = sleepyHollowMovie.Id,
+                AuditoriumId = auditorium.Id,
+                MovieId = movie.Id,
                 Showtime = DateTimeOffset.Now,
                 Language = "English",
                 Subtitles = "English"
             };
-
             var pricing = new Pricing
             {
                 Id = Guid.NewGuid(),
-                ScreeningId = sleepyHollowScreening.Id,
-                TierId = sopronElitMoziHuszarikTeremDefaultTier.Id,
+                ScreeningId = screening.Id,
+                TierId = tier.Id,
                 Price = new Price
                 {
                     Amount = 4500,
                     Currency = "HUF",
                 }
             };
-
-            var hansJuergenCustomer = new Customer
+            var booking = new Booking
             {
                 Id = Guid.NewGuid(),
-                FirstName = "Hans Jürgen",
-                LastName = "Waldmann",
-                Email = "hans.juergen.waldmann@gmail.com"
+                BookingState = bookingStateToSetup,
+                CustomerId = customer.Id,
+                ScreeningId = screening.Id,
+                CreatedOn = DateTimeOffset.UtcNow - TimeSpan.FromDays(3),
             };
 
-            yield return
-            [
-                2,
-                elitMozi,
-                sleepyHollowMovie,
-                sleepyHollowScreening,
-                pricing,
-                hansJuergenCustomer,
-                new Booking
-                {
-                    Id = Guid.NewGuid(),
-                    BookingState = BookingState.Confirmed,
-                    CustomerId = hansJuergenCustomer.Id,
-                    ScreeningId = sleepyHollowScreening.Id,
-                    CreatedOn = DateTimeOffset.UtcNow - TimeSpan.FromDays(3),
-                },
-                BookingState.Confirmed
-            ];
+            return (screening, pricing, booking);
+        }
 
-            yield return
-            [
-                2,
-                elitMozi,
-                sleepyHollowMovie,
-                sleepyHollowScreening,
-                pricing,
-                hansJuergenCustomer,
-                new Booking
-                {
-                    Id = Guid.NewGuid(),
-                    BookingState = BookingState.NonConfirmed,
-                    CustomerId = hansJuergenCustomer.Id,
-                    ScreeningId = sleepyHollowScreening.Id,
-                    CreatedOn = DateTimeOffset.UtcNow - TimeSpan.FromDays(3),
-                },
-                BookingState.ConfirmationTimeout
-            ];
+        public static IEnumerable<object[]> TimeoutUnconfirmedBookingsAsyncSetsBookingStateCorrectlyAsyncData()
+        {
+            // The seed data needs to be created new for each test run as otherwise they would get contaminated
+            // by the previous test runs, which would lead to false positives or negatives.
+            // The concrete issue would be that there would be a screening entity referenced by one of the tiers.
+            // Being able to use a static SeedData in the test class would lead to more readable tests, but we cannot do that
+            // because the tests need to be isolated from each other. Not having a static seed data is not possible as methods used
+            // in MemberDataAttribute require a static method or property to return the data.
+            var result = new TheoryData<SeedData, Screening, Pricing, Booking, BookingState>();
+
+            {
+                var seedData = new DefaultSeedData();
+                var (screening, pricing, booking) = CreateTestEntities(seedData, BookingState.Confirmed);
+                result.Add(seedData,screening, pricing, booking, BookingState.Confirmed);
+            }
+            {
+                var seedData = new DefaultSeedData();
+                var (screening, pricing, booking) = CreateTestEntities(seedData, BookingState.NonConfirmed);
+                result.Add(seedData, screening, pricing, booking, BookingState.ConfirmationTimeout);
+            }
+
+            return result;
         }
 
         [Theory]
         [MemberData(nameof(TimeoutUnconfirmedBookingsAsyncSetsBookingStateCorrectlyAsyncData))]
-        public async Task TimeoutUnconfirmedBookingsAsyncSetsBookingStateCorrectlyAsync(int timeoutInMinutes,
-                                                                                        Theater theaterToSetup,
-                                                                                        Movie movieToSetup,
-                                                                                        Screening screeningToSetup,
-                                                                                        Pricing pricingToSetup,
-                                                                                        Customer customerToSetup,
-                                                                                        Booking bookingToSetup,
-                                                                                        BookingState expectedBookingState)
+        async Task TimeoutUnconfirmedBookingsAsyncSetsBookingStateCorrectlyAsync(SeedData seedData,
+                                                                                 Screening screeningToSetup,
+                                                                                 Pricing pricingToSetup,
+                                                                                 Booking bookingToSetup,
+                                                                                 BookingState expectedBookingState)
         {
             // Arrange
-            await using var db = await CreateDatabaseAsync();
-            var dbContext = db.Context;
-            var theaterRepository = new TheaterRepository(mapper, dbContext);
-            await theaterRepository.AddTheatersAsync([theaterToSetup]);
-            var movieRepository = new MovieRepository(mapper, databaseBinding, dbContext);
-            await movieRepository.AddMoviesAsync([movieToSetup]);
-            var screeningRepository = new ScreeningRepository(mapper, dbContext);
+            var timeoutInMinutes = 2;
+            await using var db = await CreateDatabaseAsync(seedData);
+            var screeningRepository = new ScreeningRepository(mapper, db.Context);
+            var bookingRepository = new BookingRepository(mapper, db.Context);
             await screeningRepository.AddScreeningsAsync([screeningToSetup]);
             await screeningRepository.SetPricingAsync(pricingToSetup);
-            var customerRepository = new CustomerRepository(mapper, dbContext);
-            await customerRepository.AddCustomerAsync(customerToSetup);
-            var bookingRepository = new BookingRepository(mapper, dbContext);
             await bookingRepository.AddBookingAsync(bookingToSetup);
-            await dbContext.SaveChangesAsync();
-            var bookingId = bookingToSetup.Id;
 
             // Act
             await bookingRepository.TimeoutUnconfirmedBookingsAsync(timeoutInMinutes);
 
             // Assert
-            var booking = await bookingRepository.GetBookingOrNullAsync(bookingId);
-            Assert.NotNull(booking);
-            Assert.Equal(expectedBookingState, booking.BookingState);
+            var storedBooking = await bookingRepository.GetBookingOrNullAsync(bookingToSetup.Id);
+            Assert.NotNull(storedBooking);
+            Assert.Equal(expectedBookingState, storedBooking.BookingState);
         }
 
         [Theory]
@@ -203,8 +118,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
         {
             // Arrange
             await using var db = await CreateDatabaseAsync();
-            var dbContext = db.Context;
-            var bookingRepository = new BookingRepository(mapper, dbContext);
+            var bookingRepository = new BookingRepository(mapper, db.Context);
 
             // Act
             var exception = await Record.ExceptionAsync(async () => await bookingRepository.TimeoutUnconfirmedBookingsAsync(timeoutInMinutes));
@@ -213,6 +127,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             Assert.IsType<BookingRepositoryException>(exception);
             Assert.Equal($"{nameof(timeoutInMinutes)} shall be greater than zero! Actual value: {timeoutInMinutes}", exception.Message);
         }
+
         #endregion
     }
 }
