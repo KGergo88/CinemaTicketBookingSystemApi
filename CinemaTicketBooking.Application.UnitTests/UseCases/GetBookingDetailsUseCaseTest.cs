@@ -18,7 +18,7 @@ public class GetBookingDetailsUseCaseTest
     #region ExecuteAsync Tests
 
     [Fact]
-    public async Task UnknownBookingsAreRejectedAsync()
+    async Task UnknownBookingsAreRejectedAsync()
     {
         // Arrange
         var getBookingDetailsUseCase = new GetBookingDetailsUseCase(mockBookingRepository.Object,
@@ -40,7 +40,7 @@ public class GetBookingDetailsUseCaseTest
     }
 
     [Fact]
-    public async Task SeatReservationsMustContainTheScreeningIdAsync()
+    async Task SeatReservationsMustContainTheScreeningIdAsync()
     {
         // Arrange
         var bookingId = Guid.NewGuid();

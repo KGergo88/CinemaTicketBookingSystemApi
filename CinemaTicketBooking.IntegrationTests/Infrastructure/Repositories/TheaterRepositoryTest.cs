@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CinemaTicketBooking.Domain.Entities;
 using CinemaTicketBooking.Infrastructure;
+using CinemaTicketBooking.Infrastructure.DatabaseSeeding;
 using CinemaTicketBooking.Infrastructure.Entities;
 using CinemaTicketBooking.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -10,9 +11,10 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
     [Trait("Category", "LocalDbBasedTests")]
     public class TheaterRepositoryTest : TestDatabase
     {
-        private IMapper mapper;
+        private readonly static IMapper mapper;
+        private readonly static SeedData seedData = new DefaultSeedData();
 
-        public TheaterRepositoryTest()
+        static TheaterRepositoryTest()
         {
             var mappingConfig = new MapperConfiguration(mc =>
             {
@@ -20,6 +22,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             });
             mapper = mappingConfig.CreateMapper();
         }
+
+        #region Helper methods
 
         async Task CheckStoredTheaterAsync(CinemaTicketBookingDbContext dbContext, Theater domainTheater)
         {
@@ -63,68 +67,21 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                                                      && ss.Column == domainSeat.Column);
         }
 
+        #endregion
+
         #region AddTheatersAsync Tests
 
         public static IEnumerable<object[]> AddTheatersAsyncCreatesTheatersAndRelatedEntitiesCorrectlyAsyncData()
         {
-            yield return new object[] {
-                new List<Theater>{
-                    new Theater
-                    {
-                        Name = "Elit Mozi",
-                        Address = "Sopron, Torna u. 14, 9400 Hungary",
-                        Auditoriums = new List<Auditorium>
-                        {
-                            new Auditorium
-                            {
-                                Name = "Huszárik terem",
-                                Tiers = new List<Tier>
-                                {
-                                    new Tier
-                                    {
-                                        Name = "Standard tier",
-                                        Seats = new List<Seat>
-                                        {
-                                            new Seat { Row = 1, Column = 1 },
-                                            new Seat { Row = 7, Column = 4 }
-                                        }
-                                    }
-                                }
-                            },
-                            new Auditorium
-                            {
-                                Name = "Nagyterem",
-                                Tiers = new List<Tier>
-                                {
-                                    new Tier
-                                    {
-                                        Name = "Nézötér",
-                                        Seats = new List<Seat>
-                                        {
-                                            new Seat { Row = 1, Column = 1 },
-                                            new Seat { Row = 13, Column = 8 }
-                                        }
-                                    },
-                                    new Tier
-                                    {
-                                        Name = "Erkély",
-                                        Seats = new List<Seat>
-                                        {
-                                            new Seat { Row = 1, Column = 1 },
-                                            new Seat { Row = 4, Column = 10 }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            };
+            var domainTheaters = seedData.Theaters.Select(mapper.Map<Theater>)
+                                                  .ToList();
+
+            yield return new object[] { domainTheaters };
         }
 
         [Theory]
         [MemberData(nameof(AddTheatersAsyncCreatesTheatersAndRelatedEntitiesCorrectlyAsyncData))]
-        public async Task AddTheatersAsyncCreatesTheatersAndRelatedEntitiesCorrectlyAsync(List<Theater> domainTheaters)
+        async Task AddTheatersAsyncCreatesTheatersAndRelatedEntitiesCorrectlyAsync(List<Theater> domainTheaters)
         {
             // Arrange
             await using var db = await CreateDatabaseAsync();

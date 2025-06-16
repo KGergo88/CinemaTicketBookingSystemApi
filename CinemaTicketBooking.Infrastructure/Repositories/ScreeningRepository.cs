@@ -50,11 +50,11 @@ internal class ScreeningRepository : IScreeningRepository
     public async Task<Dictionary<Guid, Pricing>> GetPricingsBySeatIdAsync(Guid screeningId)
     {
         var infraPricings = await context.Pricings.Include(p => p.Tier)
-                                                  .ThenInclude(t => t.Seats)
+                                                  .ThenInclude(t => t!.Seats)
                                                   .Where(p => p.ScreeningId == screeningId)
                                                   .ToListAsync();
 
-        var infraPricingsBySeatId = infraPricings.SelectMany(p => p.Tier.Seats.Select(s => new { SeatId = s.Id, InfraPricing = p }))
+        var infraPricingsBySeatId = infraPricings.SelectMany(p => p.Tier!.Seats.Select(s => new { SeatId = s.Id, InfraPricing = p }))
                                                  .ToDictionary(x => x.SeatId, x => x.InfraPricing);
 
         var pricingsBySeatId = mapper.Map<Dictionary<Guid, Pricing>>(infraPricingsBySeatId);
@@ -65,7 +65,7 @@ internal class ScreeningRepository : IScreeningRepository
     {
         var infraScreening = await context.Screenings.AsSplitQuery()
                                                      .Include(s => s.Auditorium)
-                                                     .ThenInclude(a => a.Tiers)
+                                                     .ThenInclude(a => a!.Tiers)
                                                      .ThenInclude(t => t.Seats)
                                                      .Where(s => s.Id == screeningId)
                                                      .SingleOrDefaultAsync();
@@ -73,7 +73,7 @@ internal class ScreeningRepository : IScreeningRepository
         if (infraScreening is null)
             throw new SeatReservationRepositoryException("The requested screening entity does not exist!");
 
-        var allInfraSeats = infraScreening.Auditorium.Tiers.SelectMany(t => t.Seats);
+        var allInfraSeats = infraScreening.Auditorium!.Tiers.SelectMany(t => t.Seats);
         var allSeats = mapper.Map<List<Seat>>(allInfraSeats);
         return allSeats;
     }

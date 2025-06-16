@@ -21,9 +21,9 @@ internal class TierEntity
     [Required]
     public required Guid AuditoriumId { get; set; }
 
-    public required AuditoriumEntity Auditorium { get; set; }
+    public AuditoriumEntity? Auditorium { get; set; }
 
-    public required ICollection<SeatEntity> Seats { get; set; }
+    public ICollection<SeatEntity> Seats { get; set; } = new List<SeatEntity>();
 
-    public required PricingEntity Pricing { get; set; }
+    public PricingEntity? Pricing { get; set; }
 }

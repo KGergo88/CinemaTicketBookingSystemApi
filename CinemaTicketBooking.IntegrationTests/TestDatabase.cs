@@ -1,30 +1,36 @@
 using CinemaTicketBooking.Infrastructure;
 using CinemaTicketBooking.Infrastructure.DatabaseSeeding;
-using System.Runtime.CompilerServices;
 
 namespace CinemaTicketBooking.IntegrationTests
 {
     public abstract class TestDatabase
     {
-        static SqlInstance<CinemaTicketBookingDbContext> sqlInstance;
+        private readonly static SqlInstance<CinemaTicketBookingDbContext> sqlInstance;
 
         static TestDatabase() =>
             sqlInstance = new(
                 constructInstance: builder => new(builder.Options));
 
-        public static Task<SqlDatabase<CinemaTicketBookingDbContext>> CreateDatabaseAsync(
-            [CallerFilePath] string testFile = "",
-            string? databaseSuffix = null,
-            [CallerMemberName] string memberName = "",
+        internal static Task<SqlDatabase<CinemaTicketBookingDbContext>> CreateDatabaseAsync(
             string? seedDataJsonPath = null)
+        {
+            SeedData? seedData = null;
+            if (!string.IsNullOrEmpty(seedDataJsonPath))
+                seedData = SeedDataLoader.LoadFromJson(seedDataJsonPath);
+
+            return CreateDatabaseAsync(seedData);
+        }
+
+        internal static Task<SqlDatabase<CinemaTicketBookingDbContext>> CreateDatabaseAsync(
+            SeedData? seedData)
         {
             var dbName = Guid.NewGuid().ToString();
 
-            IEnumerable<object>? entities = null;
-            if (!string.IsNullOrEmpty(seedDataJsonPath))
-                entities = SeedDataLoader.LoadFromJson(seedDataJsonPath);
+            IEnumerable<object>? seedEntities = null;
+            if (seedData is not null)
+                seedEntities = seedData.ToObjects();
 
-            return sqlInstance.Build(dbName, entities);
+            return sqlInstance.Build(dbName, seedEntities);
         }
     }
 }

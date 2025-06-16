@@ -16,7 +16,7 @@ public class MakeBookingUseCaseTest
     #region ExecuteAsync Tests
 
     [Fact]
-    public async Task UnknownCustomersAreRejectedAsync()
+    async Task UnknownCustomersAreRejectedAsync()
     {
         // Arrange
         mockCustomerRepository.Setup(
@@ -39,7 +39,7 @@ public class MakeBookingUseCaseTest
     }
 
     [Fact]
-    public async Task UnknownScreeningsAreRejectedAsync()
+    async Task UnknownScreeningsAreRejectedAsync()
     {
         // Arrange
         mockCustomerRepository.Setup(
@@ -88,7 +88,7 @@ public class MakeBookingUseCaseTest
 
     [Theory]
     [MemberData(nameof(PastScreeningsCannotBeBookedAsyncData))]
-    public async Task PastScreeningsCannotBeBookedAsync(DateTimeOffset showTime, MakeBookingException? expectedException)
+    async Task PastScreeningsCannotBeBookedAsync(DateTimeOffset showTime, MakeBookingException? expectedException)
     {
         // Arrange
         var seatIdsToReserve = new List<Guid> { Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() };
@@ -165,7 +165,7 @@ public class MakeBookingUseCaseTest
     }
 
     [Fact]
-    public async Task SeatReservationRepositoryExceptionsAreHandledAsync()
+    async Task SeatReservationRepositoryExceptionsAreHandledAsync()
     {
         // Arrange
         var seatIdsToReserve = new List<Guid> { Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() };

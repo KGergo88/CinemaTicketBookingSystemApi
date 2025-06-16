@@ -15,12 +15,12 @@ internal class ScreeningEntity
     [Required]
     public required Guid AuditoriumId { get; set; }
 
-    public required AuditoriumEntity Auditorium { get; set; }
+    public AuditoriumEntity? Auditorium { get; set; }
 
     [Required]
     public required Guid MovieId { get; set; }
 
-    public required MovieEntity Movie { get; set; }
+    public MovieEntity? Movie { get; set; }
 
     [Required]
     public required DateTimeOffset Showtime { get; set; }
@@ -32,7 +32,7 @@ internal class ScreeningEntity
     [MaxLength(50)]
     public string? Subtitles { get; set; }
 
-    public required ICollection<SeatReservationEntity> SeatReservations { get; set; }
+    public ICollection<SeatReservationEntity> SeatReservations { get; set; } = new List<SeatReservationEntity>();
 
-    public required ICollection<PricingEntity> Pricings { get; set; }
+    public ICollection<PricingEntity> Pricings { get; set; } = new List<PricingEntity>();
 }

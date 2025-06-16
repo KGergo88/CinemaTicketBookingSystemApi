@@ -2,9 +2,9 @@ using System.Text.Json;
 
 namespace CinemaTicketBooking.Infrastructure.DatabaseSeeding;
 
-public class SeedDataLoader
+internal class SeedDataLoader
 {
-    public static IEnumerable<object> LoadFromJson(string path)
+    internal static SeedData LoadFromJson(string path)
     {
         if (!Path.Exists(path))
             throw new ArgumentException($"The path \"{path}\" does not exist!");
@@ -14,8 +14,6 @@ public class SeedDataLoader
         if (seedData is null)
             throw new ArgumentException($"Could not serialize JSON file: {path}");
 
-        var seedDataEntities = seedData.ToObjects();
-
-        return seedDataEntities;
+        return seedData;
     }
 }
