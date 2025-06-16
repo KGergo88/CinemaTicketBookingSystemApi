@@ -6,6 +6,7 @@ using CinemaTicketBooking.Infrastructure.Repositories;
 using CinemaTicketBooking.Infrastructure.DatabaseBindings;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using CinemaTicketBooking.Infrastructure.DatabaseSeeding;
 
 namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 {
@@ -30,74 +31,18 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 
         public static IEnumerable<object[]> AddSeatReservationsAsyncRejectsMultipleReservationsForTheSameSeatAsyncData()
         {
-            var sopronElitMoziHuszarikTeremDefaultTier = new Tier
-            {
-                Id = Guid.NewGuid(),
-                Name = "default",
-                Seats =
-                [
-                    new Seat
-                    {
-                        Id = Guid.NewGuid(),
-                        Row = 1,
-                        Column = 1
-                    },
-                    new Seat
-                    {
-                        Id = Guid.NewGuid(),
-                        Row = 2,
-                        Column = 1
-                    },
-                    new Seat
-                    {
-                        Id = Guid.NewGuid(),
-                        Row = 3,
-                        Column = 1
-                    },
-                    new Seat
-                    {
-                        Id = Guid.NewGuid(),
-                        Row = 4,
-                        Column = 1
-                    }
-                ]
-            };
+            var seedData = new DefaultSeedData();
 
-            var sopronElitMoziHuszarikTerem = new Auditorium
-            {
-                Id = Guid.NewGuid(),
-                Name = "Huszárik Terem",
-                Tiers = [
-                    sopronElitMoziHuszarikTeremDefaultTier
-                ]
-            };
+            var auditorium = seedData.Auditoriums.First();
+            var tier = seedData.Tiers.First(t => t.AuditoriumId == auditorium.Id);
+            var movie = seedData.Movies.First();
+            var customer = seedData.Customers.First();
 
-            var elitMozi = new Theater
+            var screening = new Screening
             {
                 Id = Guid.NewGuid(),
-                Name = "Elit Mozi",
-                Address = "Sopron, Torna u. 14, 9400 Hungary",
-                Auditoriums = new List<Auditorium>()
-                {
-                    sopronElitMoziHuszarikTerem
-                }
-            };
-
-            var sleepyHollowMovie = new Movie
-            {
-                Id = Guid.NewGuid(),
-                Title = "Sleepy Hollow",
-                ReleaseYear = 1999,
-                Description = "A movie about a headless horseman chopping other people´s heads off",
-                Duration = TimeSpan.FromSeconds(105),
-                Genres = new List<string> { "Dark Fantasy", "Slasher Horror", "Supernatural Horror", "Fantasy", "Horror", "Mistery" }
-            };
-
-            var sleepyHollowScreening = new Screening
-            {
-                Id = Guid.NewGuid(),
-                AuditoriumId = sopronElitMoziHuszarikTerem.Id,
-                MovieId = sleepyHollowMovie.Id,
+                AuditoriumId = auditorium.Id,
+                MovieId = movie.Id,
                 Showtime = DateTimeOffset.Now,
                 Language = "English",
                 Subtitles = "English"
@@ -106,8 +51,8 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             var pricing = new Pricing
             {
                 Id = Guid.NewGuid(),
-                ScreeningId = sleepyHollowScreening.Id,
-                TierId = sopronElitMoziHuszarikTeremDefaultTier.Id,
+                ScreeningId = screening.Id,
+                TierId = tier.Id,
                 Price = new Price
                 {
                     Amount = 4500,
@@ -115,67 +60,47 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                 }
             };
 
-            var hansJuergenCustomer = new Customer
-            {
-                Id = Guid.NewGuid(),
-                FirstName = "Hans Jürgen",
-                LastName = "Waldmann",
-                Email = "hans.juergen.waldmann@gmail.com"
-            };
-
             var booking = new Booking
             {
                 Id = Guid.NewGuid(),
                 BookingState = BookingState.Confirmed,
-                CustomerId = hansJuergenCustomer.Id,
-                ScreeningId = sleepyHollowScreening.Id,
+                CustomerId = customer.Id,
+                ScreeningId = screening.Id,
                 CreatedOn = DateTimeOffset.UtcNow - TimeSpan.FromDays(3),
             };
 
+            var seatIdToReserve = seedData.Seats.First(s => s.TierId == tier.Id).Id;
+
             yield return
             [
-                elitMozi,
-                sleepyHollowMovie,
-                sleepyHollowScreening,
+                seedData,
+                screening,
                 pricing,
-                hansJuergenCustomer,
-                booking
+                booking,
+                seatIdToReserve
             ];
         }
 
         [Theory]
         [MemberData(nameof(AddSeatReservationsAsyncRejectsMultipleReservationsForTheSameSeatAsyncData))]
-        public async Task AddSeatReservationsAsyncRejectsMultipleReservationsForTheSameSeatAsync(Theater theaterToSetup,
-                                                                                                 Movie movieToSetup,
-                                                                                                 Screening screeningToSetup,
-                                                                                                 Pricing pricingToSetup,
-                                                                                                 Customer customerToSetup,
-                                                                                                 Booking bookingToSetup)
+        async Task AddSeatReservationsAsyncRejectsMultipleReservationsForTheSameSeatAsync(SeedData seedData,
+                                                                                          Screening screeningToSetup,
+                                                                                          Pricing pricingToSetup,
+                                                                                          Booking bookingToSetup,
+                                                                                          Guid seatIdToReserve)
         {
             // Arrange
-            await using var db = await CreateDatabaseAsync();
+            await using var db = await CreateDatabaseAsync(seedData);
             var dbContext = db.Context;
             var seatReservationRepository = new SeatReservationRepository(mapper, databaseBinding, dbContext);
             {
-                var theaterRepository = new TheaterRepository(mapper, dbContext);
-                await theaterRepository.AddTheatersAsync([theaterToSetup]);
-
-                var movieRepository = new MovieRepository(mapper, databaseBinding, dbContext);
-                await movieRepository.AddMoviesAsync([movieToSetup]);
-
                 var screeningRepository = new ScreeningRepository(mapper, dbContext);
                 await screeningRepository.AddScreeningsAsync([screeningToSetup]);
                 await screeningRepository.SetPricingAsync(pricingToSetup);
 
-                var customerRepository = new CustomerRepository(mapper, dbContext);
-                await customerRepository.AddCustomerAsync(customerToSetup);
-
                 var bookingRepository = new BookingRepository(mapper, dbContext);
                 await bookingRepository.AddBookingAsync(bookingToSetup);
-
-                await dbContext.SaveChangesAsync();
             }
-            var seatIdToReserve = theaterToSetup.Auditoriums[0].Tiers[0].Seats[0].Id;
             var bookingId = bookingToSetup.Id;
             var screeningId = screeningToSetup.Id;
 
@@ -217,73 +142,18 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 
         public static IEnumerable<object[]> ReleaseSeatsOfTimeoutedBookingsAsyncDeletesTimeoutedSeatReservationsAsyncData()
         {
-            var sopronElitMoziHuszarikTeremDefaultTier = new Tier
-            {
-                Id = Guid.NewGuid(),
-                Name = "default",
-                Seats = [
-                    new Seat
-                    {
-                        Id = Guid.NewGuid(),
-                        Row = 1,
-                        Column = 1
-                    },
-                    new Seat
-                    {
-                        Id = Guid.NewGuid(),
-                        Row = 2,
-                        Column = 1
-                    },
-                    new Seat
-                    {
-                        Id = Guid.NewGuid(),
-                        Row = 3,
-                        Column = 1
-                    },
-                    new Seat
-                    {
-                        Id = Guid.NewGuid(),
-                        Row = 4,
-                        Column = 1
-                    }
-                ]
-            };
+            var seedData = new DefaultSeedData();
 
-            var sopronElitMoziHuszarikTerem = new Auditorium
-            {
-                Id = Guid.NewGuid(),
-                Name = "Huszárik Terem",
-                Tiers = [
-                    sopronElitMoziHuszarikTeremDefaultTier
-                ]
-            };
-
-            var elitMozi = new Theater
-            {
-                Id = Guid.NewGuid(),
-                Name = "Elit Mozi",
-                Address = "Sopron, Torna u. 14, 9400 Hungary",
-                Auditoriums = new List<Auditorium>()
-                {
-                    sopronElitMoziHuszarikTerem
-                }
-            };
-
-            var sleepyHollowMovie = new Movie
-            {
-                Id = Guid.NewGuid(),
-                Title = "Sleepy Hollow",
-                ReleaseYear = 1999,
-                Description = "A movie about a headless horseman chopping other people´s heads off",
-                Duration = TimeSpan.FromSeconds(105),
-                Genres = new List<string> { "Dark Fantasy", "Slasher Horror", "Supernatural Horror", "Fantasy", "Horror", "Mistery" }
-            };
+            var auditorium = seedData.Auditoriums.First();
+            var tier = seedData.Tiers.First(t => t.AuditoriumId == auditorium.Id);
+            var movie = seedData.Movies.First();
+            var customer = seedData.Customers.First();
 
             var sleepyHollowScreening = new Screening
             {
                 Id = Guid.NewGuid(),
-                AuditoriumId = sopronElitMoziHuszarikTerem.Id,
-                MovieId = sleepyHollowMovie.Id,
+                AuditoriumId = auditorium.Id,
+                MovieId = movie.Id,
                 Showtime = DateTimeOffset.Now,
                 Language = "English",
                 Subtitles = "English"
@@ -293,7 +163,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             {
                 Id = Guid.NewGuid(),
                 ScreeningId = sleepyHollowScreening.Id,
-                TierId = sopronElitMoziHuszarikTeremDefaultTier.Id,
+                TierId = tier.Id,
                 Price = new Price
                 {
                     Amount = 4500,
@@ -301,67 +171,47 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                 }
             };
 
-            var hansJuergenCustomer = new Customer
-            {
-                Id = Guid.NewGuid(),
-                FirstName = "Hans Jürgen",
-                LastName = "Waldmann",
-                Email = "hans.juergen.waldmann@gmail.com"
-            };
-
             var booking = new Booking
             {
                 Id = Guid.NewGuid(),
                 BookingState = BookingState.ConfirmationTimeout,
-                CustomerId = hansJuergenCustomer.Id,
+                CustomerId = customer.Id,
                 ScreeningId = sleepyHollowScreening.Id,
                 CreatedOn = DateTimeOffset.UtcNow - TimeSpan.FromDays(3),
             };
 
+            var seatIdToReserve = seedData.Seats.First(s => s.TierId == tier.Id).Id;
+
             yield return
             [
-                elitMozi,
-                sleepyHollowMovie,
+                seedData,
                 sleepyHollowScreening,
                 pricing,
-                hansJuergenCustomer,
-                booking
+                booking,
+                seatIdToReserve
             ];
         }
 
         [Theory]
         [MemberData(nameof(ReleaseSeatsOfTimeoutedBookingsAsyncDeletesTimeoutedSeatReservationsAsyncData))]
-        public async Task ReleaseSeatsOfTimeoutedBookingsAsyncDeletesTimeoutedSeatReservationsAsync(Theater theaterToSetup,
-                                                                                                    Movie movieToSetup,
-                                                                                                    Screening screeningToSetup,
-                                                                                                    Pricing pricingToSetup,
-                                                                                                    Customer customerToSetup,
-                                                                                                    Booking bookingToSetup)
+        async Task ReleaseSeatsOfTimeoutedBookingsAsyncDeletesTimeoutedSeatReservationsAsync(SeedData seedData,
+                                                                                             Screening screeningToSetup,
+                                                                                             Pricing pricingToSetup,
+                                                                                             Booking bookingToSetup,
+                                                                                             Guid seatIdToReserve)
         {
             // Arrange
-            await using var db = await CreateDatabaseAsync();
+            await using var db = await CreateDatabaseAsync(seedData);
             var dbContext = db.Context;
             var seatReservationRepository = new SeatReservationRepository(mapper, databaseBinding, dbContext);
             {
-                var theaterRepository = new TheaterRepository(mapper, dbContext);
-                await theaterRepository.AddTheatersAsync([theaterToSetup]);
-
-                var movieRepository = new MovieRepository(mapper, databaseBinding, dbContext);
-                await movieRepository.AddMoviesAsync([movieToSetup]);
-
                 var screeningRepository = new ScreeningRepository(mapper, dbContext);
                 await screeningRepository.AddScreeningsAsync([screeningToSetup]);
                 await screeningRepository.SetPricingAsync(pricingToSetup);
 
-                var customerRepository = new CustomerRepository(mapper, dbContext);
-                await customerRepository.AddCustomerAsync(customerToSetup);
-
                 var bookingRepository = new BookingRepository(mapper, dbContext);
                 await bookingRepository.AddBookingAsync(bookingToSetup);
-
-                await dbContext.SaveChangesAsync();
             }
-            var seatIdToReserve = theaterToSetup.Auditoriums[0].Tiers[0].Seats[0].Id;
             var bookingId = bookingToSetup.Id;
             var screeningId = screeningToSetup.Id;
 
