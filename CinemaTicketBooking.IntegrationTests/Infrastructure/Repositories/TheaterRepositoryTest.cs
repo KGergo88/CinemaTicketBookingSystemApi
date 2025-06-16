@@ -81,7 +81,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 
         [Theory]
         [MemberData(nameof(AddTheatersAsyncCreatesTheatersAndRelatedEntitiesCorrectlyAsyncData))]
-        public async Task AddTheatersAsyncCreatesTheatersAndRelatedEntitiesCorrectlyAsync(List<Theater> domainTheaters)
+        async Task AddTheatersAsyncCreatesTheatersAndRelatedEntitiesCorrectlyAsync(List<Theater> domainTheaters)
         {
             // Arrange
             await using var db = await CreateDatabaseAsync();

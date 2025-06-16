@@ -13,7 +13,7 @@ public class ConfirmBookingUseCaseTest
     #region ExecuteAsync Tests
 
     [Fact]
-    public async Task BookingWithEmptyIdCannotBeConfirmedAsync()
+    async Task BookingWithEmptyIdCannotBeConfirmedAsync()
     {
         // Arrange
         var confirmBookingUseCase = new ConfirmBookingUseCase(mockBookingRepository.Object);
@@ -30,7 +30,7 @@ public class ConfirmBookingUseCaseTest
     }
 
     [Fact]
-    public async Task NonExistingBookingCannotBeConfirmedAsync()
+    async Task NonExistingBookingCannotBeConfirmedAsync()
     {
         // Arrange
         mockBookingRepository.Setup(
@@ -59,7 +59,7 @@ public class ConfirmBookingUseCaseTest
 
     [Theory]
     [MemberData(nameof(OnlyNonConfirmedBookingCanBeConfirmedAsyncData))]
-    public async Task OnlyNonConfirmedBookingCanBeConfirmedAsync(BookingState bookingState)
+    async Task OnlyNonConfirmedBookingCanBeConfirmedAsync(BookingState bookingState)
     {
         // Arrange
         var bookingId = Guid.NewGuid();

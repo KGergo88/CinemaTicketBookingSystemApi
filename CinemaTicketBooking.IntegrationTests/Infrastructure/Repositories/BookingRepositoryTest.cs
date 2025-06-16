@@ -114,7 +114,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
         [Theory]
         [InlineData(-1)]
         [InlineData(0)]
-        public async Task TimeoutUnconfirmedBookingsAsyncThrowsForInvalidTimeoutLimits(int timeoutInMinutes)
+        async Task TimeoutUnconfirmedBookingsAsyncThrowsForInvalidTimeoutLimits(int timeoutInMinutes)
         {
             // Arrange
             await using var db = await CreateDatabaseAsync();
