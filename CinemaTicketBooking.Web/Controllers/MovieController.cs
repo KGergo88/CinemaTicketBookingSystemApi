@@ -8,7 +8,7 @@ namespace CinemaTicketBooking.Web.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class MovieController : ControllerBase
+public class MoviesController : ControllerBase
 {
     private readonly IMapper mapper;
     private readonly IGetMoviesUseCase getMoviesUseCase;
@@ -16,7 +16,7 @@ public class MovieController : ControllerBase
     private readonly IUpdateMovieUseCase updateMovieUseCase;
     private readonly IDeleteMovieUseCase deleteMoviesUseCase;
 
-    public MovieController(
+    public MoviesController(
         IMapper mapper,
         IGetMoviesUseCase getMoviesUseCase,
         IAddMoviesUseCase addMoviesUseCase,

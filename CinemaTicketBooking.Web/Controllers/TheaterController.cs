@@ -8,12 +8,12 @@ namespace CinemaTicketBooking.Web.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class TheaterController : ControllerBase
+public class TheatersController : ControllerBase
 {
     private readonly IMapper mapper;
     private readonly IAddTheatersUseCase addTheatersUseCase;
 
-    public TheaterController(
+    public TheatersController(
         IMapper mapper,
         IAddTheatersUseCase addTheatersUseCase)
     {

@@ -7,12 +7,12 @@ namespace CinemaTicketBooking.Web.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class SeatReservationController : ControllerBase
+public class SeatReservationsController : ControllerBase
 {
     private readonly IMapper mapper;
     private readonly IGetAvailableSeatsUseCase getAvailableSeatsUseCase;
 
-    public SeatReservationController(
+    public SeatReservationsController(
         IMapper mapper,
         IGetAvailableSeatsUseCase getAvailableSeatsUseCase)
     {
