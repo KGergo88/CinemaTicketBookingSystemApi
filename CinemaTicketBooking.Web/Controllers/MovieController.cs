@@ -30,7 +30,7 @@ public class MoviesController : ControllerBase
         this.deleteMoviesUseCase = deleteMoviesUseCase ?? throw new ArgumentNullException(nameof(deleteMoviesUseCase));
     }
 
-    [HttpGet("[action]")]
+    [HttpGet]
     public async Task<ActionResult<List<MovieDto>>> List()
     {
         var movies = await getMoviesUseCase.ExecuteAsync();
@@ -38,8 +38,8 @@ public class MoviesController : ControllerBase
         return Ok(movieDtos);
     }
 
-    [HttpPost("[action]")]
-    public async Task<ActionResult> Add(IEnumerable<MovieWithoutIdDto> movieDtos)
+    [HttpPost]
+    public async Task<ActionResult> Add([FromBody] IEnumerable<MovieWithoutIdDto> movieDtos)
     {
         try
         {
@@ -53,8 +53,8 @@ public class MoviesController : ControllerBase
         }
     }
 
-    [HttpPut("[action]")]
-    public async Task<ActionResult> Update(MovieDto movieDto)
+    [HttpPut]
+    public async Task<ActionResult> Update([FromBody] MovieDto movieDto)
     {
         try
         {
@@ -68,8 +68,8 @@ public class MoviesController : ControllerBase
         }
     }
 
-    [HttpDelete("[action]")]
-    public async Task<ActionResult> Delete(IEnumerable<Guid> movieIdsToDelete)
+    [HttpDelete]
+    public async Task<ActionResult> Delete([FromBody] IEnumerable<Guid> movieIdsToDelete)
     {
         try
         {

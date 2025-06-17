@@ -2,6 +2,7 @@ using AutoMapper;
 using CinemaTicketBooking.Application.Interfaces.UseCases;
 using CinemaTicketBooking.Domain.Entities;
 using CinemaTicketBooking.Web.Dtos;
+using CinemaTicketBooking.Web.Dtos.GetAvailableSeats;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CinemaTicketBooking.Web.Controllers;
@@ -13,30 +14,48 @@ public class ScreeningsController : ControllerBase
     private readonly IMapper mapper;
     private readonly IAddScreeningsUseCase addScreeningsUseCase;
     private readonly ISetPricingUseCase setPricingUseCase;
+    private readonly IGetAvailableSeatsUseCase getAvailableSeatsUseCase;
 
     public ScreeningsController(
         IMapper mapper,
         IAddScreeningsUseCase addScreeningsUseCase,
-        ISetPricingUseCase setPricingUseCase)
+        ISetPricingUseCase setPricingUseCase,
+        IGetAvailableSeatsUseCase getAvailableSeatsUseCase)
     {
         this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         this.addScreeningsUseCase = addScreeningsUseCase ?? throw new ArgumentNullException(nameof(addScreeningsUseCase));
         this.setPricingUseCase = setPricingUseCase ?? throw new ArgumentNullException(nameof(setPricingUseCase));
+        this.getAvailableSeatsUseCase = getAvailableSeatsUseCase ?? throw new ArgumentNullException(nameof(getAvailableSeatsUseCase));
     }
 
-    [HttpPost("[action]")]
-    public async Task<ActionResult> AddScreenings(IEnumerable<ScreeningDto> screeningDtos)
+    [HttpPost]
+    public async Task<ActionResult> AddScreenings([FromBody] IEnumerable<ScreeningDto> screeningDtos)
     {
         var screenings = mapper.Map<IEnumerable<Screening>>(screeningDtos);
         await addScreeningsUseCase.ExecuteAsync(screenings);
         return Ok();
     }
 
-    [HttpPost("[action]")]
-    public async Task<ActionResult> SetPricing(PricingDto pricingDto)
+    [HttpPost("pricing")]
+    public async Task<ActionResult> SetPricing([FromBody] PricingDto pricingDto)
     {
         var pricing = mapper.Map<Pricing>(pricingDto);
         await setPricingUseCase.ExecuteAsync(pricing);
         return Ok();
+    }
+
+    [HttpGet("{screeningId:guid}/availableSeats")]
+    public async Task<ActionResult> GetAvailableSeats(Guid screeningId)
+    {
+        try
+        {
+            var availableSeats = await getAvailableSeatsUseCase.ExecuteAsync(screeningId);
+            var response = mapper.Map<GetAvailableSeatsResponseDto>(availableSeats);
+            return Ok(response);
+        }
+        catch (GetAvailableSeatsUseCaseException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 }

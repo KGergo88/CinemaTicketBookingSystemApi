@@ -27,8 +27,8 @@ public class BookingsController : ControllerBase
         this.getBookingDetailsUseCase = getBookingDetailsUseCase ?? throw new ArgumentNullException(nameof(getBookingDetailsUseCase));
     }
 
-    [HttpPost("[action]")]
-    public async Task<ActionResult> MakeBooking(BookingRequestDto bookingRequestDto)
+    [HttpPost]
+    public async Task<ActionResult> MakeBooking([FromBody] BookingRequestDto bookingRequestDto)
     {
         try
         {
@@ -46,7 +46,7 @@ public class BookingsController : ControllerBase
         }
     }
 
-    [HttpPost("[action]")]
+    [HttpPost("{bookingId:guid}/confirm")]
     public async Task<ActionResult> ConfirmBooking(Guid bookingId)
     {
         try
@@ -60,7 +60,7 @@ public class BookingsController : ControllerBase
         }
     }
 
-    [HttpGet("[action]")]
+    [HttpGet("{bookingId:guid}")]
     public async Task<ActionResult> GetBookingDetails(Guid bookingId)
     {
         try

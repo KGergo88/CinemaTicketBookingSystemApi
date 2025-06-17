@@ -21,8 +21,8 @@ public class TheatersController : ControllerBase
         this.addTheatersUseCase = addTheatersUseCase ?? throw new ArgumentNullException(nameof(addTheatersUseCase));
     }
 
-    [HttpPost("[action]")]
-    public async Task<ActionResult> AddTheaters(IEnumerable<TheaterWithoutIdDto> theaterDtos)
+    [HttpPost]
+    public async Task<ActionResult> AddTheaters([FromBody] IEnumerable<TheaterWithoutIdDto> theaterDtos)
     {
         var theaters = mapper.Map<List<Theater>>(theaterDtos);
         await addTheatersUseCase.ExecuteAsync(theaters);
