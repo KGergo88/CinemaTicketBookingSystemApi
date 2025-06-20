@@ -33,7 +33,7 @@ public class ScreeningsController : ControllerBase
     {
         var screenings = mapper.Map<IEnumerable<Screening>>(screeningDtos);
         await addScreeningsUseCase.ExecuteAsync(screenings);
-        return Ok();
+        return Created();
     }
 
     [HttpPost("pricing")]

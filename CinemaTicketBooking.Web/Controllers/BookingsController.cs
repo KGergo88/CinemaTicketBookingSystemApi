@@ -38,7 +38,7 @@ public class BookingsController : ControllerBase
                 bookingRequestDto.SeatsToReserve);
 
             var response = mapper.Map<BookingResponseDto>(booking);
-            return Ok(response);
+            return CreatedAtAction(nameof(GetBookingDetails), new { bookingId = response.BookingId }, response);
         }
         catch (MakeBookingException ex)
         {

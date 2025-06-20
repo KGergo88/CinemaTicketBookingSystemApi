@@ -26,6 +26,6 @@ public class TheatersController : ControllerBase
     {
         var theaters = mapper.Map<List<Theater>>(theaterDtos);
         await addTheatersUseCase.ExecuteAsync(theaters);
-        return Ok();
+        return Created();
     }
 }

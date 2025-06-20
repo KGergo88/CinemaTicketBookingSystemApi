@@ -45,7 +45,7 @@ public class MoviesController : ControllerBase
         {
             var movies = mapper.Map<List<Movie>>(movieDtos);
             await addMoviesUseCase.ExecuteAsync(movies);
-            return Ok();
+            return Created();
         }
         catch (AddMoviesUseCaseException ex)
         {
