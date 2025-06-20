@@ -28,7 +28,7 @@ public class BookingsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult> MakeBooking([FromBody] BookingRequestDto bookingRequestDto)
+    public async Task<ActionResult<BookingResponseDto>> MakeBooking([FromBody] BookingRequestDto bookingRequestDto)
     {
         try
         {
@@ -61,7 +61,7 @@ public class BookingsController : ControllerBase
     }
 
     [HttpGet("{bookingId:guid}")]
-    public async Task<ActionResult> GetBookingDetails(Guid bookingId)
+    public async Task<ActionResult<BookingDetailsDto>> GetBookingDetails(Guid bookingId)
     {
         try
         {
