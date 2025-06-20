@@ -28,6 +28,8 @@ public class BookingsController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<BookingResponseDto>> MakeBooking([FromBody] BookingRequestDto bookingRequestDto)
     {
         try
@@ -47,6 +49,8 @@ public class BookingsController : ControllerBase
     }
 
     [HttpPost("{bookingId:guid}/confirm")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> ConfirmBooking(Guid bookingId)
     {
         try
@@ -61,6 +65,8 @@ public class BookingsController : ControllerBase
     }
 
     [HttpGet("{bookingId:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<BookingDetailsDto>> GetBookingDetails(Guid bookingId)
     {
         try

@@ -29,6 +29,8 @@ public class ScreeningsController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> AddScreenings([FromBody] IEnumerable<ScreeningDto> screeningDtos)
     {
         var screenings = mapper.Map<IEnumerable<Screening>>(screeningDtos);
@@ -45,6 +47,8 @@ public class ScreeningsController : ControllerBase
     }
 
     [HttpGet("{screeningId:guid}/availableSeats")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> GetAvailableSeats(Guid screeningId)
     {
         try

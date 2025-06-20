@@ -39,6 +39,8 @@ public class MoviesController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> Add([FromBody] IEnumerable<MovieWithoutIdDto> movieDtos)
     {
         try
@@ -54,6 +56,8 @@ public class MoviesController : ControllerBase
     }
 
     [HttpPut]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> Update([FromBody] MovieDto movieDto)
     {
         try
@@ -69,6 +73,8 @@ public class MoviesController : ControllerBase
     }
 
     [HttpDelete]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> Delete([FromBody] IEnumerable<Guid> movieIdsToDelete)
     {
         try
