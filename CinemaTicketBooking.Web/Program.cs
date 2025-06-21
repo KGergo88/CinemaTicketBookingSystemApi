@@ -73,11 +73,11 @@ try
     }
     else
     {
-        app.UseExceptionHandler("/Home/Error");
+        app.UseExceptionHandler("/home/error");
     }
 
     app.MapControllers();
-    app.MapDefaultControllerRoute();
+    app.MapFallbackToController("HandleUnknownRoutes", "Home");
 
     app.Run();
 }

@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace CinemaTicketBooking.Web.Controllers;
 
 [ApiController]
-[Route("[controller]")]
-public class MovieController : ControllerBase
+[Route("api/[controller]")]
+public class MoviesController : ControllerBase
 {
     private readonly IMapper mapper;
     private readonly IGetMoviesUseCase getMoviesUseCase;
@@ -16,7 +16,7 @@ public class MovieController : ControllerBase
     private readonly IUpdateMovieUseCase updateMovieUseCase;
     private readonly IDeleteMovieUseCase deleteMoviesUseCase;
 
-    public MovieController(
+    public MoviesController(
         IMapper mapper,
         IGetMoviesUseCase getMoviesUseCase,
         IAddMoviesUseCase addMoviesUseCase,
@@ -30,7 +30,7 @@ public class MovieController : ControllerBase
         this.deleteMoviesUseCase = deleteMoviesUseCase ?? throw new ArgumentNullException(nameof(deleteMoviesUseCase));
     }
 
-    [HttpGet("[action]")]
+    [HttpGet]
     public async Task<ActionResult<List<MovieDto>>> List()
     {
         var movies = await getMoviesUseCase.ExecuteAsync();
@@ -38,14 +38,16 @@ public class MovieController : ControllerBase
         return Ok(movieDtos);
     }
 
-    [HttpPost("[action]")]
-    public async Task<ActionResult> Add(IEnumerable<MovieWithoutIdDto> movieDtos)
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult> Add([FromBody] IEnumerable<MovieWithoutIdDto> movieDtos)
     {
         try
         {
             var movies = mapper.Map<List<Movie>>(movieDtos);
             await addMoviesUseCase.ExecuteAsync(movies);
-            return Ok();
+            return Created();
         }
         catch (AddMoviesUseCaseException ex)
         {
@@ -53,8 +55,10 @@ public class MovieController : ControllerBase
         }
     }
 
-    [HttpPut("[action]")]
-    public async Task<ActionResult> Update(MovieDto movieDto)
+    [HttpPut]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult> Update([FromBody] MovieDto movieDto)
     {
         try
         {
@@ -68,8 +72,10 @@ public class MovieController : ControllerBase
         }
     }
 
-    [HttpDelete("[action]")]
-    public async Task<ActionResult> Delete(IEnumerable<Guid> movieIdsToDelete)
+    [HttpDelete]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult> Delete([FromBody] IEnumerable<Guid> movieIdsToDelete)
     {
         try
         {

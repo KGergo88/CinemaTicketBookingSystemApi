@@ -7,15 +7,15 @@ using Microsoft.AspNetCore.Mvc;
 namespace CinemaTicketBooking.Web.Controllers;
 
 [ApiController]
-[Route("[controller]")]
-public class BookingController : ControllerBase
+[Route("api/[controller]")]
+public class BookingsController : ControllerBase
 {
     private readonly IMapper mapper;
     private readonly IMakeBookingUseCase makeBookingUseCase;
     private readonly IConfirmBookingUseCase confirmBookingUseCase;
     private readonly IGetBookingDetailsUseCase getBookingDetailsUseCase;
 
-    public BookingController(
+    public BookingsController(
         IMapper mapper,
         IMakeBookingUseCase makeBookingUseCase,
         IConfirmBookingUseCase confirmBookingUseCase,
@@ -27,8 +27,10 @@ public class BookingController : ControllerBase
         this.getBookingDetailsUseCase = getBookingDetailsUseCase ?? throw new ArgumentNullException(nameof(getBookingDetailsUseCase));
     }
 
-    [HttpPost("[action]")]
-    public async Task<ActionResult> MakeBooking(BookingRequestDto bookingRequestDto)
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<BookingResponseDto>> MakeBooking([FromBody] BookingRequestDto bookingRequestDto)
     {
         try
         {
@@ -38,7 +40,7 @@ public class BookingController : ControllerBase
                 bookingRequestDto.SeatsToReserve);
 
             var response = mapper.Map<BookingResponseDto>(booking);
-            return Ok(response);
+            return CreatedAtAction(nameof(GetBookingDetails), new { bookingId = response.BookingId }, response);
         }
         catch (MakeBookingException ex)
         {
@@ -46,7 +48,9 @@ public class BookingController : ControllerBase
         }
     }
 
-    [HttpPost("[action]")]
+    [HttpPost("{bookingId:guid}/confirm")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> ConfirmBooking(Guid bookingId)
     {
         try
@@ -60,8 +64,10 @@ public class BookingController : ControllerBase
         }
     }
 
-    [HttpGet("[action]")]
-    public async Task<ActionResult> GetBookingDetails(Guid bookingId)
+    [HttpGet("{bookingId:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<BookingDetailsDto>> GetBookingDetails(Guid bookingId)
     {
         try
         {

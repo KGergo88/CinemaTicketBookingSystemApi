@@ -7,13 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 namespace CinemaTicketBooking.Web.Controllers;
 
 [ApiController]
-[Route("[controller]")]
-public class TheaterController : ControllerBase
+[Route("api/[controller]")]
+public class TheatersController : ControllerBase
 {
     private readonly IMapper mapper;
     private readonly IAddTheatersUseCase addTheatersUseCase;
 
-    public TheaterController(
+    public TheatersController(
         IMapper mapper,
         IAddTheatersUseCase addTheatersUseCase)
     {
@@ -21,11 +21,13 @@ public class TheaterController : ControllerBase
         this.addTheatersUseCase = addTheatersUseCase ?? throw new ArgumentNullException(nameof(addTheatersUseCase));
     }
 
-    [HttpPost("[action]")]
-    public async Task<ActionResult> AddTheaters(IEnumerable<TheaterWithoutIdDto> theaterDtos)
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult> AddTheaters([FromBody] IEnumerable<TheaterWithoutIdDto> theaterDtos)
     {
         var theaters = mapper.Map<List<Theater>>(theaterDtos);
         await addTheatersUseCase.ExecuteAsync(theaters);
-        return Ok();
+        return Created();
     }
 }
