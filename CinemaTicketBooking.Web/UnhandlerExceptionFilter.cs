@@ -15,8 +15,10 @@ internal class UnhandledExceptionFilter : IExceptionFilter
 
     public void OnException(ExceptionContext context)
     {
+        // Logging the exception details
         logger.LogError("{basicErrorMessage} Exception: {exception}", BasicErrorMessage, context.Exception);
 
+        // Returning only a basic error message to the client without exposing sensitive information
         context.Result = new JsonResult(BasicErrorMessage)
         {
             StatusCode = StatusCodes.Status500InternalServerError
