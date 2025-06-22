@@ -10,7 +10,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddScoped<IAddMovieUseCase, AddMovieUseCase>();
         services.AddScoped<IAddScreeningsUseCase, AddScreeningsUseCase>();
-        services.AddScoped<IAddTheatersUseCase, AddTheatersUseCase>();
+        services.AddScoped<IAddTheaterUseCase, AddTheaterUseCase>();
         services.AddScoped<IConfirmBookingUseCase, ConfirmBookingUseCase>();
         services.AddScoped<IDeleteMovieUseCase, DeleteMovieUseCase>();
         services.AddScoped<IGetAvailableSeatsUseCase, GetAvailableSeatsUseCase>();

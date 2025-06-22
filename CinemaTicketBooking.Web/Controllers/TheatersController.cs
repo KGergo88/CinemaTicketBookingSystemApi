@@ -11,23 +11,23 @@ namespace CinemaTicketBooking.Web.Controllers;
 public class TheatersController : ControllerBase
 {
     private readonly IMapper mapper;
-    private readonly IAddTheatersUseCase addTheatersUseCase;
+    private readonly IAddTheaterUseCase addTheaterUseCase;
 
     public TheatersController(
         IMapper mapper,
-        IAddTheatersUseCase addTheatersUseCase)
+        IAddTheaterUseCase addTheaterUseCase)
     {
         this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-        this.addTheatersUseCase = addTheatersUseCase ?? throw new ArgumentNullException(nameof(addTheatersUseCase));
+        this.addTheaterUseCase = addTheaterUseCase ?? throw new ArgumentNullException(nameof(addTheaterUseCase));
     }
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult> AddTheaters([FromBody] IEnumerable<TheaterWithoutIdDto> theaterDtos)
+    public async Task<ActionResult> Add([FromBody] TheaterWithoutIdDto theaterDto)
     {
-        var theaters = mapper.Map<List<Theater>>(theaterDtos);
-        await addTheatersUseCase.ExecuteAsync(theaters);
+        var theater = mapper.Map<Theater>(theaterDto);
+        await addTheaterUseCase.ExecuteAsync(theater);
         return Created();
     }
 }
