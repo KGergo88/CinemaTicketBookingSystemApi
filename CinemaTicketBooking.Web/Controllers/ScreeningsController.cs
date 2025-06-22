@@ -12,18 +12,18 @@ namespace CinemaTicketBooking.Web.Controllers;
 public class ScreeningsController : ControllerBase
 {
     private readonly IMapper mapper;
-    private readonly IAddScreeningsUseCase addScreeningsUseCase;
+    private readonly IAddScreeningUseCase addScreeningUseCase;
     private readonly ISetPricingUseCase setPricingUseCase;
     private readonly IGetAvailableSeatsUseCase getAvailableSeatsUseCase;
 
     public ScreeningsController(
         IMapper mapper,
-        IAddScreeningsUseCase addScreeningsUseCase,
+        IAddScreeningUseCase addScreeningUseCase,
         ISetPricingUseCase setPricingUseCase,
         IGetAvailableSeatsUseCase getAvailableSeatsUseCase)
     {
         this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-        this.addScreeningsUseCase = addScreeningsUseCase ?? throw new ArgumentNullException(nameof(addScreeningsUseCase));
+        this.addScreeningUseCase = addScreeningUseCase ?? throw new ArgumentNullException(nameof(addScreeningUseCase));
         this.setPricingUseCase = setPricingUseCase ?? throw new ArgumentNullException(nameof(setPricingUseCase));
         this.getAvailableSeatsUseCase = getAvailableSeatsUseCase ?? throw new ArgumentNullException(nameof(getAvailableSeatsUseCase));
     }
@@ -31,10 +31,10 @@ public class ScreeningsController : ControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult> AddScreenings([FromBody] IEnumerable<ScreeningDto> screeningDtos)
+    public async Task<ActionResult> Add([FromBody] ScreeningDto screeningDto)
     {
-        var screenings = mapper.Map<IEnumerable<Screening>>(screeningDtos);
-        await addScreeningsUseCase.ExecuteAsync(screenings);
+        var screening = mapper.Map<Screening>(screeningDto);
+        await addScreeningUseCase.ExecuteAsync(screening);
         return Created();
     }
 

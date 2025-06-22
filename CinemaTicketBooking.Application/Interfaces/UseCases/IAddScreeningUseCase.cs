@@ -2,7 +2,7 @@ using CinemaTicketBooking.Domain.Entities;
 
 namespace CinemaTicketBooking.Application.Interfaces.UseCases;
 
-public interface IAddTheatersUseCase
+public interface IAddScreeningUseCase
 {
-    public Task ExecuteAsync(IEnumerable<Theater> theaters);
+    public Task ExecuteAsync(Screening screening);
 }

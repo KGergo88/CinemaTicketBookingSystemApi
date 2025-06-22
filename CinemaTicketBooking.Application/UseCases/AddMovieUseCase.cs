@@ -4,24 +4,24 @@ using CinemaTicketBooking.Domain.Entities;
 
 namespace CinemaTicketBooking.Application.UseCases;
 
-internal class AddMoviesUseCase : IAddMoviesUseCase
+internal class AddMovieUseCase : IAddMovieUseCase
 {
     private readonly IMovieRepository movieRepository;
 
-    public AddMoviesUseCase(IMovieRepository movieRepository)
+    public AddMovieUseCase(IMovieRepository movieRepository)
     {
         this.movieRepository = movieRepository ?? throw new ArgumentNullException(nameof(movieRepository));
     }
 
-    public async Task ExecuteAsync(IEnumerable<Movie> movies)
+    public async Task ExecuteAsync(Movie movie)
     {
         try
         {
-            await movieRepository.AddMoviesAsync(movies);
+            await movieRepository.AddMoviesAsync([movie]);
         }
         catch (MovieRepositoryException ex)
         {
-            throw new AddMoviesUseCaseException($"Could not add movies. Details: {ex.Message}", ex);
+            throw new AddMovieUseCaseException($"Could not add movie. Details: {ex.Message}", ex);
         }
     }
 }

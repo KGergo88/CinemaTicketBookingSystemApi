@@ -12,22 +12,22 @@ public class MoviesController : ControllerBase
 {
     private readonly IMapper mapper;
     private readonly IGetMoviesUseCase getMoviesUseCase;
-    private readonly IAddMoviesUseCase addMoviesUseCase;
+    private readonly IAddMovieUseCase addMovieUseCase;
     private readonly IUpdateMovieUseCase updateMovieUseCase;
-    private readonly IDeleteMovieUseCase deleteMoviesUseCase;
+    private readonly IDeleteMovieUseCase deleteMovieUseCase;
 
     public MoviesController(
         IMapper mapper,
         IGetMoviesUseCase getMoviesUseCase,
-        IAddMoviesUseCase addMoviesUseCase,
+        IAddMovieUseCase addMovieUseCase,
         IUpdateMovieUseCase updateMovieUseCase,
-        IDeleteMovieUseCase deleteMoviesUseCase)
+        IDeleteMovieUseCase deleteMovieUseCase)
     {
         this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         this.getMoviesUseCase = getMoviesUseCase ?? throw new ArgumentNullException(nameof(getMoviesUseCase));
-        this.addMoviesUseCase = addMoviesUseCase ?? throw new ArgumentNullException(nameof(addMoviesUseCase));
+        this.addMovieUseCase = addMovieUseCase ?? throw new ArgumentNullException(nameof(addMovieUseCase));
         this.updateMovieUseCase = updateMovieUseCase ?? throw new ArgumentNullException(nameof(updateMovieUseCase));
-        this.deleteMoviesUseCase = deleteMoviesUseCase ?? throw new ArgumentNullException(nameof(deleteMoviesUseCase));
+        this.deleteMovieUseCase = deleteMovieUseCase ?? throw new ArgumentNullException(nameof(deleteMovieUseCase));
     }
 
     [HttpGet]
@@ -41,15 +41,15 @@ public class MoviesController : ControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult> Add([FromBody] IEnumerable<MovieWithoutIdDto> movieDtos)
+    public async Task<ActionResult> Add([FromBody] MovieWithoutIdDto movieDto)
     {
         try
         {
-            var movies = mapper.Map<List<Movie>>(movieDtos);
-            await addMoviesUseCase.ExecuteAsync(movies);
+            var movie = mapper.Map<Movie>(movieDto);
+            await addMovieUseCase.ExecuteAsync(movie);
             return Created();
         }
-        catch (AddMoviesUseCaseException ex)
+        catch (AddMovieUseCaseException ex)
         {
             return BadRequest(ex.Message);
         }
@@ -75,14 +75,14 @@ public class MoviesController : ControllerBase
     [HttpDelete]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult> Delete([FromBody] IEnumerable<Guid> movieIdsToDelete)
+    public async Task<ActionResult> Delete([FromBody] Guid movieIdToDelete)
     {
         try
         {
-            await deleteMoviesUseCase.ExecuteAsync(movieIdsToDelete);
+            await deleteMovieUseCase.ExecuteAsync(movieIdToDelete);
             return Ok();
         }
-        catch (DeleteMoviesUseCaseException ex)
+        catch (DeleteMovieUseCaseException ex)
         {
             return BadRequest(ex.Message);
         }

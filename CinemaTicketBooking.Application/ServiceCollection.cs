@@ -8,9 +8,9 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddCinemaTicketBookingApplicationServices(this IServiceCollection services)
     {
-        services.AddScoped<IAddMoviesUseCase, AddMoviesUseCase>();
-        services.AddScoped<IAddScreeningsUseCase, AddScreeningsUseCase>();
-        services.AddScoped<IAddTheatersUseCase, AddTheatersUseCase>();
+        services.AddScoped<IAddMovieUseCase, AddMovieUseCase>();
+        services.AddScoped<IAddScreeningUseCase, AddScreeningUseCase>();
+        services.AddScoped<IAddTheaterUseCase, AddTheaterUseCase>();
         services.AddScoped<IConfirmBookingUseCase, ConfirmBookingUseCase>();
         services.AddScoped<IDeleteMovieUseCase, DeleteMovieUseCase>();
         services.AddScoped<IGetAvailableSeatsUseCase, GetAvailableSeatsUseCase>();

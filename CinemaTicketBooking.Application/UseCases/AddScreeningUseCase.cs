@@ -4,17 +4,17 @@ using CinemaTicketBooking.Domain.Entities;
 
 namespace CinemaTicketBooking.Application.UseCases;
 
-internal class AddScreeningsUseCase : IAddScreeningsUseCase
+internal class AddScreeningUseCase : IAddScreeningUseCase
 {
     private readonly IScreeningRepository screeningRepository;
 
-    public AddScreeningsUseCase(IScreeningRepository screeningRepository)
+    public AddScreeningUseCase(IScreeningRepository screeningRepository)
     {
         this.screeningRepository = screeningRepository ?? throw new ArgumentNullException(nameof(screeningRepository));
     }
 
-    public async Task ExecuteAsync(IEnumerable<Screening> screenings)
+    public async Task ExecuteAsync(Screening screening)
     {
-        await screeningRepository.AddScreeningsAsync(screenings);
+        await screeningRepository.AddScreeningsAsync([screening]);
     }
 }
