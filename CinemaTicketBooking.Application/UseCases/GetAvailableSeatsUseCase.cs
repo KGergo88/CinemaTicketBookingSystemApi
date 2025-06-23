@@ -31,6 +31,10 @@ internal class GetAvailableSeatsUseCase : IGetAvailableSeatsUseCase
 
             return availableSeats;
         }
+        catch (Interfaces.Repositories.Exceptions.NotFoundException ex)
+        {
+            throw new Interfaces.UseCases.Exceptions.NotFoundException($"Could not get available seats for screening {screeningId}. Details: {ex.Message}", ex);
+        }
         catch (RepositoryException ex)
         {
             throw new UseCaseException($"Could not get available seats. Details: {ex.Message}", ex);
