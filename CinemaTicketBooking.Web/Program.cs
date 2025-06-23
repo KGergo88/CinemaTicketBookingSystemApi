@@ -89,3 +89,7 @@ finally
 {
     Log.CloseAndFlush();
 }
+
+// This empty partial class is required for the integration tests to work correctly
+// as it allows the Program class to be used with WebApplicationFactory<T>.
+public partial class Program { }
