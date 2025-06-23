@@ -54,9 +54,20 @@ public class ScreeningsController : ControllerBase
     [HttpPost("pricing")]
     public async Task<ActionResult> SetPricing([FromBody] PricingDto pricingDto)
     {
-        var pricing = mapper.Map<Pricing>(pricingDto);
-        await setPricingUseCase.ExecuteAsync(pricing);
-        return Ok();
+        try
+        {
+            var pricing = mapper.Map<Pricing>(pricingDto);
+            await setPricingUseCase.ExecuteAsync(pricing);
+            return Ok();
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (UseCaseException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpGet("{screeningId:guid}/availableSeats")]
