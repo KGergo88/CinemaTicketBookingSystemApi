@@ -5,13 +5,13 @@ using CinemaTicketBooking.Domain.Entities;
 
 namespace CinemaTicketBooking.Application.UseCases;
 
-internal class SetPricingsUseCase : ISetPricingUseCase
+internal class SetPricingUseCase : ISetPricingUseCase
 {
     private readonly IScreeningRepository screeningRepository;
     private readonly ITheaterRepository theaterRepository;
 
-    public SetPricingsUseCase(IScreeningRepository screeningRepository,
-                              ITheaterRepository theaterRepository)
+    public SetPricingUseCase(IScreeningRepository screeningRepository,
+                             ITheaterRepository theaterRepository)
     {
         this.screeningRepository = screeningRepository ?? throw new ArgumentNullException(nameof(screeningRepository));
         this.theaterRepository = theaterRepository ?? throw new ArgumentNullException(nameof(theaterRepository));
