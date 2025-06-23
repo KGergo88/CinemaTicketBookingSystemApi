@@ -1,4 +1,5 @@
 ﻿using CinemaTicketBooking.Application.Interfaces.Repositories;
+using CinemaTicketBooking.Application.Interfaces.Repositories.Exceptions;
 using CinemaTicketBooking.Application.Interfaces.UseCases;
 using CinemaTicketBooking.Application.UseCases;
 using CinemaTicketBooking.Domain.Entities;
@@ -219,11 +220,11 @@ public class MakeBookingUseCaseTest
                                                                             Price = new Price { Amount = 10, Currency = "EUR" }
                                                                         })
             );
-        var seatReservationRepositoryExceptionMessage = "Some known exception from the repository.";
+        var repositoryExceptionMessage = "Some known exception from the repository.";
         mockSeatReservationRepository.Setup(
             msrr => msrr.AddSeatReservationsAsync(
                 It.IsAny<IEnumerable<SeatReservation>>())).ThrowsAsync(
-                    new SeatReservationRepositoryException(seatReservationRepositoryExceptionMessage)
+                    new RepositoryException(repositoryExceptionMessage)
             );
         var makeBookingUseCase = new MakeBookingUseCase(mockBookingRepository.Object,
                                                         mockCustomerRepository.Object,
@@ -237,7 +238,7 @@ public class MakeBookingUseCaseTest
 
         // Assert
         Assert.IsType<MakeBookingException>(exception);
-        Assert.Equal($"Could not reserve seats! Error: \"{seatReservationRepositoryExceptionMessage}\"", exception.Message);
+        Assert.Equal($"Could not reserve seats! Error: \"{repositoryExceptionMessage}\"", exception.Message);
     }
 
     #endregion

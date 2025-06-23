@@ -1,4 +1,5 @@
 using CinemaTicketBooking.Application.Interfaces.Repositories;
+using CinemaTicketBooking.Application.Interfaces.Repositories.Exceptions;
 using CinemaTicketBooking.Application.Interfaces.UseCases;
 using CinemaTicketBooking.Domain.Entities;
 
@@ -86,7 +87,7 @@ internal class MakeBookingUseCase : IMakeBookingUseCase
 
             await seatReservationRepository.AddSeatReservationsAsync(seatReservations);
         }
-        catch (SeatReservationRepositoryException exception)
+        catch (RepositoryException exception)
         {
             await bookingRepository.DeleteBookingAsync(booking.Id);
             throw new MakeBookingException($"Could not reserve seats! Error: \"{exception.Message}\"", exception);

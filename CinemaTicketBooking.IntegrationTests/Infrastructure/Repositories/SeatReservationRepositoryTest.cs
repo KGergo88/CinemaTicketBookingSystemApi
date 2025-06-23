@@ -1,5 +1,5 @@
 using AutoMapper;
-using CinemaTicketBooking.Application.Interfaces.Repositories;
+using CinemaTicketBooking.Application.Interfaces.Repositories.Exceptions;
 using CinemaTicketBooking.Domain.Entities;
 using CinemaTicketBooking.Infrastructure;
 using CinemaTicketBooking.Infrastructure.Repositories;
@@ -129,7 +129,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 
             // Assert
             Assert.Null(firstCallException);
-            Assert.IsType<SeatReservationRepositoryException>(secondCallException);
+            Assert.IsType<RepositoryException>(secondCallException);
             Assert.IsType<DbUpdateException>(secondCallException.InnerException);
             Assert.IsType<SqlException>(secondCallException.InnerException.InnerException);
             Assert.Null(secondCallException.InnerException.InnerException.InnerException);

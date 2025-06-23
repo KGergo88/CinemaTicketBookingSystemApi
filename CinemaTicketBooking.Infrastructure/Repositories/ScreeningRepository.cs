@@ -1,5 +1,6 @@
 using AutoMapper;
 using CinemaTicketBooking.Application.Interfaces.Repositories;
+using CinemaTicketBooking.Application.Interfaces.Repositories.Exceptions;
 using CinemaTicketBooking.Domain.Entities;
 using CinemaTicketBooking.Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -71,7 +72,7 @@ internal class ScreeningRepository : IScreeningRepository
                                                      .SingleOrDefaultAsync();
 
         if (infraScreening is null)
-            throw new SeatReservationRepositoryException("The requested screening entity does not exist!");
+            throw new NotFoundException($"No screening was found with the ID: {screeningId}");
 
         var allInfraSeats = infraScreening.Auditorium!.Tiers.SelectMany(t => t.Seats);
         var allSeats = mapper.Map<List<Seat>>(allInfraSeats);
@@ -85,7 +86,7 @@ internal class ScreeningRepository : IScreeningRepository
 
         var seatsOfTheScreening = await GetAllSeatsOfTheScreeningAsync(screeningId);
         if (seatsOfTheScreening is null || !seatsOfTheScreening.Any())
-            throw new SeatReservationRepositoryException($"Could not load the seats of the screening! ScreeningId: {screeningId}");
+            throw new NotFoundException($"No seats were found for the screening! ScreeningId: {screeningId}");
 
         var seatIdsOfTheScreening = seatsOfTheScreening.Select(sots => sots.Id)
                                                        .ToHashSet();

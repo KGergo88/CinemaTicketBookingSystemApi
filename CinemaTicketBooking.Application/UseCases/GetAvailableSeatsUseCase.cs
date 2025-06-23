@@ -1,4 +1,5 @@
 using CinemaTicketBooking.Application.Interfaces.Repositories;
+using CinemaTicketBooking.Application.Interfaces.Repositories.Exceptions;
 using CinemaTicketBooking.Application.Interfaces.UseCases;
 using CinemaTicketBooking.Application.Interfaces.UseCases.Exceptions;
 using CinemaTicketBooking.Domain.Entities;
@@ -30,7 +31,7 @@ internal class GetAvailableSeatsUseCase : IGetAvailableSeatsUseCase
 
             return availableSeats;
         }
-        catch (SeatReservationRepositoryException ex)
+        catch (RepositoryException ex)
         {
             throw new UseCaseException($"Could not get available seats. Details: {ex.Message}", ex);
         }
