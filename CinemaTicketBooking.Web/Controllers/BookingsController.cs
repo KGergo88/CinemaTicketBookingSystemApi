@@ -1,5 +1,6 @@
 using AutoMapper;
 using CinemaTicketBooking.Application.Interfaces.UseCases;
+using CinemaTicketBooking.Application.Interfaces.UseCases.Exceptions;
 using CinemaTicketBooking.Web.Dtos;
 using CinemaTicketBooking.Web.Dtos.MakeBooking;
 using Microsoft.AspNetCore.Mvc;
@@ -41,6 +42,10 @@ public class BookingsController : ControllerBase
 
             var response = mapper.Map<BookingResponseDto>(booking);
             return CreatedAtAction(nameof(GetBookingDetails), new { bookingId = response.BookingId }, response);
+        }
+        catch (ConflictException ex)
+        {
+            return Conflict(ex.Message);
         }
         catch (MakeBookingException ex)
         {
