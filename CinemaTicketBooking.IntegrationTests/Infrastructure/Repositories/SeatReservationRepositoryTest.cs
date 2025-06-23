@@ -4,9 +4,9 @@ using CinemaTicketBooking.Domain.Entities;
 using CinemaTicketBooking.Infrastructure;
 using CinemaTicketBooking.Infrastructure.Repositories;
 using CinemaTicketBooking.Infrastructure.DatabaseBindings;
+using CinemaTicketBooking.Infrastructure.DatabaseSeeding;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using CinemaTicketBooking.Infrastructure.DatabaseSeeding;
 
 namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 {
