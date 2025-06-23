@@ -81,7 +81,7 @@ public class ScreeningsController : ControllerBase
             var response = mapper.Map<GetAvailableSeatsResponseDto>(availableSeats);
             return Ok(response);
         }
-        catch (GetAvailableSeatsUseCaseException ex)
+        catch (UseCaseException ex)
         {
             return BadRequest(ex.Message);
         }
