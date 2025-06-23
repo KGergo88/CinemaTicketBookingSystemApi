@@ -64,4 +64,32 @@ public class ScreeningsControllerTests
             Times.Once);
         mockAddScreeningsUseCase.VerifyNoOtherCalls();
     }
+
+    [Fact]
+    public async Task SetPricing_ReturnsNotFound_WhenUseCaseThrowsNotFoundException()
+    {
+        // Arrange
+        mockSetPricingUseCase.Setup(x => x.ExecuteAsync(It.IsAny<Pricing>()))
+                             .ThrowsAsync(new NotFoundException("Screening does not exist"));
+        var pricingDto = new PricingDto
+        {
+            ScreeningId = Guid.NewGuid(), // Not existing ID
+            TierId = Guid.NewGuid(),      // Not existing ID
+            Price = new PriceDto
+            {
+                Amount = 1500,
+                Currency = "HUF"
+            }
+        };
+
+        // Act
+        var response = await httpClient.PostAsJsonAsync($"{screeningscontrollerRoute}/pricing", pricingDto);
+
+        // Assert
+        Assert.Equal(404, (int)response.StatusCode);
+        mockSetPricingUseCase.Verify(
+            mock => mock.ExecuteAsync(It.Is<Pricing>(p => p.ScreeningId == pricingDto.ScreeningId && p.TierId == pricingDto.TierId)),
+            Times.Once);
+        mockSetPricingUseCase.VerifyNoOtherCalls();
+    }
 }
