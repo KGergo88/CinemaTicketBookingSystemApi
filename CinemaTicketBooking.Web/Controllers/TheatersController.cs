@@ -1,5 +1,6 @@
 using AutoMapper;
 using CinemaTicketBooking.Application.Interfaces.UseCases;
+using CinemaTicketBooking.Application.Interfaces.UseCases.Exceptions;
 using CinemaTicketBooking.Domain.Entities;
 using CinemaTicketBooking.Web.Dtos.Theater;
 using Microsoft.AspNetCore.Mvc;
@@ -26,8 +27,15 @@ public class TheatersController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> Add([FromBody] TheaterWithoutIdDto theaterDto)
     {
-        var theater = mapper.Map<Theater>(theaterDto);
-        await addTheaterUseCase.ExecuteAsync(theater);
-        return Created();
+        try
+        {
+            var theater = mapper.Map<Theater>(theaterDto);
+            await addTheaterUseCase.ExecuteAsync(theater);
+            return Created();
+        }
+        catch (UseCaseException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 }
