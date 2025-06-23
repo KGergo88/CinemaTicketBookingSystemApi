@@ -1,5 +1,6 @@
 using AutoMapper;
 using CinemaTicketBooking.Application.Interfaces.UseCases;
+using CinemaTicketBooking.Application.Interfaces.UseCases.Exceptions;
 using CinemaTicketBooking.Domain.Entities;
 using CinemaTicketBooking.Web.Dtos;
 using CinemaTicketBooking.Web.Dtos.GetAvailableSeats;
@@ -31,11 +32,23 @@ public class ScreeningsController : ControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> Add([FromBody] ScreeningDto screeningDto)
     {
-        var screening = mapper.Map<Screening>(screeningDto);
-        await addScreeningUseCase.ExecuteAsync(screening);
-        return Created();
+        try
+        {
+            var screening = mapper.Map<Screening>(screeningDto);
+            await addScreeningUseCase.ExecuteAsync(screening);
+            return Created();
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (UseCaseException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpPost("pricing")]
