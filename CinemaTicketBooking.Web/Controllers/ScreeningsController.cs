@@ -73,6 +73,7 @@ public class ScreeningsController : ControllerBase
     [HttpGet("{screeningId:guid}/availableSeats")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> GetAvailableSeats(Guid screeningId)
     {
         try
@@ -80,6 +81,10 @@ public class ScreeningsController : ControllerBase
             var availableSeats = await getAvailableSeatsUseCase.ExecuteAsync(screeningId);
             var response = mapper.Map<GetAvailableSeatsResponseDto>(availableSeats);
             return Ok(response);
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(ex.Message);
         }
         catch (UseCaseException ex)
         {
