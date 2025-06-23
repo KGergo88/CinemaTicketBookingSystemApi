@@ -33,7 +33,7 @@ internal class SeatReservationRepository : ISeatReservationRepository
         catch (DbUpdateException ex)
         {
             if (databaseBinding.IsUniqueIndexException(ex))
-                throw new RepositoryException(
+                throw new DuplicateException(
                     "Could not reserve seats as at least one of them seems to be already reserved.", ex);
 
             throw;
