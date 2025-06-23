@@ -34,7 +34,7 @@ internal class SeatReservationRepository : ISeatReservationRepository
         {
             if (databaseBinding.IsUniqueIndexException(ex))
                 throw new DuplicateException(
-                    "Could not reserve seats as at least one of them seems to be already reserved.", ex);
+                    "Could not store seat reservation entities because of unique index constraints.", ex);
 
             throw;
         }

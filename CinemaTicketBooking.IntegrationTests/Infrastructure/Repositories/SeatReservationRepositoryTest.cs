@@ -133,7 +133,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             Assert.IsType<DbUpdateException>(secondCallException.InnerException);
             Assert.IsType<SqlException>(secondCallException.InnerException.InnerException);
             Assert.Null(secondCallException.InnerException.InnerException.InnerException);
-            Assert.Equal("Could not reserve seats as at least one of them seems to be already reserved.", secondCallException.Message);
+            Assert.Equal("Could not store seat reservation entities because of unique index constraints.", secondCallException.Message);
         }
 
         #endregion
