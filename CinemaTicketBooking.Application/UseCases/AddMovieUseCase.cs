@@ -1,4 +1,5 @@
 using CinemaTicketBooking.Application.Interfaces.Repositories;
+using CinemaTicketBooking.Application.Interfaces.Repositories.Exceptions;
 using CinemaTicketBooking.Application.Interfaces.UseCases;
 using CinemaTicketBooking.Application.Interfaces.UseCases.Exceptions;
 using CinemaTicketBooking.Domain.Entities;
@@ -19,6 +20,10 @@ internal class AddMovieUseCase : IAddMovieUseCase
         try
         {
             await movieRepository.AddMoviesAsync([movie]);
+        }
+        catch (DuplicateException ex)
+        {
+            throw new ConflictException($"This movie already exists!", ex);
         }
         catch (RepositoryException ex)
         {
