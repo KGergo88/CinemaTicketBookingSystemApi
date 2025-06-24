@@ -1,5 +1,6 @@
 using AutoMapper;
 using CinemaTicketBooking.Application.Interfaces.UseCases;
+using CinemaTicketBooking.Application.Interfaces.UseCases.Exceptions;
 using CinemaTicketBooking.Domain.Entities;
 using CinemaTicketBooking.Web.Dtos.Movie;
 using Microsoft.AspNetCore.Mvc;
@@ -49,7 +50,7 @@ public class MoviesController : ControllerBase
             await addMovieUseCase.ExecuteAsync(movie);
             return Created();
         }
-        catch (AddMovieUseCaseException ex)
+        catch (UseCaseException ex)
         {
             return BadRequest(ex.Message);
         }

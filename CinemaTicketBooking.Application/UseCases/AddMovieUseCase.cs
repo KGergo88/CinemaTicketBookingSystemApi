@@ -1,5 +1,6 @@
 using CinemaTicketBooking.Application.Interfaces.Repositories;
 using CinemaTicketBooking.Application.Interfaces.UseCases;
+using CinemaTicketBooking.Application.Interfaces.UseCases.Exceptions;
 using CinemaTicketBooking.Domain.Entities;
 
 namespace CinemaTicketBooking.Application.UseCases;
@@ -21,7 +22,7 @@ internal class AddMovieUseCase : IAddMovieUseCase
         }
         catch (MovieRepositoryException ex)
         {
-            throw new AddMovieUseCaseException($"Could not add movie. Details: {ex.Message}", ex);
+            throw new UseCaseException($"Could not add movie. Details: {ex.Message}", ex);
         }
     }
 }
