@@ -50,6 +50,10 @@ public class MoviesController : ControllerBase
             await addMovieUseCase.ExecuteAsync(movie);
             return Created();
         }
+        catch (ConflictException ex)
+        {
+            return Conflict(ex.Message);
+        }
         catch (UseCaseException ex)
         {
             return BadRequest(ex.Message);
@@ -67,6 +71,10 @@ public class MoviesController : ControllerBase
             await updateMovieUseCase.ExecuteAsync(movie);
             return Ok();
         }
+        catch (NotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
         catch (UpdateMovieUseCaseException ex)
         {
             return BadRequest(ex.Message);
@@ -82,6 +90,10 @@ public class MoviesController : ControllerBase
         {
             await deleteMovieUseCase.ExecuteAsync(movieIdToDelete);
             return Ok();
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(ex.Message);
         }
         catch (DeleteMovieUseCaseException ex)
         {
