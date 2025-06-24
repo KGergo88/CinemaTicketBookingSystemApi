@@ -1,5 +1,6 @@
 using AutoMapper;
 using CinemaTicketBooking.Application.Interfaces.Repositories;
+using CinemaTicketBooking.Application.Interfaces.Repositories.Exceptions;
 using CinemaTicketBooking.Domain.Entities;
 using CinemaTicketBooking.Infrastructure.DatabaseBindings;
 using CinemaTicketBooking.Infrastructure.Entities;
@@ -45,7 +46,7 @@ internal class MovieRepository : IMovieRepository
             var alreadyStoredMovie = await context.Movies.FirstOrDefaultAsync(m => m.Title == domainMovie.Title
                                                                                    && m.ReleaseYear == domainMovie.ReleaseYear);
             if (alreadyStoredMovie is not null)
-                throw new MovieRepositoryException(
+                throw new DuplicateException(
                     $"A movie with the Title \"{domainMovie.Title}\" from the year {domainMovie.ReleaseYear} is already stored!");
 
             var infraMovie = mapper.Map<MovieEntity>(domainMovie);
@@ -74,7 +75,7 @@ internal class MovieRepository : IMovieRepository
         catch (DbUpdateException ex)
         {
             if (databaseBinding.IsUniqueIndexException(ex))
-                throw new MovieRepositoryException($"Cannot add the same movie twice!", ex);
+                throw new DuplicateException($"Cannot add the same movie twice!", ex);
 
             throw;
         }
@@ -91,7 +92,7 @@ internal class MovieRepository : IMovieRepository
         }
         catch (InvalidOperationException ex)
         {
-            throw new MovieRepositoryException($"No movie with the ID {domainMovie.Id} was found!", ex);
+            throw new NotFoundException($"No movie with the ID {domainMovie.Id} was found!", ex);
         }
 
         infraMovie.Title = domainMovie.Title;
@@ -140,7 +141,7 @@ internal class MovieRepository : IMovieRepository
             var foundIds = movies.Select(m => m.Id);
             var missingIds = movieIdsToDelete.Except(foundIds).ToList();
             var missingIdsAsString = string.Join(", ", missingIds);
-            throw new MovieRepositoryException($"Not every requested ID exists! Missing IDs: {missingIdsAsString}");
+            throw new NotFoundException($"Not every requested ID exists! Missing IDs: {missingIdsAsString}");
         }
 
         context.RemoveRange(movies);

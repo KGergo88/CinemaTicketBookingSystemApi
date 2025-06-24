@@ -20,7 +20,7 @@ internal class AddMovieUseCase : IAddMovieUseCase
         {
             await movieRepository.AddMoviesAsync([movie]);
         }
-        catch (MovieRepositoryException ex)
+        catch (RepositoryException ex)
         {
             throw new UseCaseException($"Could not add movie. Details: {ex.Message}", ex);
         }

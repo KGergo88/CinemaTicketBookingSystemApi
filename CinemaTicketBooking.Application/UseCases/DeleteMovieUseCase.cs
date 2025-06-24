@@ -18,7 +18,7 @@ internal class DeleteMovieUseCase : IDeleteMovieUseCase
         {
             await movieRepository.DeleteMoviesAsync([movieIdToDelete]);
         }
-        catch (MovieRepositoryException ex)
+        catch (RepositoryException ex)
         {
             throw new DeleteMovieUseCaseException($"Could not delete movie. Details: {ex.Message}", ex);
         }
