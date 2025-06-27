@@ -1,4 +1,5 @@
 using CinemaTicketBooking.Application.Interfaces.UseCases;
+using CinemaTicketBooking.Application.Interfaces.UseCases.Exceptions;
 
 namespace CinemaTicketBooking.Web.Services;
 
@@ -33,7 +34,16 @@ internal class BookingTimeoutBackgroundService : IHostedService, IDisposable
         logger.LogInformation("Booking Timeout Background Service is working.");
         using var scope = serviceScopeFactory.CreateScope();
         var manageBookingTimeoutUseCase = scope.ServiceProvider.GetRequiredService<IManageBookingTimeoutUseCase>();
-        await manageBookingTimeoutUseCase.ExecuteAsync();
+
+        try
+        {
+            await manageBookingTimeoutUseCase.ExecuteAsync();
+        }
+        catch (UseCaseException)
+        {
+            logger.LogError($"Failed to execute {nameof(manageBookingTimeoutUseCase)}!");
+            throw;
+        }
     }
 
     public Task StopAsync(CancellationToken stoppingToken)
