@@ -1,10 +1,6 @@
-using CinemaTicketBooking.Application.Interfaces.Repositories.Exceptions;
 using CinemaTicketBooking.Domain.Entities;
 
 namespace CinemaTicketBooking.Application.Interfaces.Repositories;
-
-public class BookingRepositoryException(string message, Exception? innerException = null)
-    : RepositoryException(message, innerException) { }
 
 public interface IBookingRepository
 {
