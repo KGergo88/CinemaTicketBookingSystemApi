@@ -16,7 +16,7 @@ The projects are representing the different layers:
 
 - **CinemaTicketBooking.Application**: Application layer contains the use cases, via the user requests can be served.
   It defines the interfaces for the use cases so they can be used via dependency injection once the service collection of the project is configured during startup.
-  Besides this, the project contains the repository interfaces that describe the classes the persistency layer shall implement.
+  Besides this, the project contains the repository interfaces that describe the classes the persistence layer shall implement.
 
 - **CinemaTicketBooking.Infrastructure**: Persistence layer providing database access via [Entity Framework Core](https://learn.microsoft.com/en-us/ef/core).
   Currently the project only supports [SQL Server](https://learn.microsoft.com/en-us/ef/core/providers/sql-server/?tabs=dotnet-core-cli) as database.
