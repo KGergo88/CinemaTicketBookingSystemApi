@@ -43,11 +43,15 @@ public class BookingsController : ControllerBase
             var response = mapper.Map<BookingResponseDto>(booking);
             return CreatedAtAction(nameof(GetBookingDetails), new { bookingId = response.BookingId }, response);
         }
+        catch (NotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
         catch (ConflictException ex)
         {
             return Conflict(ex.Message);
         }
-        catch (MakeBookingException ex)
+        catch (UseCaseException ex)
         {
             return BadRequest(ex.Message);
         }
