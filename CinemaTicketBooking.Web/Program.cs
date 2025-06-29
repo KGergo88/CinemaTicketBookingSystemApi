@@ -35,12 +35,12 @@ try
     builder.Services.AddDbContext<CinemaTicketBookingDbContext>(
         options => databaseBinding.SetDatabaseType(options, dbConnectionString));
 
-    builder.Services.AddControllers(options =>
-        options.Filters.Add<UnhandledExceptionFilter>());
+    builder.Services.AddControllers();
 
     builder.Services.AddCinemaTicketBookingInfrastructureServices()
                     .AddCinemaTicketBookingApplicationServices()
-                    .AddHostedService<BookingTimeoutBackgroundService>();
+                    .AddHostedService<BookingTimeoutBackgroundService>()
+                    .AddExceptionHandler<CinemaTicketBookingExceptionHandler>();
 
     builder.Services.AddSwaggerGen(options =>
     {
@@ -66,15 +66,10 @@ try
 
     if (app.Environment.IsDevelopment())
     {
-        app.UseDeveloperExceptionPage();
-
         app.UseSwagger();
         app.UseSwaggerUI();
     }
-    else
-    {
-        app.UseExceptionHandler("/home/error");
-    }
+    app.UseExceptionHandler("/home/error");
 
     app.MapControllers();
     app.MapFallbackToController("HandleUnknownRoutes", "Home");
