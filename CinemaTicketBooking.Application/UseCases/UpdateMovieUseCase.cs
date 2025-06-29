@@ -1,5 +1,7 @@
 using CinemaTicketBooking.Application.Interfaces.Repositories;
+using CinemaTicketBooking.Application.Interfaces.Repositories.Exceptions;
 using CinemaTicketBooking.Application.Interfaces.UseCases;
+using CinemaTicketBooking.Application.Interfaces.UseCases.Exceptions;
 using CinemaTicketBooking.Domain.Entities;
 
 namespace CinemaTicketBooking.Application.UseCases;
@@ -19,9 +21,13 @@ internal class UpdateMovieUseCase : IUpdateMovieUseCase
         {
             await movieRepository.UpdateMovieAsync(movie);
         }
-        catch (MovieRepositoryException ex)
+        catch (Interfaces.Repositories.Exceptions.NotFoundException ex)
         {
-            throw new UpdateMovieUseCaseException($"Could not update movie. Details: {ex.Message}", ex);
+            throw new Interfaces.UseCases.Exceptions.NotFoundException($"No movie was found with the ID: {movie.Id}", ex);
+        }
+        catch (RepositoryException ex)
+        {
+            throw new UseCaseException($"Could not update movie. Details: {ex.Message}", ex);
         }
     }
 }

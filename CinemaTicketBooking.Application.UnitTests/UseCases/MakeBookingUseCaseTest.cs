@@ -1,5 +1,7 @@
 ﻿using CinemaTicketBooking.Application.Interfaces.Repositories;
+using CinemaTicketBooking.Application.Interfaces.Repositories.Exceptions;
 using CinemaTicketBooking.Application.Interfaces.UseCases;
+using CinemaTicketBooking.Application.Interfaces.UseCases.Exceptions;
 using CinemaTicketBooking.Application.UseCases;
 using CinemaTicketBooking.Domain.Entities;
 using Moq;
@@ -34,7 +36,7 @@ public class MakeBookingUseCaseTest
         );
 
         // Assert
-        Assert.IsType<MakeBookingException>(exception);
+        Assert.IsType<Interfaces.UseCases.Exceptions.NotFoundException>(exception);
         Assert.Equal($"Unknown customer Id: {customerId}", exception.Message);
     }
 
@@ -65,7 +67,7 @@ public class MakeBookingUseCaseTest
         );
 
         // Assert
-        Assert.IsType<MakeBookingException>(exception);
+        Assert.IsType<Interfaces.UseCases.Exceptions.NotFoundException>(exception);
         Assert.Equal($"Unknown screening Id: {screeningId}", exception.Message);
     }
 
@@ -75,7 +77,7 @@ public class MakeBookingUseCaseTest
         yield return
         [
             DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-            new MakeBookingException("The screening's showtime is in the past, thus not bookable.")
+            new UseCaseException("The screening's showtime is in the past, thus not bookable.")
         ];
 
         // Tomorrow's screening. This can still be booked!
@@ -88,7 +90,7 @@ public class MakeBookingUseCaseTest
 
     [Theory]
     [MemberData(nameof(PastScreeningsCannotBeBookedAsyncData))]
-    async Task PastScreeningsCannotBeBookedAsync(DateTimeOffset showTime, MakeBookingException? expectedException)
+    async Task PastScreeningsCannotBeBookedAsync(DateTimeOffset showTime, UseCaseException? expectedException)
     {
         // Arrange
         var seatIdsToReserve = new List<Guid> { Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() };
@@ -155,7 +157,7 @@ public class MakeBookingUseCaseTest
         // Assert
         if (expectedException is not null)
         {
-            Assert.IsType<MakeBookingException>(exception);
+            Assert.IsType<UseCaseException>(exception);
             Assert.Equal("The screening's showtime is in the past, thus not bookable.", exception.Message);
         }
         else
@@ -219,11 +221,11 @@ public class MakeBookingUseCaseTest
                                                                             Price = new Price { Amount = 10, Currency = "EUR" }
                                                                         })
             );
-        var seatReservationRepositoryExceptionMessage = "Some known exception from the repository.";
+        var repositoryExceptionMessage = "Some known exception from the repository.";
         mockSeatReservationRepository.Setup(
             msrr => msrr.AddSeatReservationsAsync(
                 It.IsAny<IEnumerable<SeatReservation>>())).ThrowsAsync(
-                    new SeatReservationRepositoryException(seatReservationRepositoryExceptionMessage)
+                    new RepositoryException(repositoryExceptionMessage)
             );
         var makeBookingUseCase = new MakeBookingUseCase(mockBookingRepository.Object,
                                                         mockCustomerRepository.Object,
@@ -236,8 +238,8 @@ public class MakeBookingUseCaseTest
         );
 
         // Assert
-        Assert.IsType<MakeBookingException>(exception);
-        Assert.Equal($"Could not reserve seats! Error: \"{seatReservationRepositoryExceptionMessage}\"", exception.Message);
+        Assert.IsType<UseCaseException>(exception);
+        Assert.Equal($"Could not reserve seats! Error: \"{repositoryExceptionMessage}\"", exception.Message);
     }
 
     #endregion

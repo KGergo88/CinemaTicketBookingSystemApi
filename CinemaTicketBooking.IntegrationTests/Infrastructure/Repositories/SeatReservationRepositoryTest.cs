@@ -1,12 +1,12 @@
 using AutoMapper;
-using CinemaTicketBooking.Application.Interfaces.Repositories;
+using CinemaTicketBooking.Application.Interfaces.Repositories.Exceptions;
 using CinemaTicketBooking.Domain.Entities;
 using CinemaTicketBooking.Infrastructure;
 using CinemaTicketBooking.Infrastructure.Repositories;
 using CinemaTicketBooking.Infrastructure.DatabaseBindings;
+using CinemaTicketBooking.Infrastructure.DatabaseSeeding;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using CinemaTicketBooking.Infrastructure.DatabaseSeeding;
 
 namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 {
@@ -129,11 +129,11 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 
             // Assert
             Assert.Null(firstCallException);
-            Assert.IsType<SeatReservationRepositoryException>(secondCallException);
+            Assert.IsType<DuplicateException>(secondCallException);
             Assert.IsType<DbUpdateException>(secondCallException.InnerException);
             Assert.IsType<SqlException>(secondCallException.InnerException.InnerException);
             Assert.Null(secondCallException.InnerException.InnerException.InnerException);
-            Assert.Equal("Could not reserve seats as at least one of them seems to be already reserved.", secondCallException.Message);
+            Assert.Equal("Could not store seat reservation entities because of unique index constraints.", secondCallException.Message);
         }
 
         #endregion

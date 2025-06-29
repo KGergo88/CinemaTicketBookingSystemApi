@@ -1,5 +1,7 @@
 using CinemaTicketBooking.Application.Interfaces.Repositories;
+using CinemaTicketBooking.Application.Interfaces.Repositories.Exceptions;
 using CinemaTicketBooking.Application.Interfaces.UseCases;
+using CinemaTicketBooking.Application.Interfaces.UseCases.Exceptions;
 using CinemaTicketBooking.Domain.Entities;
 
 namespace CinemaTicketBooking.Application.UseCases;
@@ -26,35 +28,35 @@ internal class MakeBookingUseCase : IMakeBookingUseCase
     {
         var customer = await customerRepository.GetCustomerOrNullAsync(customerId);
         if (customer is null)
-            throw new MakeBookingException($"Unknown customer Id: {customerId}");
+            throw new Interfaces.UseCases.Exceptions.NotFoundException($"Unknown customer Id: {customerId}");
 
         var screening = await screeningRepository.GetScreeningOrNullAsync(screeningId);
         if (screening is null)
-            throw new MakeBookingException($"Unknown screening Id: {screeningId}");
+            throw new Interfaces.UseCases.Exceptions.NotFoundException($"Unknown screening Id: {screeningId}");
 
         if (screening.Showtime < DateTime.UtcNow)
-            throw new MakeBookingException($"The screening's showtime is in the past, thus not bookable.");
+            throw new UseCaseException($"The screening's showtime is in the past, thus not bookable.");
 
         if (!seatIdsToReserve.Any())
-            throw new MakeBookingException($"Cannot make a booking without reserving any seats!");
+            throw new UseCaseException($"Cannot make a booking without reserving any seats!");
 
         var notExistingSeatIds = await screeningRepository.FindNotExistingSeatIdsAsync(screeningId, seatIdsToReserve);
         if (notExistingSeatIds.Any())
         {
             var notExistingSeatIdsAsString = string.Join(", ", notExistingSeatIds.Select(nes => nes));
-            throw new MakeBookingException($"Could not reserve seats as the following seats do not exist: {notExistingSeatIdsAsString}");
+            throw new Interfaces.UseCases.Exceptions.NotFoundException($"Could not reserve seats as the following seats do not exist: {notExistingSeatIdsAsString}");
         }
 
         var alreadyReservedSeatIds = await seatReservationRepository.FindAlreadyReservedSeatIdsAsync(screeningId, seatIdsToReserve);
         if (alreadyReservedSeatIds.Any())
         {
             var alreadyReservedSeatIdsAsString = string.Join(", ", alreadyReservedSeatIds);
-            throw new MakeBookingException($"Could not reserve seats as the following seats are already reserved: {alreadyReservedSeatIdsAsString}");
+            throw new ConflictException($"Could not reserve seats as the following seats are already reserved: {alreadyReservedSeatIdsAsString}");
         }
 
         var pricingsBySeatId = await screeningRepository.GetPricingsBySeatIdAsync(screeningId);
         if (seatIdsToReserve.Any(sitr => !pricingsBySeatId.ContainsKey(sitr)))
-            throw new MakeBookingException("Could not reserve seats as pricing information is not available for at least one of them.");
+            throw new Interfaces.UseCases.Exceptions.NotFoundException("Could not reserve seats as pricing information is not available for at least one of them.");
 
         Booking booking;
         try
@@ -71,7 +73,7 @@ internal class MakeBookingUseCase : IMakeBookingUseCase
         }
         catch
         {
-            throw new MakeBookingException($"Could not create booking! No seats were reserved!");
+            throw new UseCaseException($"Could not create booking! No seats were reserved!");
         }
 
         try
@@ -86,10 +88,18 @@ internal class MakeBookingUseCase : IMakeBookingUseCase
 
             await seatReservationRepository.AddSeatReservationsAsync(seatReservations);
         }
-        catch (SeatReservationRepositoryException exception)
+        catch (RepositoryException exception)
         {
             await bookingRepository.DeleteBookingAsync(booking.Id);
-            throw new MakeBookingException($"Could not reserve seats! Error: \"{exception.Message}\"", exception);
+
+            if (exception is DuplicateException)
+            {
+                throw new ConflictException($"Some of the seats are already reserved! Error: \"{exception.Message}\"", exception);
+            }
+            else
+            {
+                throw new UseCaseException($"Could not reserve seats! Error: \"{exception.Message}\"", exception);
+            }
         }
 
         return booking;

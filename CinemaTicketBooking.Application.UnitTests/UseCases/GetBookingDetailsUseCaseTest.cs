@@ -1,5 +1,6 @@
 ﻿using CinemaTicketBooking.Application.Interfaces.Repositories;
 using CinemaTicketBooking.Application.Interfaces.UseCases;
+using CinemaTicketBooking.Application.Interfaces.UseCases.Exceptions;
 using CinemaTicketBooking.Application.UseCases;
 using CinemaTicketBooking.Domain.Entities;
 using Moq;
@@ -35,7 +36,7 @@ public class GetBookingDetailsUseCaseTest
         );
 
         // Assert
-        Assert.IsType<GetBookingDetailsException>(exception);
+        Assert.IsType<NotFoundException>(exception);
         Assert.Equal($"Booking not found! Id: {bookingId}", exception.Message);
     }
 
@@ -95,7 +96,7 @@ public class GetBookingDetailsUseCaseTest
         );
 
         // Assert
-        Assert.IsType<GetBookingDetailsException>(exception);
+        Assert.IsType<NotFoundException>(exception);
         Assert.Equal($"The screening of the booking does not exist! ScreeningId: {screeningId} BookingId: {bookingId}", exception.Message);
     }
 

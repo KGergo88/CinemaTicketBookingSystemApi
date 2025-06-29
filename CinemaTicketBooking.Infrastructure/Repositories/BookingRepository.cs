@@ -1,5 +1,6 @@
 using AutoMapper;
 using CinemaTicketBooking.Application.Interfaces.Repositories;
+using CinemaTicketBooking.Application.Interfaces.Repositories.Exceptions;
 using CinemaTicketBooking.Domain.Entities;
 using CinemaTicketBooking.Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -49,7 +50,7 @@ internal class BookingRepository : IBookingRepository
     public async Task TimeoutUnconfirmedBookingsAsync(int timeoutInMinutes)
     {
         if (timeoutInMinutes <= 0)
-            throw new BookingRepositoryException($"{nameof(timeoutInMinutes)} shall be greater than zero! Actual value: {timeoutInMinutes}");
+            throw new RepositoryException($"{nameof(timeoutInMinutes)} shall be greater than zero! Actual value: {timeoutInMinutes}");
 
         // TODO
         // Instead of doing two round trips to the DB, we should use ExecuteUpdateAsync() here,
@@ -72,7 +73,7 @@ internal class BookingRepository : IBookingRepository
         catch (Exception ex)
         {
             await transaction.RollbackAsync();
-            throw new BookingRepositoryException(ex.Message);
+            throw new RepositoryException("Failed to timeout unconfirmed bookings!", ex);
         }
     }
 }

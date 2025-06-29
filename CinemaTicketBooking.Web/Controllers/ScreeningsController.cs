@@ -1,5 +1,6 @@
 using AutoMapper;
 using CinemaTicketBooking.Application.Interfaces.UseCases;
+using CinemaTicketBooking.Application.Interfaces.UseCases.Exceptions;
 using CinemaTicketBooking.Domain.Entities;
 using CinemaTicketBooking.Web.Dtos;
 using CinemaTicketBooking.Web.Dtos.GetAvailableSeats;
@@ -31,6 +32,7 @@ public class ScreeningsController : ControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> Add([FromBody] ScreeningDto screeningDto)
     {
         var screening = mapper.Map<Screening>(screeningDto);
@@ -49,17 +51,11 @@ public class ScreeningsController : ControllerBase
     [HttpGet("{screeningId:guid}/availableSeats")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> GetAvailableSeats(Guid screeningId)
     {
-        try
-        {
-            var availableSeats = await getAvailableSeatsUseCase.ExecuteAsync(screeningId);
-            var response = mapper.Map<GetAvailableSeatsResponseDto>(availableSeats);
-            return Ok(response);
-        }
-        catch (GetAvailableSeatsUseCaseException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var availableSeats = await getAvailableSeatsUseCase.ExecuteAsync(screeningId);
+        var response = mapper.Map<GetAvailableSeatsResponseDto>(availableSeats);
+        return Ok(response);
     }
 }

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using CinemaTicketBooking.Application.Interfaces.Repositories;
+using CinemaTicketBooking.Application.Interfaces.Repositories.Exceptions;
 using CinemaTicketBooking.Domain.Entities;
 using CinemaTicketBooking.Infrastructure;
 using CinemaTicketBooking.Infrastructure.DatabaseSeeding;
@@ -124,7 +124,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             var exception = await Record.ExceptionAsync(async () => await bookingRepository.TimeoutUnconfirmedBookingsAsync(timeoutInMinutes));
 
             // Assert
-            Assert.IsType<BookingRepositoryException>(exception);
+            Assert.IsType<RepositoryException>(exception);
             Assert.Equal($"{nameof(timeoutInMinutes)} shall be greater than zero! Actual value: {timeoutInMinutes}", exception.Message);
         }
 

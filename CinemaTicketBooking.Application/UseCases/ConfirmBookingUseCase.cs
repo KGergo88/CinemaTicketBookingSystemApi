@@ -1,5 +1,6 @@
 using CinemaTicketBooking.Application.Interfaces.Repositories;
 using CinemaTicketBooking.Application.Interfaces.UseCases;
+using CinemaTicketBooking.Application.Interfaces.UseCases.Exceptions;
 using CinemaTicketBooking.Domain.Entities;
 
 namespace CinemaTicketBooking.Application.UseCases;
@@ -16,15 +17,15 @@ internal class ConfirmBookingUseCase : IConfirmBookingUseCase
     public async Task ExecuteAsync(Guid bookingId)
     {
         if (bookingId == Guid.Empty)
-            throw new ConfirmBookingException($"Invalid booking ID: {bookingId}");
+            throw new UseCaseException($"Invalid booking ID: {bookingId}");
 
         var booking = await bookingRepository.GetBookingOrNullAsync(bookingId);
 
         if (booking == null)
-            throw new ConfirmBookingException("Booking not found!");
+            throw new NotFoundException("Booking not found!");
 
         if (booking.BookingState != BookingState.NonConfirmed)
-            throw new ConfirmBookingException("Booking is not confirmable!");
+            throw new ConflictException("Booking is not confirmable!");
 
         await bookingRepository.SetBookingStateAsync(bookingId, BookingState.Confirmed);
     }

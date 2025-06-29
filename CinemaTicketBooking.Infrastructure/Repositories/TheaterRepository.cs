@@ -35,4 +35,27 @@ internal class TheaterRepository : ITheaterRepository
 
         return mapper.Map<Theater>(infraScreening.Auditorium!.Theater);
     }
+
+    public async Task<Auditorium> GetAuditoriumOrNullAsync(Guid auditoriumId)
+    {
+        var infraAuditorium = await context.Auditoriums.Include(a => a!.Theater)
+                                                       .ThenInclude(t => t!.Auditoriums)
+                                                       .ThenInclude(a => a.Tiers)
+                                                       .ThenInclude(t => t.Seats)
+                                                       .SingleAsync(a => a.Id == auditoriumId);
+
+        return mapper.Map<Auditorium>(infraAuditorium);
+    }
+
+    public async Task<Tier> GetTierOrNullAsync(Guid tierId)
+    {
+        var infraTier = await context.Tiers.Include(t => t!.Auditorium)
+                                           .ThenInclude(a => a!.Theater)
+                                           .ThenInclude(t => t!.Auditoriums)
+                                           .ThenInclude(a => a.Tiers)
+                                           .ThenInclude(t => t.Seats)
+                                           .SingleAsync(t => t.Id == tierId);
+
+        return mapper.Map<Tier>(infraTier);
+    }
 }

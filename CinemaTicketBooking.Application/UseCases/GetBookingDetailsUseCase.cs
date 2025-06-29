@@ -1,5 +1,6 @@
 using CinemaTicketBooking.Application.Interfaces.Repositories;
 using CinemaTicketBooking.Application.Interfaces.UseCases;
+using CinemaTicketBooking.Application.Interfaces.UseCases.Exceptions;
 using CinemaTicketBooking.Domain.Entities;
 
 namespace CinemaTicketBooking.Application.UseCases;
@@ -32,21 +33,21 @@ internal class GetBookingDetailsUseCase : IGetBookingDetailsUseCase
     {
         var booking = await bookingRepository.GetBookingOrNullAsync(bookingId);
         if (booking == null)
-            throw new GetBookingDetailsException($"Booking not found! Id: {bookingId}");
+            throw new NotFoundException($"Booking not found! Id: {bookingId}");
 
         var customer = await customerRepository.GetCustomerOrNullAsync(booking.CustomerId);
         if (customer == null)
-            throw new GetBookingDetailsException($"Customer not found! Id: {booking.CustomerId} BookingId: {bookingId}");
+            throw new NotFoundException($"Customer not found! Id: {booking.CustomerId} BookingId: {bookingId}");
 
         var screeningId = booking.ScreeningId;
         var screening = await screeningRepository.GetScreeningOrNullAsync(screeningId);
         if (screening is null)
-            throw new GetBookingDetailsException($"The screening of the booking does not exist! ScreeningId: {screeningId} BookingId: {bookingId}");
+            throw new NotFoundException($"The screening of the booking does not exist! ScreeningId: {screeningId} BookingId: {bookingId}");
 
         var movieId = screening.MovieId;
         var movie = await movieRepository.GetMovieOrNullAsync(movieId);
         if (movie is null)
-            throw new GetBookingDetailsException($"The movie of the booking does not exist! Movieid: {movieId} BookingId: {bookingId}");
+            throw new NotFoundException($"The movie of the booking does not exist! Movieid: {movieId} BookingId: {bookingId}");
 
         var theater = await theaterRepository.GetTheaterOfAScreeningAsync(screeningId);
         var seatReservations = await seatReservationRepository.GetSeatReservationsOfABookingAsync(bookingId);
@@ -60,8 +61,8 @@ internal class GetBookingDetailsUseCase : IGetBookingDetailsUseCase
         if (seatReservationCurrencies.Count() != 1 && totalPriceAmount > 0)
         {
             var seatReservationCurrenciesAsString = string.Join(", ", seatReservationCurrencies);
-            throw new GetBookingDetailsException("The currency of the booking is ambigous!" +
-                                                 $"Currencies found in the seat reservations of this booking: {seatReservationCurrenciesAsString}");
+            throw new UseCaseException("The currency of the booking is ambiguous!" +
+                                       $"Currencies found in the seat reservations of this booking: {seatReservationCurrenciesAsString}");
         }
 
         var totalPriceCurrency = seatReservationCurrencies.Any() ? seatReservationCurrencies.First() : "";

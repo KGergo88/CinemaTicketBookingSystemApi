@@ -1,5 +1,7 @@
 using CinemaTicketBooking.Application.Interfaces.Repositories;
+using CinemaTicketBooking.Application.Interfaces.Repositories.Exceptions;
 using CinemaTicketBooking.Application.Interfaces.UseCases;
+using CinemaTicketBooking.Application.Interfaces.UseCases.Exceptions;
 
 namespace CinemaTicketBooking.Application.UseCases;
 
@@ -18,7 +20,14 @@ internal class ManageBookingTimeoutUseCase : IManageBookingTimeoutUseCase
 
     public async Task ExecuteAsync()
     {
-        await bookingRepository.TimeoutUnconfirmedBookingsAsync(ConfirmationTimeoutInMinutes);
-        await seatReservationRepository.ReleaseSeatsOfTimeoutedBookingsAsync();
+        try
+        {
+            await bookingRepository.TimeoutUnconfirmedBookingsAsync(ConfirmationTimeoutInMinutes);
+            await seatReservationRepository.ReleaseSeatsOfTimeoutedBookingsAsync();
+        }
+        catch (RepositoryException ex)
+        {
+            throw new UseCaseException($"{nameof(ManageBookingTimeoutUseCase)} failed!", ex);
+        }
     }
 }

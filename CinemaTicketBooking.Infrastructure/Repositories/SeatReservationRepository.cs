@@ -1,5 +1,6 @@
 using AutoMapper;
 using CinemaTicketBooking.Application.Interfaces.Repositories;
+using CinemaTicketBooking.Application.Interfaces.Repositories.Exceptions;
 using CinemaTicketBooking.Domain.Entities;
 using CinemaTicketBooking.Infrastructure.Entities;
 using CinemaTicketBooking.Infrastructure.DatabaseBindings;
@@ -32,8 +33,8 @@ internal class SeatReservationRepository : ISeatReservationRepository
         catch (DbUpdateException ex)
         {
             if (databaseBinding.IsUniqueIndexException(ex))
-                throw new SeatReservationRepositoryException(
-                    "Could not reserve seats as at least one of them seems to be already reserved.", ex);
+                throw new DuplicateException(
+                    "Could not store seat reservation entities because of unique index constraints.", ex);
 
             throw;
         }

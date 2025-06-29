@@ -1,5 +1,6 @@
 using AutoMapper;
 using CinemaTicketBooking.Application.Interfaces.UseCases;
+using CinemaTicketBooking.Application.Interfaces.UseCases.Exceptions;
 using CinemaTicketBooking.Domain.Entities;
 using CinemaTicketBooking.Web.Dtos.Movie;
 using Microsoft.AspNetCore.Mvc;
@@ -43,16 +44,9 @@ public class MoviesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> Add([FromBody] MovieWithoutIdDto movieDto)
     {
-        try
-        {
-            var movie = mapper.Map<Movie>(movieDto);
-            await addMovieUseCase.ExecuteAsync(movie);
-            return Created();
-        }
-        catch (AddMovieUseCaseException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var movie = mapper.Map<Movie>(movieDto);
+        await addMovieUseCase.ExecuteAsync(movie);
+        return Created();
     }
 
     [HttpPut]
@@ -60,16 +54,9 @@ public class MoviesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> Update([FromBody] MovieDto movieDto)
     {
-        try
-        {
-            var movie = mapper.Map<Movie>(movieDto);
-            await updateMovieUseCase.ExecuteAsync(movie);
-            return Ok();
-        }
-        catch (UpdateMovieUseCaseException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var movie = mapper.Map<Movie>(movieDto);
+        await updateMovieUseCase.ExecuteAsync(movie);
+        return Ok();
     }
 
     [HttpDelete]
@@ -77,14 +64,7 @@ public class MoviesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> Delete([FromBody] Guid movieIdToDelete)
     {
-        try
-        {
-            await deleteMovieUseCase.ExecuteAsync(movieIdToDelete);
-            return Ok();
-        }
-        catch (DeleteMovieUseCaseException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        await deleteMovieUseCase.ExecuteAsync(movieIdToDelete);
+        return Ok();
     }
 }

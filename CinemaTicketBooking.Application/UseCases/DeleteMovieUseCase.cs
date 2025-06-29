@@ -1,5 +1,7 @@
 using CinemaTicketBooking.Application.Interfaces.Repositories;
+using CinemaTicketBooking.Application.Interfaces.Repositories.Exceptions;
 using CinemaTicketBooking.Application.Interfaces.UseCases;
+using CinemaTicketBooking.Application.Interfaces.UseCases.Exceptions;
 
 namespace CinemaTicketBooking.Application.UseCases;
 
@@ -18,9 +20,13 @@ internal class DeleteMovieUseCase : IDeleteMovieUseCase
         {
             await movieRepository.DeleteMoviesAsync([movieIdToDelete]);
         }
-        catch (MovieRepositoryException ex)
+        catch(Interfaces.Repositories.Exceptions.NotFoundException ex)
         {
-            throw new DeleteMovieUseCaseException($"Could not delete movie. Details: {ex.Message}", ex);
+            throw new Interfaces.UseCases.Exceptions.NotFoundException($"No movie was found with the ID: {movieIdToDelete}", ex);
+        }
+        catch (RepositoryException ex)
+        {
+            throw new UseCaseException($"Could not delete movie. Details: {ex.Message}", ex);
         }
     }
 }
