@@ -36,7 +36,12 @@ public class ScreeningsControllerTests
                     .AddSingleton(mockGetAvailableSeatsUseCase.Object); ;
         });
 
-        httpClient = factory.CreateClient();
+        var mockAppSettings = new Dictionary<string, string?>
+        {
+            { "ConnectionStrings:CinemaTicketBooking", "mock connection string" }
+        };
+
+        httpClient = factory.CreateClient(mockAppSettings);
     }
 
     [Fact]
