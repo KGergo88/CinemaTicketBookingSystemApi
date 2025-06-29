@@ -27,7 +27,7 @@ internal class UpdateMovieUseCase : IUpdateMovieUseCase
         }
         catch (RepositoryException ex)
         {
-            throw new UpdateMovieUseCaseException($"Could not update movie. Details: {ex.Message}", ex);
+            throw new UseCaseException($"Could not update movie. Details: {ex.Message}", ex);
         }
     }
 }

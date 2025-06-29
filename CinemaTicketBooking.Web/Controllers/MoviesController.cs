@@ -75,7 +75,7 @@ public class MoviesController : ControllerBase
         {
             return NotFound(ex.Message);
         }
-        catch (UpdateMovieUseCaseException ex)
+        catch (UseCaseException ex)
         {
             return BadRequest(ex.Message);
         }
