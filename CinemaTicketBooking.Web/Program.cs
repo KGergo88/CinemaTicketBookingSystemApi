@@ -69,10 +69,11 @@ try
         app.UseSwagger();
         app.UseSwaggerUI();
     }
-    app.UseExceptionHandler("/home/error");
+
+    app.UseExceptionHandler("/error");
 
     app.MapControllers();
-    app.MapFallbackToController("HandleUnknownRoutes", "Home");
+    app.MapFallbackToController("HandleUnknownRoutes", "Error");
 
     app.Run();
 }
