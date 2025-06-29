@@ -26,7 +26,7 @@ internal class DeleteMovieUseCase : IDeleteMovieUseCase
         }
         catch (RepositoryException ex)
         {
-            throw new DeleteMovieUseCaseException($"Could not delete movie. Details: {ex.Message}", ex);
+            throw new UseCaseException($"Could not delete movie. Details: {ex.Message}", ex);
         }
     }
 }
