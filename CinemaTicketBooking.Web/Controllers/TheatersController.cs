@@ -27,15 +27,8 @@ public class TheatersController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> Add([FromBody] TheaterWithoutIdDto theaterDto)
     {
-        try
-        {
-            var theater = mapper.Map<Theater>(theaterDto);
-            await addTheaterUseCase.ExecuteAsync(theater);
-            return Created();
-        }
-        catch (UseCaseException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var theater = mapper.Map<Theater>(theaterDto);
+        await addTheaterUseCase.ExecuteAsync(theater);
+        return Created();
     }
 }

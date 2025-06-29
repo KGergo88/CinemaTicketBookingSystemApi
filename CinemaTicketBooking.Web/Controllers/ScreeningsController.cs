@@ -35,39 +35,17 @@ public class ScreeningsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> Add([FromBody] ScreeningDto screeningDto)
     {
-        try
-        {
-            var screening = mapper.Map<Screening>(screeningDto);
-            await addScreeningUseCase.ExecuteAsync(screening);
-            return Created();
-        }
-        catch (NotFoundException ex)
-        {
-            return NotFound(ex.Message);
-        }
-        catch (UseCaseException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var screening = mapper.Map<Screening>(screeningDto);
+        await addScreeningUseCase.ExecuteAsync(screening);
+        return Created();
     }
 
     [HttpPost("pricing")]
     public async Task<ActionResult> SetPricing([FromBody] PricingDto pricingDto)
     {
-        try
-        {
-            var pricing = mapper.Map<Pricing>(pricingDto);
-            await setPricingUseCase.ExecuteAsync(pricing);
-            return Ok();
-        }
-        catch (NotFoundException ex)
-        {
-            return NotFound(ex.Message);
-        }
-        catch (UseCaseException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var pricing = mapper.Map<Pricing>(pricingDto);
+        await setPricingUseCase.ExecuteAsync(pricing);
+        return Ok();
     }
 
     [HttpGet("{screeningId:guid}/availableSeats")]
@@ -76,19 +54,8 @@ public class ScreeningsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> GetAvailableSeats(Guid screeningId)
     {
-        try
-        {
-            var availableSeats = await getAvailableSeatsUseCase.ExecuteAsync(screeningId);
-            var response = mapper.Map<GetAvailableSeatsResponseDto>(availableSeats);
-            return Ok(response);
-        }
-        catch (NotFoundException ex)
-        {
-            return NotFound(ex.Message);
-        }
-        catch (UseCaseException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var availableSeats = await getAvailableSeatsUseCase.ExecuteAsync(screeningId);
+        var response = mapper.Map<GetAvailableSeatsResponseDto>(availableSeats);
+        return Ok(response);
     }
 }
