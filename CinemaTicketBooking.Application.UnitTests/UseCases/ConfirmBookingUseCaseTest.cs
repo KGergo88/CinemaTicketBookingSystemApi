@@ -1,5 +1,6 @@
 ﻿using CinemaTicketBooking.Application.Interfaces.Repositories;
 using CinemaTicketBooking.Application.Interfaces.UseCases;
+using CinemaTicketBooking.Application.Interfaces.UseCases.Exceptions;
 using CinemaTicketBooking.Application.UseCases;
 using CinemaTicketBooking.Domain.Entities;
 using Moq;
@@ -25,7 +26,7 @@ public class ConfirmBookingUseCaseTest
         );
 
         // Assert
-        Assert.IsType<ConfirmBookingException>(exception);
+        Assert.IsType<UseCaseException>(exception);
         Assert.Equal($"Invalid booking ID: {bookingId}", exception.Message);
     }
 
@@ -45,7 +46,7 @@ public class ConfirmBookingUseCaseTest
         );
 
         // Assert
-        Assert.IsType<ConfirmBookingException>(exception);
+        Assert.IsType<NotFoundException>(exception);
         Assert.Equal("Booking not found!", exception.Message);
     }
 
@@ -94,7 +95,7 @@ public class ConfirmBookingUseCaseTest
         }
         else
         {
-            Assert.IsType<ConfirmBookingException>(exception);
+            Assert.IsType<ConflictException>(exception);
             Assert.Equal("Booking is not confirmable!", exception.Message);
         }
     }

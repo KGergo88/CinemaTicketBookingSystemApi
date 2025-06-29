@@ -67,7 +67,15 @@ public class BookingsController : ControllerBase
             await confirmBookingUseCase.ExecuteAsync(bookingId);
             return Ok();
         }
-        catch (ConfirmBookingException ex)
+        catch (NotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (ConflictException ex)
+        {
+            return Conflict(ex.Message);
+        }
+        catch (UseCaseException ex)
         {
             return BadRequest(ex.Message);
         }
