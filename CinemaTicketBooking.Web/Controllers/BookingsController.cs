@@ -92,7 +92,11 @@ public class BookingsController : ControllerBase
             var response = mapper.Map<BookingDetailsDto>(bookingDetails);
             return Ok(response);
         }
-        catch (GetBookingDetailsException ex)
+        catch (NotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (UseCaseException ex)
         {
             return BadRequest(ex.Message);
         }
