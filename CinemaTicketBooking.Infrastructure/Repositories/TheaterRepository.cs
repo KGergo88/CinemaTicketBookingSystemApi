@@ -42,7 +42,7 @@ internal class TheaterRepository : ITheaterRepository
                                                        .ThenInclude(t => t!.Auditoriums)
                                                        .ThenInclude(a => a.Tiers)
                                                        .ThenInclude(t => t.Seats)
-                                                       .SingleAsync(a => a.Id == auditoriumId);
+                                                       .SingleOrDefaultAsync(a => a.Id == auditoriumId);
 
         return mapper.Map<Auditorium>(infraAuditorium);
     }
@@ -54,7 +54,7 @@ internal class TheaterRepository : ITheaterRepository
                                            .ThenInclude(t => t!.Auditoriums)
                                            .ThenInclude(a => a.Tiers)
                                            .ThenInclude(t => t.Seats)
-                                           .SingleAsync(t => t.Id == tierId);
+                                           .SingleOrDefaultAsync(t => t.Id == tierId);
 
         return mapper.Map<Tier>(infraTier);
     }
