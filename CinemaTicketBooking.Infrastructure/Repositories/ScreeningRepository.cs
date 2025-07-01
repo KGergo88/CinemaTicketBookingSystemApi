@@ -35,7 +35,8 @@ internal class ScreeningRepository : IScreeningRepository
     {
         var infraPricing = await context.Pricings.SingleOrDefaultAsync(p => p.ScreeningId == pricing.ScreeningId
                                                                             && p.TierId == pricing.TierId);
-        if (infraPricing is null) {
+        if (infraPricing is null)
+        {
             infraPricing = mapper.Map<PricingEntity>(pricing);
             context.Pricings.Add(infraPricing);
         }

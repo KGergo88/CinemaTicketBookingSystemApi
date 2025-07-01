@@ -59,12 +59,12 @@ public class MoviesController : ControllerBase
         return Ok();
     }
 
-    [HttpDelete]
+    [HttpDelete("{movieId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult> Delete([FromBody] Guid movieIdToDelete)
+    public async Task<ActionResult> Delete(Guid movieId)
     {
-        await deleteMovieUseCase.ExecuteAsync(movieIdToDelete);
+        await deleteMovieUseCase.ExecuteAsync(movieId);
         return Ok();
     }
 }

@@ -67,7 +67,7 @@ public class CinemaTicketBookingDbContext : DbContext
         modelBuilder
             .Entity<PricingEntity>()
             .HasOne(e => e.Tier)
-            .WithOne(e => e.Pricing)
+            .WithMany(e => e.Pricings)
             .OnDelete(DeleteBehavior.NoAction);
     }
 }

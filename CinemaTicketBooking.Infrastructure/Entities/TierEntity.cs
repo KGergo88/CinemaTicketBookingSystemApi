@@ -25,5 +25,5 @@ internal class TierEntity
 
     public ICollection<SeatEntity> Seats { get; set; } = new List<SeatEntity>();
 
-    public PricingEntity? Pricing { get; set; }
+    public ICollection<PricingEntity> Pricings { get; set; } = new List<PricingEntity>();
 }

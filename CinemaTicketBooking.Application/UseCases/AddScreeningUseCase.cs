@@ -30,6 +30,9 @@ internal class AddScreeningUseCase : IAddScreeningUseCase
         if (auditorium is null)
             throw new NotFoundException($"No auditorium with the ID {screening.AuditoriumId} was found!");
 
+        // TODO - Add here a check to see if the screening time overlaps with existing screenings in the same auditorium
+        // See Issue #73 and Issue #46 for details
+
         await screeningRepository.AddScreeningsAsync([screening]);
     }
 }

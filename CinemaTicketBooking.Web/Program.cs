@@ -79,7 +79,9 @@ try
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, "Application terminated unexpectedly");
+    Log.Fatal("Application terminated unexpectedly!" +
+              " If you encounter this when running 'dotnet ef' commands, this is not necessarily an error!" +
+              " Exception: {ex}", ex);
 }
 finally
 {

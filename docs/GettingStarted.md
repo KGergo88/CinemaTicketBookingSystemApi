@@ -39,8 +39,8 @@ See [ASP.NET Core documentation](https://learn.microsoft.com/en-us/aspnet/core/f
 
 ### Seed the database with demo data
 
-This step is optional, but makes it possible that the API endpoints can be tried out immediately,
-without having to create test data for in database. In order to achieve this, you can either create your
+This step is optional, but makes trying out the API endpoints possible without having to
+create test data in database. In order to achieve this, you can either create your
 database by importing a `.bacpac` file, or you can run the `CinemaTicketBooking.Utilities project`
 with the `seed_database` command and seed data from a JSON file.
 You can find a suitable `.bacpac` and a JSON file in the `configurations/DatabaseSeeding` folder.

@@ -4,6 +4,7 @@ using CinemaTicketBooking.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CinemaTicketBooking.Infrastructure.Migrations
 {
     [DbContext(typeof(CinemaTicketBookingDbContext))]
-    partial class CinemaTicketBookingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250630100654_TierShallNotRequireAPricing")]
+    partial class TierShallNotRequireAPricing
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -171,7 +174,8 @@ namespace CinemaTicketBooking.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TierId");
+                    b.HasIndex("TierId")
+                        .IsUnique();
 
                     b.HasIndex("ScreeningId", "Currency")
                         .IsUnique();
@@ -378,8 +382,8 @@ namespace CinemaTicketBooking.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("CinemaTicketBooking.Infrastructure.Entities.TierEntity", "Tier")
-                        .WithMany("Pricings")
-                        .HasForeignKey("TierId")
+                        .WithOne("Pricing")
+                        .HasForeignKey("CinemaTicketBooking.Infrastructure.Entities.PricingEntity", "TierId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
@@ -495,7 +499,7 @@ namespace CinemaTicketBooking.Infrastructure.Migrations
 
             modelBuilder.Entity("CinemaTicketBooking.Infrastructure.Entities.TierEntity", b =>
                 {
-                    b.Navigation("Pricings");
+                    b.Navigation("Pricing");
 
                     b.Navigation("Seats");
                 });
