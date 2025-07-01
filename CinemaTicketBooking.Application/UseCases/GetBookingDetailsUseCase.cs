@@ -51,7 +51,7 @@ internal class GetBookingDetailsUseCase : IGetBookingDetailsUseCase
 
         var theater = await theaterRepository.GetTheaterOfAScreeningAsync(screeningId);
         var seatReservations = await seatReservationRepository.GetSeatReservationsOfABookingAsync(bookingId);
-        theater = FilterNonReservedEntities(theater, seatReservations);
+        theater = FilterNonReservedEntities(theater, screening, seatReservations);
 
         var totalPriceAmount = seatReservations.Sum(sr => sr.Price.Amount);
 
@@ -82,19 +82,26 @@ internal class GetBookingDetailsUseCase : IGetBookingDetailsUseCase
         return bookingDetails;
     }
 
-    private Theater FilterNonReservedEntities(Theater theater, List<SeatReservation> seatReservations)
+    private static Theater FilterNonReservedEntities(Theater theater, Screening screening, List<SeatReservation> seatReservations)
     {
-        if (seatReservations.Count == 0)
-            return theater;
-
+        // Convrt seat reservations to a hashset for fast lookup
         var seatReservationsById = seatReservations.Select(sr => sr.SeatId)
                                                    .ToHashSet();
 
+        // Remove all the seats from the theater entity that are not included in the seat reservations
         theater.Auditoriums.ForEach(a => a.Tiers.ForEach(t => t.Seats.FindAll(s => !seatReservationsById.Contains(s.Id))
                                                                      .ForEach(s => t.Seats.Remove(s))));
 
-        theater.Auditoriums.ForEach(a => a.Tiers.RemoveAll(t => t.Seats.Count == 0));
+        // Remove all the now empty tiers (the ones that did not contain any of the seat reservations)
+        // The tiers of the auditorium where the screening takes place shall be kept
+        theater.Auditoriums.ForEach(a => {
+            if (a.Id == screening.AuditoriumId)
+                return;
 
+            a.Tiers.RemoveAll(t => t.Seats.Count == 0);
+        });
+
+        // Remove all the now empty auditoriums (the ones that did not contain any of the seat reservations)
         theater.Auditoriums.RemoveAll(a => a.Tiers.Count == 0);
 
         return theater;
