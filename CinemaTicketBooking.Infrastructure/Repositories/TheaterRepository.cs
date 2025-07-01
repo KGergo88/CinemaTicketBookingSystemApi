@@ -17,6 +17,17 @@ internal class TheaterRepository : ITheaterRepository
         this.context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
+    public async Task<Theater?> GetTheaterOrNullAsync(string name, string address)
+    {
+        var infraTheater = await context.Theaters.Include(t => t.Auditoriums)
+                                                 .ThenInclude(a => a.Tiers)
+                                                 .ThenInclude(t => t.Seats)
+                                                 .SingleOrDefaultAsync(t => t.Name == name
+                                                                            && t.Address == address);
+
+        return mapper.Map<Theater>(infraTheater);
+    }
+
     public async Task AddTheatersAsync(IEnumerable<Theater> domainTheaters)
     {
         var infraTheaters = mapper.Map<IList<TheaterEntity>>(domainTheaters);
