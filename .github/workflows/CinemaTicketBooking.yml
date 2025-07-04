@@ -15,7 +15,9 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     env:
+      BUILD_CONFIGURATION: Release
       COVERAGEREPORT_FOLDER: coveragereport
+      SWAGGER_FOLDER: swagger
       COMMENT_FILE: pull_request_comment.md
 
     steps:
@@ -32,13 +34,15 @@ jobs:
           dotnet-quality: 'ga'
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: |
+          dotnet restore
+          dotnet tool restore
 
       - name: Build solution
-        run: dotnet build --no-restore
+        run: dotnet build --configuration ${{ env.BUILD_CONFIGURATION }} --no-restore
 
       - name: Run Tests
-        run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage"
+        run: dotnet test --configuration ${{ env.BUILD_CONFIGURATION }} --no-build --verbosity normal --collect:"XPlat Code Coverage"
 
       - name: Generate code coverage report
         uses: danielpalme/ReportGenerator-GitHub-Action@5.4.5
@@ -54,10 +58,26 @@ jobs:
           name: CoverageReport
           path: ${{ env.COVERAGEREPORT_FOLDER }}
 
+      - name: Generate Swagger JSON
+        run: dotnet swagger tofile --output ${{ env.SWAGGER_FOLDER }}/swagger.json CinemaTicketBooking.Web/bin/${{ env.BUILD_CONFIGURATION }}/net8.0/CinemaTicketBooking.Web.dll v1
+        env:
+          DOTNET_ROLL_FORWARD: LatestMajor
+          SkipDatabaseSetup: true
+
+      - name: Upload Swagger JSON
+        id: upload-swagger-json
+        uses: actions/upload-artifact@v4
+        with:
+          name: SwaggerJson
+          path: ${{ env.SWAGGER_FOLDER }}
+
       - name: Create pull request comment content
         run: |
-          echo "# Code coverage report" > ${{ env.COMMENT_FILE }}
-          echo "${{ steps.upload-coverage-report.outputs.artifact-url }}" >> ${{ env.COMMENT_FILE }}
+          echo "# Open API definition" >> ${{ env.COMMENT_FILE }}
+          echo "[Download](${{ steps.upload-swagger-json.outputs.artifact-url }})" >> ${{ env.COMMENT_FILE }}
+          echo "" >> ${{ env.COMMENT_FILE }}
+          echo "# Code coverage report" >> ${{ env.COMMENT_FILE }}
+          echo "[Download](${{ steps.upload-coverage-report.outputs.artifact-url }})" >> ${{ env.COMMENT_FILE }}
           echo "" >> ${{ env.COMMENT_FILE }}
           cat ${{ env.COVERAGEREPORT_FOLDER }}/SummaryGithub.md >> ${{ env.COMMENT_FILE }}
 
