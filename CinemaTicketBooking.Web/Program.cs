@@ -27,13 +27,17 @@ try
         typeof(CinemaTicketBooking.Web.MappingProfile));
 
     var connectionStringName = "CinemaTicketBooking";
-    var dbConnectionString = builder.Configuration.GetConnectionString(connectionStringName);
-    if (dbConnectionString is null)
-        throw new StartupException($"Could not load the connection string: \"{connectionStringName}\"");
+    var skipDatabaseSetup = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("SkipDatabaseSetup"));
+    if (!skipDatabaseSetup)
+    {
+        var dbConnectionString = builder.Configuration.GetConnectionString(connectionStringName);
+        if (dbConnectionString is null)
+            throw new StartupException($"Could not load the connection string: \"{connectionStringName}\"");
 
-    var databaseBinding = DatabaseBindingFactory.Create(dbConnectionString);
-    builder.Services.AddDbContext<CinemaTicketBookingDbContext>(
-        options => databaseBinding.SetDatabaseType(options, dbConnectionString));
+        var databaseBinding = DatabaseBindingFactory.Create(dbConnectionString);
+        builder.Services.AddDbContext<CinemaTicketBookingDbContext>(
+            options => databaseBinding.SetDatabaseType(options, dbConnectionString));
+    }
 
     builder.Services.AddControllers();
 
