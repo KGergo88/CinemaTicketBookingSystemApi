@@ -51,6 +51,10 @@ jobs:
           targetdir: ${{ env.COVERAGEREPORT_FOLDER }}
           reporttypes: Html;MarkdownSummaryGithub
 
+      - name: Customize code coverage report
+        # Replace first line in the GitHub summary report with a level 2 heading
+        run: sed -i "1s/.*/## Summary/" ${{ env.COVERAGEREPORT_FOLDER }}/SummaryGithub.md
+
       - name: Upload code coverage report
         id: upload-coverage-report
         uses: actions/upload-artifact@v4
