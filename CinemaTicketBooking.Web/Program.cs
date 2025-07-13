@@ -28,8 +28,6 @@ try
 
     var connectionStringName = "CinemaTicketBooking";
     var dbConnectionString = builder.Configuration.GetConnectionString(connectionStringName);
-    if (dbConnectionString is null)
-        throw new StartupException($"Could not load the connection string: \"{connectionStringName}\"");
 
     var databaseBinding = DatabaseBindingFactory.Create(dbConnectionString);
     builder.Services.AddDbContext<CinemaTicketBookingDbContext>(
