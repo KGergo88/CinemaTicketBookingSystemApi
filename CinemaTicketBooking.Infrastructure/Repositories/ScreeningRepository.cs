@@ -95,4 +95,31 @@ internal class ScreeningRepository : IScreeningRepository
                                                .ToList();
         return notExistingSeatIds;
     }
+
+    public async Task<List<Guid>> FindScreeningIdsInTimeFrameAsync(Guid auditoriumId, DateTimeOffset timeFrameStart, TimeSpan timeFrameDuration)
+    {
+        if (timeFrameDuration <= TimeSpan.Zero)
+            throw new RepositoryException($"{nameof(timeFrameDuration)} shall be greater than zero! Actual value: {timeFrameDuration}");
+
+        var timeFrameEnd = timeFrameStart.Add(timeFrameDuration);
+        var screeningIds = await (
+            from screening in context.Screenings
+            join movie in context.Movies on screening.MovieId equals movie.Id
+            let screeningStart = screening.Showtime
+            let screeningEnd = screening.Showtime.AddSeconds(movie.DurationInSeconds)
+            where screening.AuditoriumId == auditoriumId
+                  // Screening is inside the timeframe if
+                  && (
+                      // Screening ends inside the timeframe
+                      (timeFrameStart < screeningEnd && screeningEnd < timeFrameEnd)
+                      // Screening starts inside or at the same time as the timeframe
+                      || (timeFrameStart <= screeningStart && screeningStart < timeFrameEnd)
+                      // Screening completely overlaps the timeframe (starts before it and ends after it)
+                      || (screeningStart < timeFrameStart && timeFrameEnd < screeningEnd)
+                  )
+            select screening.Id
+        ).ToListAsync();
+
+        return screeningIds;
+    }
 }
