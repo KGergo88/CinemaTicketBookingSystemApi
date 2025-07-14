@@ -85,7 +85,8 @@ internal class DefaultSeedData : SeedData
         {
             Id = Guid.NewGuid(),
             Name = "Huszárik terem",
-            TheaterId = elitMoziTheater.Id
+            TheaterId = elitMoziTheater.Id,
+            MinimumCleanupDurationInSeconds = TimeSpan.FromMinutes(15).Seconds
         };
 
         var elitMoziHuszarikTeremNezoterTier = new TierEntity
@@ -131,7 +132,8 @@ internal class DefaultSeedData : SeedData
         {
             Id = Guid.NewGuid(),
             Name = "Nagyterem",
-            TheaterId = elitMoziTheater.Id
+            TheaterId = elitMoziTheater.Id,
+            MinimumCleanupDurationInSeconds = TimeSpan.FromMinutes(30).Seconds
         };
 
         var elitMoziNagyteremErkelyTier = new TierEntity

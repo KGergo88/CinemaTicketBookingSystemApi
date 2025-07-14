@@ -16,4 +16,7 @@ internal class AuditoriumEntity
     public TheaterEntity? Theater { get; set; }
 
     public ICollection<TierEntity> Tiers { get; set; } = new List<TierEntity>();
+
+    [Range(0, int.MaxValue)]
+    public required int MinimumCleanupDurationInSeconds { get; set; }
 }
