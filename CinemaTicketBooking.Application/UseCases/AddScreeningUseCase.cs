@@ -30,8 +30,19 @@ internal class AddScreeningUseCase : IAddScreeningUseCase
         if (auditorium is null)
             throw new NotFoundException($"No auditorium with the ID {screening.AuditoriumId} was found!");
 
-        // TODO - Add here a check to see if the screening time overlaps with existing screenings in the same auditorium
-        // See Issue #73 and Issue #46 for details
+        // We must ensure that the minimum cleanup duration of the auditorium is respected between screenings
+        // This means that in order to be able to create this screening,
+        // the last one shall end at least a pause length before this one starts
+        // and the next one shall start at least a pause length after this one ends
+        var timeFrameStart = screening.Showtime - auditorium.MinimumCleanupDuration;
+        var timeFrameDuration = movie.Duration + (auditorium.MinimumCleanupDuration * 2);
+        var overlappingScreeningIds = await screeningRepository.FindScreeningIdsInTimeFrameAsync(auditorium.Id, timeFrameStart, timeFrameDuration);
+        if (overlappingScreeningIds.Count != 0)
+        {
+            var commaSeparatedIds = string.Join(',', overlappingScreeningIds);
+            throw new ConflictException("There are overlapping screenings in the same auditorium!" +
+                                        $" AuditoriumId: {auditorium.Id}, IDs of overlapping screenings: [{commaSeparatedIds}]");
+        }
 
         await screeningRepository.AddScreeningsAsync([screening]);
     }
