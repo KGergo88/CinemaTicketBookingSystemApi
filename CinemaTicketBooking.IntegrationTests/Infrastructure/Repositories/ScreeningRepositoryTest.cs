@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CinemaTicketBooking.Application.Interfaces.Repositories.Exceptions;
 using CinemaTicketBooking.Domain.Entities;
 using CinemaTicketBooking.Infrastructure;
 using CinemaTicketBooking.Infrastructure.DatabaseSeeding;
@@ -67,6 +68,39 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                 Assert.Equal(domainScreening.Language, infraScreening.Language);
                 Assert.Equal(domainScreening.Subtitles, infraScreening.Subtitles);
             }
+        }
+
+        #endregion
+
+        #region FindScreeningIdsInTimeFrameAsync Tests
+
+        public static TheoryData<DateTimeOffset, TimeSpan> FindScreeningIdsInTimeFrameAsyncThrowsForInvalidTimeFramesData()
+        {
+            var theoryData = new TheoryData<DateTimeOffset, TimeSpan>
+            {
+                { DateTimeOffset.Now, TimeSpan.Zero },
+                { DateTimeOffset.UnixEpoch, TimeSpan.Zero - TimeSpan.FromSeconds(1)}
+            };
+
+            return theoryData;
+        }
+
+        [Theory]
+        [MemberData(nameof(FindScreeningIdsInTimeFrameAsyncThrowsForInvalidTimeFramesData))]
+        async Task FindScreeningIdsInTimeFrameAsyncThrowsForInvalidTimeFrames(DateTimeOffset timeFrameStart, TimeSpan timeFrameDuration)
+        {
+            // Arrange
+            await using var db = await CreateDatabaseAsync(seedData);
+            var screeningRepository = new ScreeningRepository(mapper, db.Context);
+            var auditoriumId = Guid.NewGuid();
+
+            // Act
+            var exception = await Record.ExceptionAsync(async () => await screeningRepository.FindScreeningIdsInTimeFrameAsync(auditoriumId, timeFrameStart, timeFrameDuration));
+
+            // Assert
+            Assert.NotNull(exception);
+            Assert.IsType<RepositoryException>(exception);
+            Assert.Equal(exception.Message, $"{nameof(timeFrameDuration)} shall be greater than zero! Actual value: {timeFrameDuration}");
         }
 
         #endregion
