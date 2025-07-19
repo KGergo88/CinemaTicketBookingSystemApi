@@ -33,11 +33,13 @@ public class MappingProfile : Profile
             // For previously not stored entities (Guid is empty), a valid Guid needs to be created
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => CreateNewGuidIfNullOrEmpty(src.Id)));
 
-        CreateMap<AuditoriumEntity, Auditorium>();
+        CreateMap<AuditoriumEntity, Auditorium>()
+            .ForMember(dest => dest.MinimumCleanupDuration, opt => opt.MapFrom(src => TimeSpan.FromSeconds(src.MinimumCleanupDurationInSeconds)));
 
         CreateMap<Auditorium, AuditoriumEntity>()
             // For previously not stored entities (Guid is empty), a valid Guid needs to be created
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => CreateNewGuidIfNullOrEmpty(src.Id)));
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => CreateNewGuidIfNullOrEmpty(src.Id)))
+            .ForMember(dest => dest.MinimumCleanupDurationInSeconds, opt => opt.MapFrom(src => src.MinimumCleanupDuration.TotalSeconds));
 
         CreateMap<TierEntity, Tier>();
 

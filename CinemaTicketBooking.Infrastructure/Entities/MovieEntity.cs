@@ -31,8 +31,10 @@ internal class MovieEntity
 
     public required string Description { get; set; } = "";
 
+    // Movies without duration are not valid
     // The longest movie Resan (The Journey), 1987 is 52380 seconds long
     [Precision(5)]
+    [Range(1, 99999)]
     public required int DurationInSeconds { get; set; }
 
     public ICollection<GenreEntity> Genres { get; set; } = new List<GenreEntity>();

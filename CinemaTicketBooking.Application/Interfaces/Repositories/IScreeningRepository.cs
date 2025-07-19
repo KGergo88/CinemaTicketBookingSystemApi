@@ -15,4 +15,6 @@ public interface IScreeningRepository
     public Task<List<Seat>> GetAllSeatsOfTheScreeningAsync(Guid screeningId);
 
     public Task<List<Guid>> FindNotExistingSeatIdsAsync(Guid screeningId, IEnumerable<Guid> seatIdsToCheck);
+
+    public Task<List<Guid>> FindScreeningIdsInTimeFrameAsync(Guid auditoriumId, DateTimeOffset timeFrameStart, TimeSpan timeFrameDuration);
 }
