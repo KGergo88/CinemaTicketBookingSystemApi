@@ -12,7 +12,6 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
     public class ScreeningRepositoryTest : TestDatabase
     {
         private readonly IMapper mapper;
-        private readonly static SeedData seedData = new DefaultSeedData();
 
         public ScreeningRepositoryTest()
         {
@@ -27,6 +26,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
 
         public static IEnumerable<object[]> AddScreeningsAsyncCreatesScreeningsCorrectlyAsyncData()
         {
+            var seedData = new DefaultSeedData();
             var domainScreenings = new List<Screening>();
             var auditorium = seedData.Auditoriums.First();
             var infraMovies = seedData.Movies.ToList();
@@ -43,12 +43,12 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
                 domainScreenings.Add(domainScreening);
             }
 
-            yield return new object[] { domainScreenings };
+            yield return new object[] { seedData, domainScreenings };
         }
 
         [Theory]
         [MemberData(nameof(AddScreeningsAsyncCreatesScreeningsCorrectlyAsyncData))]
-        async Task AddScreeningsAsyncCreatesScreeningsCorrectlyAsync(List<Screening> domainScreenings)
+        async Task AddScreeningsAsyncCreatesScreeningsCorrectlyAsync(SeedData seedData, List<Screening> domainScreenings)
         {
             // Arrange
             await using var db = await CreateDatabaseAsync(seedData);
@@ -90,7 +90,7 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
         async Task FindScreeningIdsInTimeFrameAsyncThrowsForInvalidTimeFrames(DateTimeOffset timeFrameStart, TimeSpan timeFrameDuration)
         {
             // Arrange
-            await using var db = await CreateDatabaseAsync(seedData);
+            await using var db = await CreateDatabaseAsync();
             var screeningRepository = new ScreeningRepository(mapper, db.Context);
             var auditoriumId = Guid.NewGuid();
 
