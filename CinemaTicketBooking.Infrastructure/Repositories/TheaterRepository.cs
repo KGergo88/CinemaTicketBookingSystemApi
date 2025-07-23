@@ -47,7 +47,7 @@ internal class TheaterRepository : ITheaterRepository
         return mapper.Map<Theater>(infraScreening.Auditorium!.Theater);
     }
 
-    public async Task<Auditorium> GetAuditoriumOrNullAsync(Guid auditoriumId)
+    public async Task<Auditorium?> GetAuditoriumOrNullAsync(Guid auditoriumId)
     {
         var infraAuditorium = await context.Auditoriums.Include(a => a!.Theater)
                                                        .ThenInclude(t => t!.Auditoriums)
@@ -58,7 +58,7 @@ internal class TheaterRepository : ITheaterRepository
         return mapper.Map<Auditorium>(infraAuditorium);
     }
 
-    public async Task<Tier> GetTierOrNullAsync(Guid tierId)
+    public async Task<Tier?> GetTierOrNullAsync(Guid tierId)
     {
         var infraTier = await context.Tiers.Include(t => t!.Auditorium)
                                            .ThenInclude(a => a!.Theater)
