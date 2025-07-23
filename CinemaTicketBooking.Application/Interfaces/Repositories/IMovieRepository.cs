@@ -4,7 +4,7 @@ namespace CinemaTicketBooking.Application.Interfaces.Repositories;
 
 public interface IMovieRepository
 {
-    public Task<Movie> GetMovieOrNullAsync(Guid movieId);
+    public Task<Movie?> GetMovieOrNullAsync(Guid movieId);
 
     public Task<List<Movie>> GetMoviesAsync();
 

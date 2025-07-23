@@ -21,7 +21,7 @@ internal class MovieRepository : IMovieRepository
         this.context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
-    public async Task<Movie> GetMovieOrNullAsync(Guid movieId)
+    public async Task<Movie?> GetMovieOrNullAsync(Guid movieId)
     {
         var infraMovie = await context.Movies.Include(m => m.Genres)
                                              .SingleOrDefaultAsync(m => m.Id == movieId);
