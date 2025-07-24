@@ -96,7 +96,9 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             var auditoriumId = Guid.NewGuid();
 
             // Act
-            var exception = await Record.ExceptionAsync(async () => await screeningRepository.FindScreeningIdsInTimeFrameAsync(auditoriumId, timeFrameStart, timeFrameDuration));
+            var exception = await Record.ExceptionAsync(async () => await screeningRepository.FindScreeningIdsInTimeFrameAsync(auditoriumId,
+                                                                                                                               timeFrameStart,
+                                                                                                                               timeFrameDuration));
 
             // Assert
             Assert.NotNull(exception);
@@ -412,7 +414,9 @@ namespace CinemaTicketBooking.IntegrationTests.Infrastructure.Repositories
             var screeningRepository = new ScreeningRepository(mapper, db.Context);
 
             // Act
-            var foundScreeningIds = await screeningRepository.FindScreeningIdsInTimeFrameAsync(auditoriumId, timeFrameStart, timeFrameDuration);
+            var foundScreeningIds = await screeningRepository.FindScreeningIdsInTimeFrameAsync(auditoriumId,
+                                                                                               timeFrameStart,
+                                                                                               timeFrameDuration);
 
             // Assert
             Assert.NotNull(foundScreeningIds);
