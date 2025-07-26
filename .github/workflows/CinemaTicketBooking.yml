@@ -41,6 +41,10 @@ jobs:
       - name: Build solution
         run: dotnet build --configuration ${{ env.BUILD_CONFIGURATION }} --no-restore
 
+      - name: Check for pending database migrations
+        run: dotnet ef migrations has-pending-model-changes --no-build --configuration ${{ env.BUILD_CONFIGURATION }} --startup-project ../CinemaTicketBooking.Web/CinemaTicketBooking.Web.csproj
+        working-directory: CinemaTicketBooking.Infrastructure
+
       - name: Run Tests
         run: dotnet test --configuration ${{ env.BUILD_CONFIGURATION }} --no-build --verbosity normal --collect:"XPlat Code Coverage"
 
