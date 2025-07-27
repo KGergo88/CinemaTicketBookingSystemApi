@@ -12,9 +12,6 @@ public class SqlServerDatabaseBinding : IDatabaseBinding
 
     public void SetDatabaseType(DbContextOptionsBuilder optionsBuilder, string? connectionString)
     {
-        if (string.IsNullOrEmpty(connectionString))
-            throw new ArgumentNullException(nameof(connectionString));
-
         optionsBuilder.UseSqlServer(connectionString);
     }
 
