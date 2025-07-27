@@ -18,8 +18,9 @@ public abstract class MovieDtoBase
 
     public string Description { get; set; } = "";
 
+    // Movies without duration are not valid
     // The longest movie Resan (The Journey), 1987 is 52380 seconds long
-    [Range(0, 99999, ErrorMessage = $"The {nameof(DurationInSeconds)} must be a 5-digit number.")]
+    [Range(1, 99999, ErrorMessage = $"The {nameof(DurationInSeconds)} must be a 5-digit number that is greater than 0.")]
     public int DurationInSeconds { get; set; }
 
     public List<string> Genres { get; set; } = [];

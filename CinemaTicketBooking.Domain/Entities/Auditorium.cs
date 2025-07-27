@@ -7,4 +7,6 @@ public class Auditorium
     public required string Name { get; set; }
 
     public required List<Tier> Tiers { get; set; }
+
+    public required TimeSpan MinimumCleanupDuration { get; set; }
 }
