@@ -9,8 +9,8 @@ internal class SeedDataLoader
         if (!Path.Exists(path))
             throw new ArgumentException($"The path \"{path}\" does not exist!");
 
-        var jsonData = File.ReadAllText(path);
-        var seedData = JsonSerializer.Deserialize<SeedData>(jsonData);
+        var jsonText = File.ReadAllText(path);
+        var seedData = JsonSerializer.Deserialize<SeedData>(jsonText);
         if (seedData is null)
             throw new ArgumentException($"Could not serialize JSON file: {path}");
 
