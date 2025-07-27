@@ -10,12 +10,9 @@ public class SqlServerDatabaseBinding : IDatabaseBinding
         @"^Cannot insert duplicate key row in object '.+' with unique index '.+'\.",
         RegexOptions.Compiled);
 
-    public void SetDatabaseType(DbContextOptionsBuilder options, string? connectionString)
+    public void SetDatabaseType(DbContextOptionsBuilder optionsBuilder, string? connectionString)
     {
-        if (string.IsNullOrEmpty(connectionString))
-            throw new ArgumentNullException(nameof(connectionString));
-
-        options.UseSqlServer(connectionString);
+        optionsBuilder.UseSqlServer(connectionString);
     }
 
     public bool IsUniqueIndexException(DbUpdateException dbUpdateException)
