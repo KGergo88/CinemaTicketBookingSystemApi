@@ -3,7 +3,6 @@ using CinemaTicketBooking.Infrastructure;
 using CinemaTicketBooking.Infrastructure.DatabaseBindings;
 using CinemaTicketBooking.Web;
 using CinemaTicketBooking.Web.Services;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using System.Reflection;
