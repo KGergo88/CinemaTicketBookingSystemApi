@@ -73,5 +73,5 @@ $ dotnet ef migrations add MIGRATION_NAME --startup-project ../CinemaTicketBooki
 
 ```bash
 # Executed in the CinemaTicketBooking.Infrastructure folder
-$ dotnet ef database update --startup-project ../CinemaTicketBooking.Web
+$ dotnet ef database update --connection CONNECTION_STRING --startup-project ../CinemaTicketBooking.Web
 ```
