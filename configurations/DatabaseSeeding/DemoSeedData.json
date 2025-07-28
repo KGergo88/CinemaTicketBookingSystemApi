@@ -40,7 +40,8 @@
                 { "Row": 7, "Column": 4 }
               ]
             }
-          ]
+          ],
+          "MinimumCleanupDurationInSeconds": 900
         },
         {
           "Name": "Nagyterem",
@@ -328,7 +329,8 @@
                 { "Row": 13, "Column": 8 }
               ]
             }
-          ]
+          ],
+          "MinimumCleanupDurationInSeconds": 1800
         }
       ]
     }
