@@ -42,7 +42,9 @@ See [ASP.NET Core documentation](https://learn.microsoft.com/en-us/aspnet/core/f
 This step is optional, but makes trying out the API endpoints possible without having to
 create test data in database. In order to achieve this, you can either create your
 database by importing a `.bacpac` file, or you can run the `CinemaTicketBooking.Utilities project`
-with the `seed_database` command and seed data from a JSON file.
+with the `seed_database` command and seed data from a JSON file. This utility accepts
+[Handlebars.Net](https://github.com/Handlebars-Net/Handlebars.Net) templates as well.
+If you want to use templates, the file needs to have either `.hbs` or `.handlebars` as extension.
 You can find a suitable `.bacpac` and a JSON file in the `configurations/DatabaseSeeding` folder.
 If you want to seed your database with JSON data, please make sure that the schema of the database is created
 by running the [migration command](#applying-migrations-to-the-database) first.
