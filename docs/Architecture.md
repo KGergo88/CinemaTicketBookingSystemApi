@@ -2,7 +2,11 @@
 
 The **CinemaTicketBooking** solution is structured according to the [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html):
 
-![Architecture diagram](diagrams/ArchitectureDiagram.drawio.svg)
+<img
+  style="display: block; margin: auto;"
+  src="diagrams/ArchitectureDiagram.drawio.svg"
+  alt="Architecture diagram"
+/>
 
 ## The projects of the solution
 
@@ -35,15 +39,27 @@ The projects are representing the different layers:
 
 The dependencies between the layers are configured in the `.csproj` files of the projects:
 
-![Project dependency diagram](diagrams/ProjectDependencyDiagram.drawio.svg)
+<img
+  style="display: block; margin: auto;"
+  src="diagrams/ProjectDependencyDiagram.drawio.svg"
+  alt="Project dependency diagram"
+/>
 
 ## Database tables
 
 The entities of the infrastructure layer represents the database tables:
 
-![Infrastructure entitiy diagram](diagrams/InfrastructureEntityDiagram.drawio.svg)
+<img
+  style="display: block; margin: auto;"
+  src="diagrams/InfrastructureEntityDiagram.drawio.svg"
+  alt="Infrastructure entity diagram"
+/>
 
 From these entities the follwing tables are created:
 
-![Database schema diagram](diagrams/DatabaseSchemaDiagram.svg)
+<img
+  style="display: block; margin: auto;"
+  src="diagrams/DatabaseSchemaDiagram.svg"
+  alt="Database schema diagram"
+/>
 *Generated with the [Schema Visualization Azure Data Studio Extension](https://github.com/R0tenur/visualization)*
