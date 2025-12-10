@@ -1,8 +1,24 @@
 # Architecture
 
-The **CinemaTicketBooking** solution is structured according to the [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html):
+The **Cinema Ticket Booking System API** is structured according to the [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html):
 
-![Architecture diagram](diagrams/ArchitectureDiagram.drawio.svg)
+> Clean architecture puts the business logic and application model at the center of the application. Instead of having business logic depend on data access or other infrastructure concerns, this dependency is inverted: infrastructure and implementation details depend on the Application Core. - [Steve "ardalis" Smith][architect-modern-web-pplications-ebook]
+
+To achieve this, the components are organized into layers. The layers are represented by .NET projects. This way we can easily enforce the dependency rules via the project configuration in the `.csproj` files. The diagram below visualizes the layers of the application and the data structures they exchange with each other.
+
+<img
+  style="display: block; margin: auto;"
+  src="diagrams/ArchitectureDiagram.drawio.svg"
+  alt="Architecture diagram"
+/>
+
+This in practice leads to the following control flow when serving a web request:
+
+<img
+  style="display: block; margin: auto;"
+  src="diagrams/ControlFlowDiagram.drawio.svg"
+  alt="Control flow diagram"
+/>
 
 ## The projects of the solution
 
@@ -12,7 +28,7 @@ The projects are representing the different layers:
    for example a CLI, then a new project, with that presentation layer needs to be added.
    This new project should then be used with a CLI focused configuration as the startup project.
    The presentation layer triggers use cases to serve the requests it gets from the user.
-   This layer is responsible for transforming the domain entities to/from the DTOs via [Automapper](https://github.com/AutoMapper/AutoMapper).
+   This layer is responsible for transforming the DTOs to/from domain entities via [Automapper](https://github.com/AutoMapper/AutoMapper).
 
 - **CinemaTicketBooking.Application**: Application layer contains the use cases, via the user requests can be served.
   It defines the interfaces for the use cases so they can be used via dependency injection once the service collection of the project is configured during startup.
@@ -35,15 +51,29 @@ The projects are representing the different layers:
 
 The dependencies between the layers are configured in the `.csproj` files of the projects:
 
-![Project dependency diagram](diagrams/ProjectDependencyDiagram.drawio.svg)
+<img
+  style="display: block; margin: auto;"
+  src="diagrams/ProjectDependencyDiagram.drawio.svg"
+  alt="Project dependency diagram"
+/>
 
-## Database tables
+## Database schema
 
 The entities of the infrastructure layer represents the database tables:
 
-![Infrastructure entitiy diagram](diagrams/InfrastructureEntityDiagram.drawio.svg)
+<img
+  style="display: block; margin: auto;"
+  src="diagrams/InfrastructureEntityDiagram.drawio.svg"
+  alt="Infrastructure entity diagram"
+/>
 
-From these entities the follwing tables are created:
+From these entities the follwing tables are created by Entity Framework Core:
 
-![Database schema diagram](diagrams/DatabaseSchemaDiagram.svg)
+<img
+  style="display: block; margin: auto;"
+  src="diagrams/DatabaseSchemaDiagram.svg"
+  alt="Database schema diagram"
+/>
 *Generated with the [Schema Visualization Azure Data Studio Extension](https://github.com/R0tenur/visualization)*
+
+[architect-modern-web-pplications-ebook]: https://learn.microsoft.com/en-us/dotnet/architecture/modern-web-apps-azure
