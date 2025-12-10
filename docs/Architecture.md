@@ -28,7 +28,7 @@ The projects are representing the different layers:
    for example a CLI, then a new project, with that presentation layer needs to be added.
    This new project should then be used with a CLI focused configuration as the startup project.
    The presentation layer triggers use cases to serve the requests it gets from the user.
-   This layer is responsible for transforming the domain entities to/from the DTOs via [Automapper](https://github.com/AutoMapper/AutoMapper).
+   This layer is responsible for transforming the DTOs to/from domain entities via [Automapper](https://github.com/AutoMapper/AutoMapper).
 
 - **CinemaTicketBooking.Application**: Application layer contains the use cases, via the user requests can be served.
   It defines the interfaces for the use cases so they can be used via dependency injection once the service collection of the project is configured during startup.
