@@ -6,7 +6,7 @@
 The Cinema Ticket Booking System API is an [ASP.NET Core][asp-net-core] application that provides REST endpoints for managing theaters, movies, screenings, and ticket bookings.
 The main motivation behind working on this project was to gain practical experience in applying the [clean architecture][clean-architecture] principles to reasonably sized application.
 
-The documentation contains the following:
+The documentation contains the following chapters:
 - [Task description](docs/images/TaskDescription.jpg)
 - [Architecture details](docs/Architecture.md)
 - [Getting started instructions](docs/GettingStarted.md)
