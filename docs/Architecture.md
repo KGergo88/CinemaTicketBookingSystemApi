@@ -57,7 +57,7 @@ The dependencies between the layers are configured in the `.csproj` files of the
   alt="Project dependency diagram"
 />
 
-## Database tables
+## Database schema
 
 The entities of the infrastructure layer represents the database tables:
 
@@ -67,7 +67,7 @@ The entities of the infrastructure layer represents the database tables:
   alt="Infrastructure entity diagram"
 />
 
-From these entities the follwing tables are created:
+From these entities the follwing tables are created by Entity Framework Core:
 
 <img
   style="display: block; margin: auto;"
