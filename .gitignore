@@ -6,3 +6,4 @@
 CinemaTicketBooking.Web/appsettings.*
 */Properties/*
 CinemaTicketBooking*.log
+/docs/diagrams/*.bkp
