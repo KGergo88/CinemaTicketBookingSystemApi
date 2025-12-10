@@ -1,11 +1,23 @@
 # Architecture
 
-The **CinemaTicketBooking** solution is structured according to the [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html):
+The **Cinema Ticket Booking System API** is structured according to the [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html):
+
+> Clean architecture puts the business logic and application model at the center of the application. Instead of having business logic depend on data access or other infrastructure concerns, this dependency is inverted: infrastructure and implementation details depend on the Application Core. - [Steve "ardalis" Smith][architect-modern-web-pplications-ebook]
+
+To achieve this, the components are organized into layers. The layers are represented by .NET projects. This way we can easily enforce the dependency rules via the project configuration in the `.csproj` files. The diagram below visualizes the layers of the application and the data structures they exchange with each other.
 
 <img
   style="display: block; margin: auto;"
   src="diagrams/ArchitectureDiagram.drawio.svg"
   alt="Architecture diagram"
+/>
+
+This in practice leads to the following control flow when serving a web request:
+
+<img
+  style="display: block; margin: auto;"
+  src="diagrams/ControlFlowDiagram.drawio.svg"
+  alt="Control flow diagram"
 />
 
 ## The projects of the solution
@@ -63,3 +75,5 @@ From these entities the follwing tables are created:
   alt="Database schema diagram"
 />
 *Generated with the [Schema Visualization Azure Data Studio Extension](https://github.com/R0tenur/visualization)*
+
+[architect-modern-web-pplications-ebook]: https://learn.microsoft.com/en-us/dotnet/architecture/modern-web-apps-azure
